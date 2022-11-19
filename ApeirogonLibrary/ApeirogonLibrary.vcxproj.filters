@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{bd08e2e7-b7fd-4131-89a9-62a325677218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\pch">
+      <UniqueIdentifier>{65f7de7c-fa5d-4a7f-998c-82b181acba43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\pch\Private">
+      <UniqueIdentifier>{82a0db08-039d-4577-9098-8437f9deb242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\pch\Public">
+      <UniqueIdentifier>{46874c7c-c3d7-4b2f-9419-0cef021022c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Main">
+      <UniqueIdentifier>{fad7c6d9-0a33-4a32-a712-ca7df39fe284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Network">
+      <UniqueIdentifier>{f1d10a3c-a186-4911-a628-c5df1614ca44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Network\Public">
+      <UniqueIdentifier>{8b6f0fcd-eb8a-41e1-abe8-b70282a316e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Network\Private">
+      <UniqueIdentifier>{6de12345-f26e-4d7c-a5c3-bb1195d61b0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Logger">
+      <UniqueIdentifier>{151bf61a-3cea-450c-87a1-22a73fe763a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Logger\Public">
+      <UniqueIdentifier>{4b602574-8a03-4c2a-ae69-a2e83bde0f4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Logger\Private">
+      <UniqueIdentifier>{f81115ff-7a9f-49fb-97b0-0cae646113ef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source\pch\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
+      <Filter>Source\Network\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IPAddress.cpp">
+      <Filter>Source\Network\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ApeirogonLibrary.cpp">
+      <Filter>Source\pch\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketUtils.cpp">
+      <Filter>Source\Network\Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Source\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket.h">
+      <Filter>Source\Network\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IPAddress.h">
+      <Filter>Source\Network\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketTypes.h">
+      <Filter>Source\Network\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultTypes.h">
+      <Filter>Source\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ApeirogonLibrary.h">
+      <Filter>Source\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultSize.h">
+      <Filter>Source\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketUtils.h">
+      <Filter>Source\Network\Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

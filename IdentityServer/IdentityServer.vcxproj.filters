@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Soruce">
+      <UniqueIdentifier>{e93e6de1-53b4-4814-8559-366092896375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\pch">
+      <UniqueIdentifier>{07671e0e-0f88-4cc1-a418-41be217cf8d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\pch\Public">
+      <UniqueIdentifier>{1e52e377-ef58-48b6-82cf-825a86217d6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\pch\Private">
+      <UniqueIdentifier>{396ddfed-022b-4e91-bd00-9cf433f218c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\main">
+      <UniqueIdentifier>{8f9c7da1-fafc-45af-86d1-f9b92bed3fcb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Soruce\pch\Public</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Soruce\pch\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityServer.cpp">
+      <Filter>Soruce\main</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
