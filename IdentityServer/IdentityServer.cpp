@@ -1,13 +1,17 @@
 #include "pch.h"
-#include "Socket.h"
-#include "SocketUtils.h"
+#include "IdentityPacket.pb.h"
+#include "IdentityPacketHandler.h"
 
-class Socket;
-
-int main(void)
+struct PacketHeader
 {
-	setlocale(LC_ALL, "");
+	uint16 packetType;
+	uint16 packetSize;
+};
 
+static int32 packetHeaderSize = static_cast<int32>(sizeof(PacketHeader));
+
+Socket*  StartUp()
+{
 	WSADATA data;
 	WORD  ver = MAKEWORD(2, 2);
 
@@ -28,24 +32,65 @@ int main(void)
 
 	SocketUtils::DestroySocket(listening);
 
-	int8 buf[4096];
-	int32 BytesRead;
-	int32 BytesSent;
+	return clientSocket;
+}
+
+void ENCODE_SINGING(Socket* sock)
+{
+	Identity::S2C_Singin S2C_pktSingin;
+	S2C_pktSingin.set_error(0);
+	S2C_pktSingin.set_idtoken(std::string("jierieriewirjiwjvjpirwjvipwri"));
+
+	const uint16 dataSize = static_cast<uint16>(S2C_pktSingin.ByteSizeLong());
+	const uint16 packetSize = dataSize + packetHeaderSize;
+
+	PacketHeader header;
+	header.packetType = C2S_SINGIN;
+	header.packetSize = packetSize;
+
+	char* sendBuf = new char[packetSize];
+	ZeroMemory(sendBuf, packetSize);
+
+	memcpy(sendBuf, &header, packetHeaderSize);
+	S2C_pktSingin.SerializeToArray(sendBuf + packetHeaderSize, dataSize);
+
+	int32 BytesSent = 0;
+	sock->Send(sendBuf, (dataSize + packetHeaderSize), BytesSent);
+}
+
+void DECODE_SINGIN(Socket* sock)
+{
+	int8 Recvbuf[4096];
+	int32 BytesRead = 0;
+
+	ZeroMemory(Recvbuf, 4096);
+	sock->Recv(Recvbuf, 4096, BytesRead);
+
+	if (BytesRead == 0)
+	{
+		exit(0);
+	}
+
+	PacketHeader headerRecv;
+	memcpy(&headerRecv, Recvbuf, packetHeaderSize);
+
+	Identity::C2S_Singin C2S_pktSingin;
+	C2S_pktSingin.ParseFromArray(Recvbuf + packetHeaderSize, headerRecv.packetSize - packetHeaderSize);
+	std::cout << "CLIENT > " << C2S_pktSingin.id() << " : " << C2S_pktSingin.password() << std::endl;
+
+}
+
+int main(void)
+{
+	setlocale(LC_ALL, "");
+
+	Socket* clientSocket = StartUp();
 
 	while (clientSocket)
 	{
-		ZeroMemory(buf, 4096);
+		DECODE_SINGIN(clientSocket);
 
-		clientSocket->Recv(buf, 4096, BytesRead);
-		if (BytesRead == 0)
-		{
-			std::cout << "END" << std::endl;
-			break;
-		}
-
-		std::cout << "CLIENT > " << BytesRead << " : " << buf << std::endl;
-
-		clientSocket->Send(buf, BytesRead, BytesSent);
+		ENCODE_SINGING(clientSocket);
 	}
 
 	system("pause");

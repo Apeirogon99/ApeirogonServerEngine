@@ -16,10 +16,25 @@
     <Filter Include="Soruce\main">
       <UniqueIdentifier>{8f9c7da1-fafc-45af-86d1-f9b92bed3fcb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Soruce\Packet">
+      <UniqueIdentifier>{c8d0a36c-eebe-4968-a841-9c33c8b2dd8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Packet\Public">
+      <UniqueIdentifier>{e1a6c9fe-4d24-4dc1-8a42-47ea17c00a13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Packet\Private">
+      <UniqueIdentifier>{c60f0c2e-21a3-492c-b045-8867f683535f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Soruce\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityPacketHandler.h">
+      <Filter>Soruce\Packet\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityPacket.pb.h">
+      <Filter>Soruce\Packet\Public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -29,5 +44,16 @@
     <ClCompile Include="IdentityServer.cpp">
       <Filter>Soruce\main</Filter>
     </ClCompile>
+    <ClCompile Include="IdentityPacketHandler.cpp">
+      <Filter>Soruce\Packet\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityPacket.pb.cc">
+      <Filter>Soruce\Packet\Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ProtobufMake\bin\src\IdentityPacket.proto">
+      <Filter>Soruce\Packet\Public</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -17,6 +17,15 @@
     <Filter Include="Source\pch\Private">
       <UniqueIdentifier>{b35faa5e-87b3-48f3-89eb-2124185d72ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Packet">
+      <UniqueIdentifier>{44605b7a-7c32-4d2e-b5d0-79bd4a25af42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Packet\Private">
+      <UniqueIdentifier>{95c39258-9d29-41e6-8184-ce63ffdf9ad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Packet\Public">
+      <UniqueIdentifier>{b9de415e-4362-4714-a67c-adee62878258}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DummyClient.cpp">
@@ -25,10 +34,22 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source\pch\Private</Filter>
     </ClCompile>
+    <ClCompile Include="IdentityPacket.pb.cc">
+      <Filter>Source\Packet\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientPacketHandler.cpp">
+      <Filter>Source\Packet\Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Source\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityPacket.pb.h">
+      <Filter>Source\Packet\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientPacketHandler.h">
+      <Filter>Source\Packet\Public</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
