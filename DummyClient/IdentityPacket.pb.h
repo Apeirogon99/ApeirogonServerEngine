@@ -44,7 +44,7 @@ struct TableStruct_IdentityPacket_2eproto {
   static const uint32_t offsets[];
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_IdentityPacket_2eproto;
-namespace Identity {
+namespace Protocol {
 class C2S_EmailVerified;
 struct C2S_EmailVerifiedDefaultTypeInternal;
 extern C2S_EmailVerifiedDefaultTypeInternal _C2S_EmailVerified_default_instance_;
@@ -66,22 +66,22 @@ extern S2C_SingupDefaultTypeInternal _S2C_Singup_default_instance_;
 class UserData;
 struct UserDataDefaultTypeInternal;
 extern UserDataDefaultTypeInternal _UserData_default_instance_;
-}  // namespace Identity
+}  // namespace Protocol
 PROTOBUF_NAMESPACE_OPEN
-template<> ::Identity::C2S_EmailVerified* Arena::CreateMaybeMessage<::Identity::C2S_EmailVerified>(Arena*);
-template<> ::Identity::C2S_Singin* Arena::CreateMaybeMessage<::Identity::C2S_Singin>(Arena*);
-template<> ::Identity::C2S_Singup* Arena::CreateMaybeMessage<::Identity::C2S_Singup>(Arena*);
-template<> ::Identity::S2C_EmailVerified* Arena::CreateMaybeMessage<::Identity::S2C_EmailVerified>(Arena*);
-template<> ::Identity::S2C_Singin* Arena::CreateMaybeMessage<::Identity::S2C_Singin>(Arena*);
-template<> ::Identity::S2C_Singup* Arena::CreateMaybeMessage<::Identity::S2C_Singup>(Arena*);
-template<> ::Identity::UserData* Arena::CreateMaybeMessage<::Identity::UserData>(Arena*);
+template<> ::Protocol::C2S_EmailVerified* Arena::CreateMaybeMessage<::Protocol::C2S_EmailVerified>(Arena*);
+template<> ::Protocol::C2S_Singin* Arena::CreateMaybeMessage<::Protocol::C2S_Singin>(Arena*);
+template<> ::Protocol::C2S_Singup* Arena::CreateMaybeMessage<::Protocol::C2S_Singup>(Arena*);
+template<> ::Protocol::S2C_EmailVerified* Arena::CreateMaybeMessage<::Protocol::S2C_EmailVerified>(Arena*);
+template<> ::Protocol::S2C_Singin* Arena::CreateMaybeMessage<::Protocol::S2C_Singin>(Arena*);
+template<> ::Protocol::S2C_Singup* Arena::CreateMaybeMessage<::Protocol::S2C_Singup>(Arena*);
+template<> ::Protocol::UserData* Arena::CreateMaybeMessage<::Protocol::UserData>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
-namespace Identity {
+namespace Protocol {
 
 // ===================================================================
 
 class UserData final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Identity.UserData) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.UserData) */ {
  public:
   inline UserData() : UserData(nullptr) {}
   ~UserData() override;
@@ -184,7 +184,7 @@ class UserData final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Identity.UserData";
+    return "Protocol.UserData";
   }
   protected:
   explicit UserData(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -204,8 +204,8 @@ class UserData final :
     kIdFieldNumber = 1,
     kPasswordFieldNumber = 2,
     kEmailFieldNumber = 5,
-    kUDateFieldNumber = 7,
-    kCDateFieldNumber = 8,
+    kUpdateDateFieldNumber = 7,
+    kCreateDateFieldNumber = 8,
     kActivateFieldNumber = 3,
     kConfirmedFieldNumber = 4,
     kVerifiedFieldNumber = 6,
@@ -252,32 +252,32 @@ class UserData final :
   std::string* _internal_mutable_email();
   public:
 
-  // string UDate = 7;
-  void clear_udate();
-  const std::string& udate() const;
+  // string update_date = 7;
+  void clear_update_date();
+  const std::string& update_date() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_udate(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_udate();
-  PROTOBUF_NODISCARD std::string* release_udate();
-  void set_allocated_udate(std::string* udate);
+  void set_update_date(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_update_date();
+  PROTOBUF_NODISCARD std::string* release_update_date();
+  void set_allocated_update_date(std::string* update_date);
   private:
-  const std::string& _internal_udate() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_udate(const std::string& value);
-  std::string* _internal_mutable_udate();
+  const std::string& _internal_update_date() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_update_date(const std::string& value);
+  std::string* _internal_mutable_update_date();
   public:
 
-  // string CDate = 8;
-  void clear_cdate();
-  const std::string& cdate() const;
+  // string create_date = 8;
+  void clear_create_date();
+  const std::string& create_date() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_cdate(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_cdate();
-  PROTOBUF_NODISCARD std::string* release_cdate();
-  void set_allocated_cdate(std::string* cdate);
+  void set_create_date(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_create_date();
+  PROTOBUF_NODISCARD std::string* release_create_date();
+  void set_allocated_create_date(std::string* create_date);
   private:
-  const std::string& _internal_cdate() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_cdate(const std::string& value);
-  std::string* _internal_mutable_cdate();
+  const std::string& _internal_create_date() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_create_date(const std::string& value);
+  std::string* _internal_mutable_create_date();
   public:
 
   // bool activate = 3;
@@ -307,7 +307,7 @@ class UserData final :
   void _internal_set_verified(bool value);
   public:
 
-  // @@protoc_insertion_point(class_scope:Identity.UserData)
+  // @@protoc_insertion_point(class_scope:Protocol.UserData)
  private:
   class _Internal;
 
@@ -318,8 +318,8 @@ class UserData final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr password_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr email_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr udate_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr cdate_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr update_date_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr create_date_;
     bool activate_;
     bool confirmed_;
     bool verified_;
@@ -331,7 +331,7 @@ class UserData final :
 // -------------------------------------------------------------------
 
 class C2S_Singin final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Identity.C2S_Singin) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_Singin) */ {
  public:
   inline C2S_Singin() : C2S_Singin(nullptr) {}
   ~C2S_Singin() override;
@@ -434,7 +434,7 @@ class C2S_Singin final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Identity.C2S_Singin";
+    return "Protocol.C2S_Singin";
   }
   protected:
   explicit C2S_Singin(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -482,7 +482,7 @@ class C2S_Singin final :
   std::string* _internal_mutable_password();
   public:
 
-  // @@protoc_insertion_point(class_scope:Identity.C2S_Singin)
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_Singin)
  private:
   class _Internal;
 
@@ -500,7 +500,7 @@ class C2S_Singin final :
 // -------------------------------------------------------------------
 
 class S2C_Singin final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Identity.S2C_Singin) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_Singin) */ {
  public:
   inline S2C_Singin() : S2C_Singin(nullptr) {}
   ~S2C_Singin() override;
@@ -603,7 +603,7 @@ class S2C_Singin final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Identity.S2C_Singin";
+    return "Protocol.S2C_Singin";
   }
   protected:
   explicit S2C_Singin(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -623,18 +623,18 @@ class S2C_Singin final :
     kIdTokenFieldNumber = 2,
     kErrorFieldNumber = 1,
   };
-  // string idToken = 2;
-  void clear_idtoken();
-  const std::string& idtoken() const;
+  // string id_token = 2;
+  void clear_id_token();
+  const std::string& id_token() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_idtoken(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_idtoken();
-  PROTOBUF_NODISCARD std::string* release_idtoken();
-  void set_allocated_idtoken(std::string* idtoken);
+  void set_id_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_id_token();
+  PROTOBUF_NODISCARD std::string* release_id_token();
+  void set_allocated_id_token(std::string* id_token);
   private:
-  const std::string& _internal_idtoken() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_idtoken(const std::string& value);
-  std::string* _internal_mutable_idtoken();
+  const std::string& _internal_id_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_id_token(const std::string& value);
+  std::string* _internal_mutable_id_token();
   public:
 
   // int32 error = 1;
@@ -646,7 +646,7 @@ class S2C_Singin final :
   void _internal_set_error(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:Identity.S2C_Singin)
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_Singin)
  private:
   class _Internal;
 
@@ -654,7 +654,7 @@ class S2C_Singin final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr idtoken_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_token_;
     int32_t error_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -664,7 +664,7 @@ class S2C_Singin final :
 // -------------------------------------------------------------------
 
 class C2S_Singup final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Identity.C2S_Singup) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_Singup) */ {
  public:
   inline C2S_Singup() : C2S_Singup(nullptr) {}
   ~C2S_Singup() override;
@@ -767,7 +767,7 @@ class C2S_Singup final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Identity.C2S_Singup";
+    return "Protocol.C2S_Singup";
   }
   protected:
   explicit C2S_Singup(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -830,7 +830,7 @@ class C2S_Singup final :
   std::string* _internal_mutable_email();
   public:
 
-  // @@protoc_insertion_point(class_scope:Identity.C2S_Singup)
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_Singup)
  private:
   class _Internal;
 
@@ -849,7 +849,7 @@ class C2S_Singup final :
 // -------------------------------------------------------------------
 
 class S2C_Singup final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Identity.S2C_Singup) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_Singup) */ {
  public:
   inline S2C_Singup() : S2C_Singup(nullptr) {}
   ~S2C_Singup() override;
@@ -952,7 +952,7 @@ class S2C_Singup final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Identity.S2C_Singup";
+    return "Protocol.S2C_Singup";
   }
   protected:
   explicit S2C_Singup(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -980,7 +980,7 @@ class S2C_Singup final :
   void _internal_set_error(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:Identity.S2C_Singup)
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_Singup)
  private:
   class _Internal;
 
@@ -997,7 +997,7 @@ class S2C_Singup final :
 // -------------------------------------------------------------------
 
 class C2S_EmailVerified final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Identity.C2S_EmailVerified) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.C2S_EmailVerified) */ {
  public:
   inline C2S_EmailVerified() : C2S_EmailVerified(nullptr) {}
   ~C2S_EmailVerified() override;
@@ -1100,7 +1100,7 @@ class C2S_EmailVerified final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Identity.C2S_EmailVerified";
+    return "Protocol.C2S_EmailVerified";
   }
   protected:
   explicit C2S_EmailVerified(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -1133,7 +1133,7 @@ class C2S_EmailVerified final :
   std::string* _internal_mutable_verified();
   public:
 
-  // @@protoc_insertion_point(class_scope:Identity.C2S_EmailVerified)
+  // @@protoc_insertion_point(class_scope:Protocol.C2S_EmailVerified)
  private:
   class _Internal;
 
@@ -1150,7 +1150,7 @@ class C2S_EmailVerified final :
 // -------------------------------------------------------------------
 
 class S2C_EmailVerified final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Identity.S2C_EmailVerified) */ {
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Protocol.S2C_EmailVerified) */ {
  public:
   inline S2C_EmailVerified() : S2C_EmailVerified(nullptr) {}
   ~S2C_EmailVerified() override;
@@ -1253,7 +1253,7 @@ class S2C_EmailVerified final :
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "Identity.S2C_EmailVerified";
+    return "Protocol.S2C_EmailVerified";
   }
   protected:
   explicit S2C_EmailVerified(::PROTOBUF_NAMESPACE_ID::Arena* arena,
@@ -1281,7 +1281,7 @@ class S2C_EmailVerified final :
   void _internal_set_error(int32_t value);
   public:
 
-  // @@protoc_insertion_point(class_scope:Identity.S2C_EmailVerified)
+  // @@protoc_insertion_point(class_scope:Protocol.S2C_EmailVerified)
  private:
   class _Internal;
 
@@ -1311,7 +1311,7 @@ inline void UserData::clear_id() {
   _impl_.id_.ClearToEmpty();
 }
 inline const std::string& UserData::id() const {
-  // @@protoc_insertion_point(field_get:Identity.UserData.id)
+  // @@protoc_insertion_point(field_get:Protocol.UserData.id)
   return _internal_id();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1319,11 +1319,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void UserData::set_id(ArgT0&& arg0, ArgT... args) {
  
  _impl_.id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.UserData.id)
+  // @@protoc_insertion_point(field_set:Protocol.UserData.id)
 }
 inline std::string* UserData::mutable_id() {
   std::string* _s = _internal_mutable_id();
-  // @@protoc_insertion_point(field_mutable:Identity.UserData.id)
+  // @@protoc_insertion_point(field_mutable:Protocol.UserData.id)
   return _s;
 }
 inline const std::string& UserData::_internal_id() const {
@@ -1338,7 +1338,7 @@ inline std::string* UserData::_internal_mutable_id() {
   return _impl_.id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* UserData::release_id() {
-  // @@protoc_insertion_point(field_release:Identity.UserData.id)
+  // @@protoc_insertion_point(field_release:Protocol.UserData.id)
   return _impl_.id_.Release();
 }
 inline void UserData::set_allocated_id(std::string* id) {
@@ -1353,7 +1353,7 @@ inline void UserData::set_allocated_id(std::string* id) {
     _impl_.id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.UserData.id)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.UserData.id)
 }
 
 // string password = 2;
@@ -1361,7 +1361,7 @@ inline void UserData::clear_password() {
   _impl_.password_.ClearToEmpty();
 }
 inline const std::string& UserData::password() const {
-  // @@protoc_insertion_point(field_get:Identity.UserData.password)
+  // @@protoc_insertion_point(field_get:Protocol.UserData.password)
   return _internal_password();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1369,11 +1369,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void UserData::set_password(ArgT0&& arg0, ArgT... args) {
  
  _impl_.password_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.UserData.password)
+  // @@protoc_insertion_point(field_set:Protocol.UserData.password)
 }
 inline std::string* UserData::mutable_password() {
   std::string* _s = _internal_mutable_password();
-  // @@protoc_insertion_point(field_mutable:Identity.UserData.password)
+  // @@protoc_insertion_point(field_mutable:Protocol.UserData.password)
   return _s;
 }
 inline const std::string& UserData::_internal_password() const {
@@ -1388,7 +1388,7 @@ inline std::string* UserData::_internal_mutable_password() {
   return _impl_.password_.Mutable(GetArenaForAllocation());
 }
 inline std::string* UserData::release_password() {
-  // @@protoc_insertion_point(field_release:Identity.UserData.password)
+  // @@protoc_insertion_point(field_release:Protocol.UserData.password)
   return _impl_.password_.Release();
 }
 inline void UserData::set_allocated_password(std::string* password) {
@@ -1403,7 +1403,7 @@ inline void UserData::set_allocated_password(std::string* password) {
     _impl_.password_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.UserData.password)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.UserData.password)
 }
 
 // bool activate = 3;
@@ -1414,7 +1414,7 @@ inline bool UserData::_internal_activate() const {
   return _impl_.activate_;
 }
 inline bool UserData::activate() const {
-  // @@protoc_insertion_point(field_get:Identity.UserData.activate)
+  // @@protoc_insertion_point(field_get:Protocol.UserData.activate)
   return _internal_activate();
 }
 inline void UserData::_internal_set_activate(bool value) {
@@ -1423,7 +1423,7 @@ inline void UserData::_internal_set_activate(bool value) {
 }
 inline void UserData::set_activate(bool value) {
   _internal_set_activate(value);
-  // @@protoc_insertion_point(field_set:Identity.UserData.activate)
+  // @@protoc_insertion_point(field_set:Protocol.UserData.activate)
 }
 
 // bool confirmed = 4;
@@ -1434,7 +1434,7 @@ inline bool UserData::_internal_confirmed() const {
   return _impl_.confirmed_;
 }
 inline bool UserData::confirmed() const {
-  // @@protoc_insertion_point(field_get:Identity.UserData.confirmed)
+  // @@protoc_insertion_point(field_get:Protocol.UserData.confirmed)
   return _internal_confirmed();
 }
 inline void UserData::_internal_set_confirmed(bool value) {
@@ -1443,7 +1443,7 @@ inline void UserData::_internal_set_confirmed(bool value) {
 }
 inline void UserData::set_confirmed(bool value) {
   _internal_set_confirmed(value);
-  // @@protoc_insertion_point(field_set:Identity.UserData.confirmed)
+  // @@protoc_insertion_point(field_set:Protocol.UserData.confirmed)
 }
 
 // string email = 5;
@@ -1451,7 +1451,7 @@ inline void UserData::clear_email() {
   _impl_.email_.ClearToEmpty();
 }
 inline const std::string& UserData::email() const {
-  // @@protoc_insertion_point(field_get:Identity.UserData.email)
+  // @@protoc_insertion_point(field_get:Protocol.UserData.email)
   return _internal_email();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1459,11 +1459,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void UserData::set_email(ArgT0&& arg0, ArgT... args) {
  
  _impl_.email_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.UserData.email)
+  // @@protoc_insertion_point(field_set:Protocol.UserData.email)
 }
 inline std::string* UserData::mutable_email() {
   std::string* _s = _internal_mutable_email();
-  // @@protoc_insertion_point(field_mutable:Identity.UserData.email)
+  // @@protoc_insertion_point(field_mutable:Protocol.UserData.email)
   return _s;
 }
 inline const std::string& UserData::_internal_email() const {
@@ -1478,7 +1478,7 @@ inline std::string* UserData::_internal_mutable_email() {
   return _impl_.email_.Mutable(GetArenaForAllocation());
 }
 inline std::string* UserData::release_email() {
-  // @@protoc_insertion_point(field_release:Identity.UserData.email)
+  // @@protoc_insertion_point(field_release:Protocol.UserData.email)
   return _impl_.email_.Release();
 }
 inline void UserData::set_allocated_email(std::string* email) {
@@ -1493,7 +1493,7 @@ inline void UserData::set_allocated_email(std::string* email) {
     _impl_.email_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.UserData.email)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.UserData.email)
 }
 
 // bool verified = 6;
@@ -1504,7 +1504,7 @@ inline bool UserData::_internal_verified() const {
   return _impl_.verified_;
 }
 inline bool UserData::verified() const {
-  // @@protoc_insertion_point(field_get:Identity.UserData.verified)
+  // @@protoc_insertion_point(field_get:Protocol.UserData.verified)
   return _internal_verified();
 }
 inline void UserData::_internal_set_verified(bool value) {
@@ -1513,107 +1513,107 @@ inline void UserData::_internal_set_verified(bool value) {
 }
 inline void UserData::set_verified(bool value) {
   _internal_set_verified(value);
-  // @@protoc_insertion_point(field_set:Identity.UserData.verified)
+  // @@protoc_insertion_point(field_set:Protocol.UserData.verified)
 }
 
-// string UDate = 7;
-inline void UserData::clear_udate() {
-  _impl_.udate_.ClearToEmpty();
+// string update_date = 7;
+inline void UserData::clear_update_date() {
+  _impl_.update_date_.ClearToEmpty();
 }
-inline const std::string& UserData::udate() const {
-  // @@protoc_insertion_point(field_get:Identity.UserData.UDate)
-  return _internal_udate();
+inline const std::string& UserData::update_date() const {
+  // @@protoc_insertion_point(field_get:Protocol.UserData.update_date)
+  return _internal_update_date();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void UserData::set_udate(ArgT0&& arg0, ArgT... args) {
+void UserData::set_update_date(ArgT0&& arg0, ArgT... args) {
  
- _impl_.udate_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.UserData.UDate)
+ _impl_.update_date_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.UserData.update_date)
 }
-inline std::string* UserData::mutable_udate() {
-  std::string* _s = _internal_mutable_udate();
-  // @@protoc_insertion_point(field_mutable:Identity.UserData.UDate)
+inline std::string* UserData::mutable_update_date() {
+  std::string* _s = _internal_mutable_update_date();
+  // @@protoc_insertion_point(field_mutable:Protocol.UserData.update_date)
   return _s;
 }
-inline const std::string& UserData::_internal_udate() const {
-  return _impl_.udate_.Get();
+inline const std::string& UserData::_internal_update_date() const {
+  return _impl_.update_date_.Get();
 }
-inline void UserData::_internal_set_udate(const std::string& value) {
+inline void UserData::_internal_set_update_date(const std::string& value) {
   
-  _impl_.udate_.Set(value, GetArenaForAllocation());
+  _impl_.update_date_.Set(value, GetArenaForAllocation());
 }
-inline std::string* UserData::_internal_mutable_udate() {
+inline std::string* UserData::_internal_mutable_update_date() {
   
-  return _impl_.udate_.Mutable(GetArenaForAllocation());
+  return _impl_.update_date_.Mutable(GetArenaForAllocation());
 }
-inline std::string* UserData::release_udate() {
-  // @@protoc_insertion_point(field_release:Identity.UserData.UDate)
-  return _impl_.udate_.Release();
+inline std::string* UserData::release_update_date() {
+  // @@protoc_insertion_point(field_release:Protocol.UserData.update_date)
+  return _impl_.update_date_.Release();
 }
-inline void UserData::set_allocated_udate(std::string* udate) {
-  if (udate != nullptr) {
+inline void UserData::set_allocated_update_date(std::string* update_date) {
+  if (update_date != nullptr) {
     
   } else {
     
   }
-  _impl_.udate_.SetAllocated(udate, GetArenaForAllocation());
+  _impl_.update_date_.SetAllocated(update_date, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.udate_.IsDefault()) {
-    _impl_.udate_.Set("", GetArenaForAllocation());
+  if (_impl_.update_date_.IsDefault()) {
+    _impl_.update_date_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.UserData.UDate)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.UserData.update_date)
 }
 
-// string CDate = 8;
-inline void UserData::clear_cdate() {
-  _impl_.cdate_.ClearToEmpty();
+// string create_date = 8;
+inline void UserData::clear_create_date() {
+  _impl_.create_date_.ClearToEmpty();
 }
-inline const std::string& UserData::cdate() const {
-  // @@protoc_insertion_point(field_get:Identity.UserData.CDate)
-  return _internal_cdate();
+inline const std::string& UserData::create_date() const {
+  // @@protoc_insertion_point(field_get:Protocol.UserData.create_date)
+  return _internal_create_date();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void UserData::set_cdate(ArgT0&& arg0, ArgT... args) {
+void UserData::set_create_date(ArgT0&& arg0, ArgT... args) {
  
- _impl_.cdate_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.UserData.CDate)
+ _impl_.create_date_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.UserData.create_date)
 }
-inline std::string* UserData::mutable_cdate() {
-  std::string* _s = _internal_mutable_cdate();
-  // @@protoc_insertion_point(field_mutable:Identity.UserData.CDate)
+inline std::string* UserData::mutable_create_date() {
+  std::string* _s = _internal_mutable_create_date();
+  // @@protoc_insertion_point(field_mutable:Protocol.UserData.create_date)
   return _s;
 }
-inline const std::string& UserData::_internal_cdate() const {
-  return _impl_.cdate_.Get();
+inline const std::string& UserData::_internal_create_date() const {
+  return _impl_.create_date_.Get();
 }
-inline void UserData::_internal_set_cdate(const std::string& value) {
+inline void UserData::_internal_set_create_date(const std::string& value) {
   
-  _impl_.cdate_.Set(value, GetArenaForAllocation());
+  _impl_.create_date_.Set(value, GetArenaForAllocation());
 }
-inline std::string* UserData::_internal_mutable_cdate() {
+inline std::string* UserData::_internal_mutable_create_date() {
   
-  return _impl_.cdate_.Mutable(GetArenaForAllocation());
+  return _impl_.create_date_.Mutable(GetArenaForAllocation());
 }
-inline std::string* UserData::release_cdate() {
-  // @@protoc_insertion_point(field_release:Identity.UserData.CDate)
-  return _impl_.cdate_.Release();
+inline std::string* UserData::release_create_date() {
+  // @@protoc_insertion_point(field_release:Protocol.UserData.create_date)
+  return _impl_.create_date_.Release();
 }
-inline void UserData::set_allocated_cdate(std::string* cdate) {
-  if (cdate != nullptr) {
+inline void UserData::set_allocated_create_date(std::string* create_date) {
+  if (create_date != nullptr) {
     
   } else {
     
   }
-  _impl_.cdate_.SetAllocated(cdate, GetArenaForAllocation());
+  _impl_.create_date_.SetAllocated(create_date, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.cdate_.IsDefault()) {
-    _impl_.cdate_.Set("", GetArenaForAllocation());
+  if (_impl_.create_date_.IsDefault()) {
+    _impl_.create_date_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.UserData.CDate)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.UserData.create_date)
 }
 
 // -------------------------------------------------------------------
@@ -1625,7 +1625,7 @@ inline void C2S_Singin::clear_id() {
   _impl_.id_.ClearToEmpty();
 }
 inline const std::string& C2S_Singin::id() const {
-  // @@protoc_insertion_point(field_get:Identity.C2S_Singin.id)
+  // @@protoc_insertion_point(field_get:Protocol.C2S_Singin.id)
   return _internal_id();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1633,11 +1633,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void C2S_Singin::set_id(ArgT0&& arg0, ArgT... args) {
  
  _impl_.id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.C2S_Singin.id)
+  // @@protoc_insertion_point(field_set:Protocol.C2S_Singin.id)
 }
 inline std::string* C2S_Singin::mutable_id() {
   std::string* _s = _internal_mutable_id();
-  // @@protoc_insertion_point(field_mutable:Identity.C2S_Singin.id)
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_Singin.id)
   return _s;
 }
 inline const std::string& C2S_Singin::_internal_id() const {
@@ -1652,7 +1652,7 @@ inline std::string* C2S_Singin::_internal_mutable_id() {
   return _impl_.id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* C2S_Singin::release_id() {
-  // @@protoc_insertion_point(field_release:Identity.C2S_Singin.id)
+  // @@protoc_insertion_point(field_release:Protocol.C2S_Singin.id)
   return _impl_.id_.Release();
 }
 inline void C2S_Singin::set_allocated_id(std::string* id) {
@@ -1667,7 +1667,7 @@ inline void C2S_Singin::set_allocated_id(std::string* id) {
     _impl_.id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.C2S_Singin.id)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_Singin.id)
 }
 
 // string password = 2;
@@ -1675,7 +1675,7 @@ inline void C2S_Singin::clear_password() {
   _impl_.password_.ClearToEmpty();
 }
 inline const std::string& C2S_Singin::password() const {
-  // @@protoc_insertion_point(field_get:Identity.C2S_Singin.password)
+  // @@protoc_insertion_point(field_get:Protocol.C2S_Singin.password)
   return _internal_password();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1683,11 +1683,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void C2S_Singin::set_password(ArgT0&& arg0, ArgT... args) {
  
  _impl_.password_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.C2S_Singin.password)
+  // @@protoc_insertion_point(field_set:Protocol.C2S_Singin.password)
 }
 inline std::string* C2S_Singin::mutable_password() {
   std::string* _s = _internal_mutable_password();
-  // @@protoc_insertion_point(field_mutable:Identity.C2S_Singin.password)
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_Singin.password)
   return _s;
 }
 inline const std::string& C2S_Singin::_internal_password() const {
@@ -1702,7 +1702,7 @@ inline std::string* C2S_Singin::_internal_mutable_password() {
   return _impl_.password_.Mutable(GetArenaForAllocation());
 }
 inline std::string* C2S_Singin::release_password() {
-  // @@protoc_insertion_point(field_release:Identity.C2S_Singin.password)
+  // @@protoc_insertion_point(field_release:Protocol.C2S_Singin.password)
   return _impl_.password_.Release();
 }
 inline void C2S_Singin::set_allocated_password(std::string* password) {
@@ -1717,7 +1717,7 @@ inline void C2S_Singin::set_allocated_password(std::string* password) {
     _impl_.password_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.C2S_Singin.password)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_Singin.password)
 }
 
 // -------------------------------------------------------------------
@@ -1732,7 +1732,7 @@ inline int32_t S2C_Singin::_internal_error() const {
   return _impl_.error_;
 }
 inline int32_t S2C_Singin::error() const {
-  // @@protoc_insertion_point(field_get:Identity.S2C_Singin.error)
+  // @@protoc_insertion_point(field_get:Protocol.S2C_Singin.error)
   return _internal_error();
 }
 inline void S2C_Singin::_internal_set_error(int32_t value) {
@@ -1741,57 +1741,57 @@ inline void S2C_Singin::_internal_set_error(int32_t value) {
 }
 inline void S2C_Singin::set_error(int32_t value) {
   _internal_set_error(value);
-  // @@protoc_insertion_point(field_set:Identity.S2C_Singin.error)
+  // @@protoc_insertion_point(field_set:Protocol.S2C_Singin.error)
 }
 
-// string idToken = 2;
-inline void S2C_Singin::clear_idtoken() {
-  _impl_.idtoken_.ClearToEmpty();
+// string id_token = 2;
+inline void S2C_Singin::clear_id_token() {
+  _impl_.id_token_.ClearToEmpty();
 }
-inline const std::string& S2C_Singin::idtoken() const {
-  // @@protoc_insertion_point(field_get:Identity.S2C_Singin.idToken)
-  return _internal_idtoken();
+inline const std::string& S2C_Singin::id_token() const {
+  // @@protoc_insertion_point(field_get:Protocol.S2C_Singin.id_token)
+  return _internal_id_token();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void S2C_Singin::set_idtoken(ArgT0&& arg0, ArgT... args) {
+void S2C_Singin::set_id_token(ArgT0&& arg0, ArgT... args) {
  
- _impl_.idtoken_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.S2C_Singin.idToken)
+ _impl_.id_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:Protocol.S2C_Singin.id_token)
 }
-inline std::string* S2C_Singin::mutable_idtoken() {
-  std::string* _s = _internal_mutable_idtoken();
-  // @@protoc_insertion_point(field_mutable:Identity.S2C_Singin.idToken)
+inline std::string* S2C_Singin::mutable_id_token() {
+  std::string* _s = _internal_mutable_id_token();
+  // @@protoc_insertion_point(field_mutable:Protocol.S2C_Singin.id_token)
   return _s;
 }
-inline const std::string& S2C_Singin::_internal_idtoken() const {
-  return _impl_.idtoken_.Get();
+inline const std::string& S2C_Singin::_internal_id_token() const {
+  return _impl_.id_token_.Get();
 }
-inline void S2C_Singin::_internal_set_idtoken(const std::string& value) {
+inline void S2C_Singin::_internal_set_id_token(const std::string& value) {
   
-  _impl_.idtoken_.Set(value, GetArenaForAllocation());
+  _impl_.id_token_.Set(value, GetArenaForAllocation());
 }
-inline std::string* S2C_Singin::_internal_mutable_idtoken() {
+inline std::string* S2C_Singin::_internal_mutable_id_token() {
   
-  return _impl_.idtoken_.Mutable(GetArenaForAllocation());
+  return _impl_.id_token_.Mutable(GetArenaForAllocation());
 }
-inline std::string* S2C_Singin::release_idtoken() {
-  // @@protoc_insertion_point(field_release:Identity.S2C_Singin.idToken)
-  return _impl_.idtoken_.Release();
+inline std::string* S2C_Singin::release_id_token() {
+  // @@protoc_insertion_point(field_release:Protocol.S2C_Singin.id_token)
+  return _impl_.id_token_.Release();
 }
-inline void S2C_Singin::set_allocated_idtoken(std::string* idtoken) {
-  if (idtoken != nullptr) {
+inline void S2C_Singin::set_allocated_id_token(std::string* id_token) {
+  if (id_token != nullptr) {
     
   } else {
     
   }
-  _impl_.idtoken_.SetAllocated(idtoken, GetArenaForAllocation());
+  _impl_.id_token_.SetAllocated(id_token, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.idtoken_.IsDefault()) {
-    _impl_.idtoken_.Set("", GetArenaForAllocation());
+  if (_impl_.id_token_.IsDefault()) {
+    _impl_.id_token_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.S2C_Singin.idToken)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.S2C_Singin.id_token)
 }
 
 // -------------------------------------------------------------------
@@ -1803,7 +1803,7 @@ inline void C2S_Singup::clear_id() {
   _impl_.id_.ClearToEmpty();
 }
 inline const std::string& C2S_Singup::id() const {
-  // @@protoc_insertion_point(field_get:Identity.C2S_Singup.id)
+  // @@protoc_insertion_point(field_get:Protocol.C2S_Singup.id)
   return _internal_id();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1811,11 +1811,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void C2S_Singup::set_id(ArgT0&& arg0, ArgT... args) {
  
  _impl_.id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.C2S_Singup.id)
+  // @@protoc_insertion_point(field_set:Protocol.C2S_Singup.id)
 }
 inline std::string* C2S_Singup::mutable_id() {
   std::string* _s = _internal_mutable_id();
-  // @@protoc_insertion_point(field_mutable:Identity.C2S_Singup.id)
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_Singup.id)
   return _s;
 }
 inline const std::string& C2S_Singup::_internal_id() const {
@@ -1830,7 +1830,7 @@ inline std::string* C2S_Singup::_internal_mutable_id() {
   return _impl_.id_.Mutable(GetArenaForAllocation());
 }
 inline std::string* C2S_Singup::release_id() {
-  // @@protoc_insertion_point(field_release:Identity.C2S_Singup.id)
+  // @@protoc_insertion_point(field_release:Protocol.C2S_Singup.id)
   return _impl_.id_.Release();
 }
 inline void C2S_Singup::set_allocated_id(std::string* id) {
@@ -1845,7 +1845,7 @@ inline void C2S_Singup::set_allocated_id(std::string* id) {
     _impl_.id_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.C2S_Singup.id)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_Singup.id)
 }
 
 // string password = 2;
@@ -1853,7 +1853,7 @@ inline void C2S_Singup::clear_password() {
   _impl_.password_.ClearToEmpty();
 }
 inline const std::string& C2S_Singup::password() const {
-  // @@protoc_insertion_point(field_get:Identity.C2S_Singup.password)
+  // @@protoc_insertion_point(field_get:Protocol.C2S_Singup.password)
   return _internal_password();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1861,11 +1861,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void C2S_Singup::set_password(ArgT0&& arg0, ArgT... args) {
  
  _impl_.password_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.C2S_Singup.password)
+  // @@protoc_insertion_point(field_set:Protocol.C2S_Singup.password)
 }
 inline std::string* C2S_Singup::mutable_password() {
   std::string* _s = _internal_mutable_password();
-  // @@protoc_insertion_point(field_mutable:Identity.C2S_Singup.password)
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_Singup.password)
   return _s;
 }
 inline const std::string& C2S_Singup::_internal_password() const {
@@ -1880,7 +1880,7 @@ inline std::string* C2S_Singup::_internal_mutable_password() {
   return _impl_.password_.Mutable(GetArenaForAllocation());
 }
 inline std::string* C2S_Singup::release_password() {
-  // @@protoc_insertion_point(field_release:Identity.C2S_Singup.password)
+  // @@protoc_insertion_point(field_release:Protocol.C2S_Singup.password)
   return _impl_.password_.Release();
 }
 inline void C2S_Singup::set_allocated_password(std::string* password) {
@@ -1895,7 +1895,7 @@ inline void C2S_Singup::set_allocated_password(std::string* password) {
     _impl_.password_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.C2S_Singup.password)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_Singup.password)
 }
 
 // string email = 3;
@@ -1903,7 +1903,7 @@ inline void C2S_Singup::clear_email() {
   _impl_.email_.ClearToEmpty();
 }
 inline const std::string& C2S_Singup::email() const {
-  // @@protoc_insertion_point(field_get:Identity.C2S_Singup.email)
+  // @@protoc_insertion_point(field_get:Protocol.C2S_Singup.email)
   return _internal_email();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1911,11 +1911,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void C2S_Singup::set_email(ArgT0&& arg0, ArgT... args) {
  
  _impl_.email_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.C2S_Singup.email)
+  // @@protoc_insertion_point(field_set:Protocol.C2S_Singup.email)
 }
 inline std::string* C2S_Singup::mutable_email() {
   std::string* _s = _internal_mutable_email();
-  // @@protoc_insertion_point(field_mutable:Identity.C2S_Singup.email)
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_Singup.email)
   return _s;
 }
 inline const std::string& C2S_Singup::_internal_email() const {
@@ -1930,7 +1930,7 @@ inline std::string* C2S_Singup::_internal_mutable_email() {
   return _impl_.email_.Mutable(GetArenaForAllocation());
 }
 inline std::string* C2S_Singup::release_email() {
-  // @@protoc_insertion_point(field_release:Identity.C2S_Singup.email)
+  // @@protoc_insertion_point(field_release:Protocol.C2S_Singup.email)
   return _impl_.email_.Release();
 }
 inline void C2S_Singup::set_allocated_email(std::string* email) {
@@ -1945,7 +1945,7 @@ inline void C2S_Singup::set_allocated_email(std::string* email) {
     _impl_.email_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.C2S_Singup.email)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_Singup.email)
 }
 
 // -------------------------------------------------------------------
@@ -1960,7 +1960,7 @@ inline int32_t S2C_Singup::_internal_error() const {
   return _impl_.error_;
 }
 inline int32_t S2C_Singup::error() const {
-  // @@protoc_insertion_point(field_get:Identity.S2C_Singup.error)
+  // @@protoc_insertion_point(field_get:Protocol.S2C_Singup.error)
   return _internal_error();
 }
 inline void S2C_Singup::_internal_set_error(int32_t value) {
@@ -1969,7 +1969,7 @@ inline void S2C_Singup::_internal_set_error(int32_t value) {
 }
 inline void S2C_Singup::set_error(int32_t value) {
   _internal_set_error(value);
-  // @@protoc_insertion_point(field_set:Identity.S2C_Singup.error)
+  // @@protoc_insertion_point(field_set:Protocol.S2C_Singup.error)
 }
 
 // -------------------------------------------------------------------
@@ -1981,7 +1981,7 @@ inline void C2S_EmailVerified::clear_verified() {
   _impl_.verified_.ClearToEmpty();
 }
 inline const std::string& C2S_EmailVerified::verified() const {
-  // @@protoc_insertion_point(field_get:Identity.C2S_EmailVerified.verified)
+  // @@protoc_insertion_point(field_get:Protocol.C2S_EmailVerified.verified)
   return _internal_verified();
 }
 template <typename ArgT0, typename... ArgT>
@@ -1989,11 +1989,11 @@ inline PROTOBUF_ALWAYS_INLINE
 void C2S_EmailVerified::set_verified(ArgT0&& arg0, ArgT... args) {
  
  _impl_.verified_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:Identity.C2S_EmailVerified.verified)
+  // @@protoc_insertion_point(field_set:Protocol.C2S_EmailVerified.verified)
 }
 inline std::string* C2S_EmailVerified::mutable_verified() {
   std::string* _s = _internal_mutable_verified();
-  // @@protoc_insertion_point(field_mutable:Identity.C2S_EmailVerified.verified)
+  // @@protoc_insertion_point(field_mutable:Protocol.C2S_EmailVerified.verified)
   return _s;
 }
 inline const std::string& C2S_EmailVerified::_internal_verified() const {
@@ -2008,7 +2008,7 @@ inline std::string* C2S_EmailVerified::_internal_mutable_verified() {
   return _impl_.verified_.Mutable(GetArenaForAllocation());
 }
 inline std::string* C2S_EmailVerified::release_verified() {
-  // @@protoc_insertion_point(field_release:Identity.C2S_EmailVerified.verified)
+  // @@protoc_insertion_point(field_release:Protocol.C2S_EmailVerified.verified)
   return _impl_.verified_.Release();
 }
 inline void C2S_EmailVerified::set_allocated_verified(std::string* verified) {
@@ -2023,7 +2023,7 @@ inline void C2S_EmailVerified::set_allocated_verified(std::string* verified) {
     _impl_.verified_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:Identity.C2S_EmailVerified.verified)
+  // @@protoc_insertion_point(field_set_allocated:Protocol.C2S_EmailVerified.verified)
 }
 
 // -------------------------------------------------------------------
@@ -2038,7 +2038,7 @@ inline int32_t S2C_EmailVerified::_internal_error() const {
   return _impl_.error_;
 }
 inline int32_t S2C_EmailVerified::error() const {
-  // @@protoc_insertion_point(field_get:Identity.S2C_EmailVerified.error)
+  // @@protoc_insertion_point(field_get:Protocol.S2C_EmailVerified.error)
   return _internal_error();
 }
 inline void S2C_EmailVerified::_internal_set_error(int32_t value) {
@@ -2047,7 +2047,7 @@ inline void S2C_EmailVerified::_internal_set_error(int32_t value) {
 }
 inline void S2C_EmailVerified::set_error(int32_t value) {
   _internal_set_error(value);
-  // @@protoc_insertion_point(field_set:Identity.S2C_EmailVerified.error)
+  // @@protoc_insertion_point(field_set:Protocol.S2C_EmailVerified.error)
 }
 
 #ifdef __GNUC__
@@ -2068,7 +2068,7 @@ inline void S2C_EmailVerified::set_error(int32_t value) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace Identity
+}  // namespace Protocol
 
 // @@protoc_insertion_point(global_scope)
 
