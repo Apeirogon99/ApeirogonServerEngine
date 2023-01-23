@@ -4,145 +4,165 @@
 
 using namespace std;
 
-Socket::Socket(SOCKET socket, EProtocolType protocolType, ESocketType socketType) : mSocket(socket), mSocketType(socketType), mProtocolType(protocolType)
+WinSocket::WinSocket(SOCKET socket, EProtocolType protocolType, ESocketType socketType) : mSocket(socket), mSocketType(socketType), mProtocolType(protocolType), mPortNo(0)
 {
-    mPortNo = 0;
+  
 }
 
-Socket::~Socket()
+WinSocket::~WinSocket()
 {
+    wprintf(L"WinSocket::~WinSocket() : Close window socket\n");
+
     if (false == Close())
     {
-        SocketUtils::PrintSocketError(L"~Socket");
+        SocketUtils::WinSocketError(L"~Socket");
     }
 }
 
-void Socket::SetAddress(IPAddress& ipAddr)
-{
-    mIpAddress = ipAddr;
-}
-
-IPAddress Socket::GetAddress()
-{
-    return mIpAddress;
-}
-
-bool Socket::GetConnectionState()
+bool WinSocket::GetConnectionState()
 {
     return false;
 }
 
-bool Socket::GetDescription()
+bool WinSocket::GetDescription()
 {
     return false;
 }
 
-bool Socket::GetPeerAddress()
+IPAddressPtr WinSocket::GetPeerAddress(const WinSocketPtr& winSocket)
 {
-    if (mSocket == INVALID_SOCKET)
+    SOCKET socket = winSocket->GetSocket();
+    if (socket == INVALID_SOCKET)
     {
-        return false;
+        return nullptr;
     }
 
-    if (!mIpAddress.IsValid())
-    {
-        return false;
-    }
-
-    int32 sockLen = mIpAddress.GetAddrSize();
-    int32 error = getpeername(mSocket, reinterpret_cast<SOCKADDR*>(&mIpAddress.GetSockAddr()), &sockLen);
+    int32 sockLen = sizeof(sockaddr_storage);
+    sockaddr_storage sockAddr;
+    ZeroMemory(&sockAddr, sockLen);
+    int32 error = getpeername(socket, reinterpret_cast<SOCKADDR*>(&sockAddr), &sockLen);
 
     if (SOCKET_ERROR == error)
     {
-        SocketUtils::PrintSocketError(L"Socket::GetPeerAddress()");
-        return false;
+        SocketUtils::WinSocketError(L"Socket::GetPeerAddress()");
+        return nullptr;
     }
 
+    IPAddressPtr ipAddr = std::make_shared<IPAddress>();
+    ipAddr->SetIp(sockAddr);
 
-    return true;
+    return ipAddr;
 }
 
-uint16 Socket::GetPortNo()
+uint16 WinSocket::GetPortNo()
 {
     return mPortNo;
 }
 
-EProtocolType Socket::GetProtocolType() const
+EProtocolType WinSocket::GetProtocolType() const
 {
     return mProtocolType;
 }
 
-SOCKET Socket::GetSocket() const
+SOCKET WinSocket::GetSocket() const
 {
     return mSocket;
 }
 
-ESocketType Socket::GetSocketType() const
+ESocketType WinSocket::GetSocketType() const
 {
     return mSocketType;
 }
 
-Socket* Socket::Accept()
+WinSocket* WinSocket::Accept()
 {
     if (mSocket == INVALID_SOCKET)
     {
         return nullptr;
     }
 
-    SOCKADDR_IN clientAddr;
+    sockaddr_storage clientAddr;
     int32 addrLen = sizeof(clientAddr);
     SOCKET newSock = INVALID_SOCKET;
-    newSock = accept(mSocket, (SOCKADDR*)&clientAddr, &addrLen);
+    newSock = accept(mSocket, reinterpret_cast<SOCKADDR*>(&clientAddr), &addrLen);
+    //::WSAAccept();
 
     if (newSock == INVALID_SOCKET)
     {
-        SocketUtils::PrintSocketError(L"Socket::Accept()");
+        SocketUtils::WinSocketError(L"Socket::Accept()");
         closesocket(newSock);
         return nullptr;
     }
 
-    Socket* clientSock = new Socket(newSock, this->mProtocolType, this->mSocketType);
-    IPAddress clientIPAddress(clientAddr);
-    clientSock->SetAddress(clientIPAddress);
+    WinSocket* clientSock = new WinSocket(newSock, this->mProtocolType, this->mSocketType);
+   
+    IPAddressPtr clientIPAddress = std::make_shared<IPAddress>();
+    clientIPAddress->SetIp(clientAddr);
 
     return clientSock;
 }
 
-bool Socket::Bind(IPAddress& ipAddr)
+bool WinSocket::AcceptEx(const SessionPtr& session, AcceptEvent* acceptEvent)
 {
-    if (mSocket == INVALID_SOCKET)
+    SOCKET acceptSocket = session->GetWinSocket()->GetSocket();
+    RecvRingBuffer& outputBuffer = session->GetRecvBuffer();
+    DWORD receiveDataLength = 0;
+    DWORD localAddressLength = sizeof(SOCKADDR_IN) + 16;
+    DWORD remoteAddressLength = sizeof(SOCKADDR_IN) + 16;
+    DWORD bytesReceived = 0;
+
+    bool result = SocketUtils::AcceptEx(
+        mSocket, 
+        acceptSocket, 
+        outputBuffer.GetWriteBuffer(),
+        receiveDataLength,
+        localAddressLength,
+        remoteAddressLength,
+        &bytesReceived, 
+        static_cast<LPOVERLAPPED>(acceptEvent)
+    );
+
+    if (result == false)
+    {
+        int32 error = WSAGetLastError();
+        if (error != WSA_IO_PENDING)
+        {
+            SocketUtils::WinSocketError(L"WinSocket::AcceptEx()");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool WinSocket::Bind(IPAddressPtr& ipAddr)
+{
+    const IPAddress* bindAddr = ipAddr.get();
+    if (!bindAddr->IsValid())
     {
         return false;
     }
 
-    if (!ipAddr.IsValid())
+    if (GetProtocolType() != bindAddr->GetProtocolType())
     {
         return false;
     }
 
-    if (GetProtocolType() != ipAddr.GetProtocolType())
-    {
-        return false;
-    }
+    sockaddr_storage sockAddr = bindAddr->GetSockAddr();
+    int32 sockAddrSize = bindAddr->GetAddrSize();
+    int32 error = ::bind(mSocket, reinterpret_cast<SOCKADDR*>(&sockAddr), sockAddrSize);
 
-    SetAddress(ipAddr);
-    if (!mIpAddress.IsValid())
-    {
-        return false;
-    }
-
-    int32 error = ::bind(mSocket, (sockaddr*)&mIpAddress.GetSockAddr(), mIpAddress.GetAddrSize());
 
     if (SOCKET_ERROR == error)
     {
-        SocketUtils::PrintSocketError(L"Socket::Bind()");
+        SocketUtils::WinSocketError(L"Socket::Bind()");
         return false;
     }
 
     return true;
 }
 
-bool Socket::Close()
+bool WinSocket::Close()
 {
     if (mSocket != INVALID_SOCKET)
     {
@@ -150,44 +170,84 @@ bool Socket::Close()
         mSocket = INVALID_SOCKET;
         return error != SOCKET_ERROR;
     }
+
     return false;
 }
 
-bool Socket::Connect(IPAddress& ipAddr)
+bool WinSocket::Connect(IPAddressPtr& ipAddr)
 {
-    if (mSocket == INVALID_SOCKET)
+    IPAddress* connectAddr = ipAddr.get();
+    if (!connectAddr->IsValid())
     {
         return false;
     }
 
-    if (!ipAddr.IsValid())
+    if (GetProtocolType() != connectAddr->GetProtocolType())
     {
         return false;
     }
 
-    if (GetProtocolType() != ipAddr.GetProtocolType())
-    {
-        return false;
-    }
-
-    SetAddress(ipAddr);
-    if (!mIpAddress.IsValid())
-    {
-        return false;
-    }
-
-    int32 error = connect(mSocket, (sockaddr*)&mIpAddress, mIpAddress.GetAddrSize());
+    int32 sockAddrSize = connectAddr->GetAddrSize();
+    sockaddr_storage sockAddr = connectAddr->GetSockAddr();
+    int32 error = connect(mSocket, reinterpret_cast<SOCKADDR*>(&sockAddr), sockAddrSize);
 
     if (SOCKET_ERROR == error)
     {
-        SocketUtils::PrintSocketError(L"Socket::Connect()");
+        SocketUtils::WinSocketError(L"Socket::Connect()");
         return false;
     }
 
     return true;
 }
 
-bool Socket::Listen(int32 maxBacklog)
+bool WinSocket::ConnectEx(const IPAddressPtr& ipAddr, ConnectEvent& connectEvent)
+{
+    const int32 addrSize = ipAddr->GetAddrSize();
+    sockaddr_storage sockAddr = ipAddr->GetSockAddr();
+    PVOID sendBuffer = nullptr;
+    DWORD sendDataLength = 0;
+    DWORD bytesSent = 0;
+
+    bool result = SocketUtils::ConnectEx(mSocket, reinterpret_cast<SOCKADDR*>(&sockAddr), addrSize, sendBuffer, sendDataLength, &bytesSent, &connectEvent);
+
+    if (result == false)
+    {
+        int32 error = WSAGetLastError();
+        if (error != WSA_IO_PENDING)
+        {
+            SocketUtils::WinSocketError(L"WinSocket::ConnectEx()");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool WinSocket::DisConnectEx(DisconnectEvent& disconnectEvent)
+{
+    DWORD flag = TF_REUSE_SOCKET;
+    DWORD reserved = 0;
+    bool result = SocketUtils::DisconnectEx(mSocket, &disconnectEvent, flag, reserved);
+
+    if (result == false)
+    {
+        int32 error = WSAGetLastError();
+        if (error != WSA_IO_PENDING)
+        {
+            SocketUtils::WinSocketError(L"WinSocket::DisConnectEx()");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool WinSocket::HasPendingConnection()
+{
+    return false;
+}
+
+bool WinSocket::Listen(int32 maxBacklog)
 {
     if (mSocket == INVALID_SOCKET)
     {
@@ -198,14 +258,14 @@ bool Socket::Listen(int32 maxBacklog)
 
     if (SOCKET_ERROR == error)
     {
-        SocketUtils::PrintSocketError(L"Socket::Listen()");
+        SocketUtils::WinSocketError(L"Socket::Listen()");
         return false;
     }
 
     return true;
 }
 
-bool Socket::Send(const int8* data, int32 dataLen, int32& BytesSent)
+bool WinSocket::Send(const int8* data, int32 dataLen, int32& BytesSent)
 {
     if (mSocket == INVALID_SOCKET)
     {
@@ -216,103 +276,232 @@ bool Socket::Send(const int8* data, int32 dataLen, int32& BytesSent)
 
     if (SOCKET_ERROR == BytesSent)
     {
-        SocketUtils::PrintSocketError(L"Socket::Send()");
+        SocketUtils::WinSocketError(L"Socket::Send()");
         return false;
     }
 
     return true;
 }
 
-bool Socket::SetBoradcast(bool bAllowBroadcast)
+bool WinSocket::SendTo(const int8* data, int32 dataLen, int32& BytesSent, const IPAddressPtr& ipAddr)
 {
-    int Param = bAllowBroadcast ? 1 : 0;
-    return SetSocketOption(SOL_SOCKET, SO_BROADCAST, Param);
-}
-
-bool Socket::SetIpPktInfo()
-{
-    return false;
-}
-
-bool Socket::SetLinger(bool bShouldLinger, int32 Timeout)
-{
-    linger ling;
-    ling.l_onoff = bShouldLinger;
-    ling.l_linger = Timeout;
-
-    return SetSocketOption(SOL_SOCKET, SO_LINGER, ling);
-}
-
-bool Socket::SetMulticatInterface()
-{
-    return false;
-}
-
-bool Socket::SetMulticastLoopBack()
-{
-    return false;
-}
-
-bool Socket::SetMulticatTtl()
-{
-    return false;
-}
-
-bool Socket::SetNoDelay(bool bIsNoDelay)
-{
-    if (GetSocketType() == ESocketType::SOCKTYPE_Streaming)
+    if (mSocket == INVALID_SOCKET)
     {
-        int Param = bIsNoDelay ? 1 : 0;
-        return SetSocketOption(IPPROTO_TCP, TCP_NODELAY, Param);
+        return false;
+    }
+
+    const sockaddr_storage sockAddr = ipAddr->GetSockAddr();
+    const int32 toLen = ipAddr->GetAddrSize();
+    BytesSent = ::sendto(mSocket, data, dataLen, 0, reinterpret_cast<const SOCKADDR*>(&sockAddr), toLen);
+
+    if (SOCKET_ERROR == BytesSent)
+    {
+        SocketUtils::WinSocketError(L"Socket::SendTo()");
+        return false;
     }
 
     return true;
 }
 
-bool Socket::SetNonBlocking(bool bIsNonBlocking)
+bool WinSocket::SendEx(SendEvent& sendEvent)
+{
+    if (mSocket == INVALID_SOCKET)
+    {
+        return false;
+    }
+
+    std::vector<WSABUF> sendBuffer;
+    const size_t sendBufferSize = sendEvent.sendBuffers.size();
+    sendBuffer.reserve(sendBufferSize);
+    for (SendBufferPtr message : sendEvent.sendBuffers)
+    {
+        WSABUF wsaBuf;
+        wsaBuf.buf = reinterpret_cast<char*>(message->Buffer());
+        wsaBuf.len = static_cast<LONG>(message->AllocSize());
+        sendBuffer.push_back(wsaBuf);
+    }
+
+    const DWORD sendBufferCount = static_cast<DWORD>(sendBuffer.size());
+    DWORD NumberOfBytesSent = 0;
+    const DWORD flag = 0;
+    LPWSAOVERLAPPED_COMPLETION_ROUTINE completionRoutine = nullptr;
+
+    int32 WSAResult = ::WSASend(mSocket, sendBuffer.data(), sendBufferCount, &NumberOfBytesSent, flag, &sendEvent, completionRoutine);
+    
+    if (SOCKET_ERROR == WSAResult)
+    {
+        int32 error = ::WSAGetLastError();
+        if (error != WSA_IO_PENDING)
+        {
+            SocketUtils::WinSocketError(L"WinSocket::SendEx()");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool WinSocket::SetBoradcast(bool bAllowBroadcast)
+{
+    int Param = bAllowBroadcast ? 1 : 0;
+
+    int32 result = setsockopt(mSocket, SOL_SOCKET, SO_BROADCAST, reinterpret_cast<char*>(&Param), sizeof(Param));
+
+    if (result == SOCKET_ERROR)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::SetBoradcast()");
+        return false;
+    }
+
+    return true;
+}
+
+bool WinSocket::SetIpPktInfo()
+{
+    return false;
+}
+
+bool WinSocket::SetLinger(bool bShouldLinger, int32 Timeout)
+{
+    linger ling;
+    ling.l_onoff = bShouldLinger;
+    ling.l_linger = Timeout;
+
+    int32 result = setsockopt(mSocket, SOL_SOCKET, SO_LINGER, reinterpret_cast<char*>(&ling), sizeof(ling));
+
+    if (result == SOCKET_ERROR)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::SetLinger()");
+        return false;
+    }
+
+    return true;
+}
+
+bool WinSocket::SetMulticatInterface()
+{
+    return false;
+}
+
+bool WinSocket::SetMulticastLoopBack()
+{
+    return false;
+}
+
+bool WinSocket::SetMulticatTtl()
+{
+    return false;
+}
+
+bool WinSocket::SetNoDelay(bool bIsNoDelay)
+{
+    ESocketType curType = GetSocketType();
+    if (curType == ESocketType::SOCKTYPE_Streaming)
+    {
+        int Param = bIsNoDelay ? 1 : 0;
+
+        int32 result = setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<char*>(&Param), sizeof(Param));
+
+        if (result == SOCKET_ERROR)
+        {
+            SocketUtils::WinSocketError(L"WinSocket::SetNoDelay()");
+            return false;
+        }
+
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
+    return false;
+}
+
+bool WinSocket::SetNonBlocking(bool bIsNonBlocking)
 {
     u_long Value = bIsNonBlocking ? true : false;
-    return SOCKET_ERROR != ::ioctlsocket(mSocket, FIONBIO, &Value);
+    int32 result = ::ioctlsocket(mSocket, FIONBIO, &Value);
+
+    if (result == SOCKET_ERROR)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::SetNonBlocking()");
+        return false;
+    }
+
+    return true;
 }
 
-bool Socket::SetReceiveBufferSize(int32 size)
+bool WinSocket::SetReceiveBufferSize(int32 size)
 {
-    return SetSocketOption(SOL_SOCKET, SO_RCVBUF, size);
+    int32 result = setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<char*>(&size), sizeof(size));
+
+    if (result == SOCKET_ERROR)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::SetReceiveBufferSize()");
+        return false;
+    }
+
+    return true;
 }
 
-bool Socket::SetRecvErr()
+bool WinSocket::SetRecvErr()
 {
     return false;
 }
 
-bool Socket::SetRetrieveTimestamp()
+bool WinSocket::SetRetrieveTimestamp()
 {
     return false;
 }
 
-bool Socket::SetReuseAddr(bool bAllowReuse)
+bool WinSocket::SetReuseAddr(bool bAllowReuse)
 {
     int Param = bAllowReuse ? 1 : 0;
-    return SetSocketOption(SOL_SOCKET, SO_REUSEADDR, Param);
+    int32 result = setsockopt(mSocket, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<char*>(&bAllowReuse), sizeof(bAllowReuse));
+
+    if (result == SOCKET_ERROR)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::SetReuseAddr()");
+        return false;
+    }
+
+    return true;
 }
 
-bool Socket::SetSendBufferSize(int32 size)
+bool WinSocket::SetSendBufferSize(int32 size)
 {
-    return SetSocketOption(SOL_SOCKET, SO_SNDBUF, size);
+    int32 result = setsockopt(mSocket, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<char*>(&size), sizeof(size));
+
+    if (result == SOCKET_ERROR)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::SetSendBufferSize()");
+        return false;
+    }
+
+    return true;
 }
 
-bool Socket::UpdateAcceptSocket(SOCKET listenSocket)
+bool WinSocket::UpdateAcceptSocket(SOCKET listenSocket)
 {
-    return SetSocketOption(SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, listenSocket);
+    int32 result = setsockopt(mSocket, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, reinterpret_cast<char*>(&listenSocket), sizeof(listenSocket));
+
+    if (result == SOCKET_ERROR)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::UpdateAcceptSocket()");
+        return false;
+    }
+
+    return true;
 }
 
 template<typename T>
-bool Socket::SetSocketOption(int32 level, int32 optName, T optVal)
+bool WinSocket::SetSocketOption(int32 level, int32 optName, T optVal)
 {
     return SOCKET_ERROR != ::setsockopt(mSocket, level, optName, reinterpret_cast<char*>(&optVal), sizeof(T));
 }
 
-bool Socket::Recv(int8* data, int32 dataSize, int32& BytesRead)
+bool WinSocket::Recv(int8* data, int32 dataSize, int32& BytesRead)
 {
     if (mSocket == INVALID_SOCKET)
     {
@@ -323,9 +512,65 @@ bool Socket::Recv(int8* data, int32 dataSize, int32& BytesRead)
 
     if (SOCKET_ERROR == BytesRead)
     {
-        SocketUtils::PrintSocketError(L"Socket::Recv()");
+        SocketUtils::WinSocketError(L"Socket::Recv()");
         BytesRead = 0;
         return false;
+    }
+
+    return true;
+}
+
+bool WinSocket::RecvFrom(int8* Data, int32 BufferSize, int32& BytesRead, const IPAddressPtr& ipAddr)
+{
+    if (mSocket == INVALID_SOCKET)
+    {
+        return false;
+    }
+
+    sockaddr_storage sockAddr;
+    int32 fromLen = sizeof(sockaddr_storage);
+    ::memset(&sockAddr, 0, fromLen);
+
+    BytesRead = ::recvfrom(mSocket, Data, BufferSize, 0, reinterpret_cast<SOCKADDR*>(&sockAddr), &fromLen);
+
+    ipAddr->SetIp(sockAddr);
+
+    if (SOCKET_ERROR == BytesRead)
+    {
+        SocketUtils::WinSocketError(L"Socket::RecvFrom()");
+        BytesRead = 0;
+        return false;
+    }
+
+    return true;
+}
+
+bool WinSocket::RecvEx(RecvEvent& recvEvnet)
+{
+    if (mSocket == INVALID_SOCKET)
+    {
+        return false;
+    }
+
+    WSABUF recvBuffer;
+    recvBuffer.buf = reinterpret_cast<char*>(recvEvnet.buffer);
+    recvBuffer.len = recvEvnet.len;
+
+    //WSABUF* recvBuffer = buffer;
+    const DWORD recvBufferCount = 1;
+    DWORD numberOfBytesRecvd = 0;
+    DWORD flag = 0;
+
+    int32 WSAResult = ::WSARecv(mSocket, &recvBuffer, recvBufferCount, &numberOfBytesRecvd, &flag, &recvEvnet, nullptr);
+
+    if (SOCKET_ERROR == WSAResult)
+    {
+        int32 error = ::WSAGetLastError();
+        if (error != WSA_IO_PENDING)
+        {
+            SocketUtils::WinSocketError(L"WinSocket::RecvEx()");
+            return false;
+        }
     }
 
     return true;

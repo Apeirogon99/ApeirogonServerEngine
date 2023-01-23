@@ -1,22 +1,27 @@
 #pragma once
 
-#ifdef DLL_DEVELOPMENT
-#define SOCKET_API __declspec(dllimport)
-#else
-#define SOCKET_API __declspec(dllexport)
-#endif // DLL_DEVELOPMENT
+class WinSocket;
+class IPAddress;
 
-class Socket;
-class SOCKET_API SocketUtils
+class SocketUtils
 {
 public:
+	static LPFN_CONNECTEX		ConnectEx;
+	static LPFN_DISCONNECTEX	DisconnectEx;
+	static LPFN_ACCEPTEX		AcceptEx;
 
-	static Socket*	CreateSocket(EProtocolType protocolType, ESocketType socketType);
+public:
+	SOCKET_API static void			Init();
+	SOCKET_API static void			Clear();
 
-	static void		DestroySocket(Socket* sock);
+	SOCKET_API static bool			BindWindowsFunction(WinSocketPtr socket, GUID guid, LPVOID* fn);
 
-	static void		PrintSocketError(const WCHAR* function);
+	SOCKET_API static WinSocketPtr	CreateSocket(EProtocolType protocolType, ESocketType socketType);
 
-	static WCHAR*	GetSocektError();
+	SOCKET_API static void			DestroySocket(WinSocketPtr sock);
+
+	SOCKET_API static void			WinSocketError(const WCHAR* function);
+
+	SOCKET_API static WCHAR*		GetSocektError();
 
 };

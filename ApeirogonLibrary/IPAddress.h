@@ -1,46 +1,45 @@
 #pragma once
 
-#ifdef DLL_DEVELOPMENT
-#define SOCKET_API __declspec(dllimport)
-#else
-#define SOCKET_API __declspec(dllexport)
-#endif // DLL_DEVELOPMENT
-
-class SOCKET_API IPAddress
+class IPAddress
 {
 public:
-	IPAddress();
-	IPAddress(IN_ADDR addr);
-	IPAddress(SOCKADDR_IN sockAddr);
-	IPAddress(std::wstring ip, uint16 port);
+	SOCKET_API IPAddress();
+	SOCKET_API IPAddress(const IPAddress& ipAddr);
+	SOCKET_API IPAddress& operator=(const IPAddress& ipAddr);
 
-	IPAddress(IPAddress& ipAddr);
-
-	~IPAddress();
+	SOCKET_API ~IPAddress();
 
 public:
-	void			SetIp(IN_ADDR& addr);
-	void			SetIp(const SOCKADDR_IN& sockAddr);
-	void			SetIp(const std::wstring ip, const uint16 port);
-	void			SetPort(uint16 port);
-	void			SetAnyAddress();
-	void			SetBroadcastAddress();
-	void			SetLoopbackAddress();
+	SOCKET_API void					SetIp(const in_addr& IPv4Addr);
+	SOCKET_API void					SetIp(const in6_addr& IPv6Addr);
+	SOCKET_API void					SetIp(const sockaddr_in& IPv4Addr);
+	SOCKET_API void					SetIp(const sockaddr_in6& IPv6Addr);
+	SOCKET_API void					SetIp(const sockaddr_storage& IpAddr);
+	SOCKET_API void					SetIp(const WCHAR* ip, const uint16 port, const EProtocolType type);
+
+	SOCKET_API void					SetAnyAddress();
+	SOCKET_API void					SetBroadcastAddress();
+	SOCKET_API void					SetLoopbackAddress();
+
+	SOCKET_API void					SetPort(const uint16 port);
 
 public:
-	std::wstring	GetIp();
-	uint16			GetPort();
-	SOCKADDR_IN&	GetSockAddr();
-	int32			GetAddrSize() const;
-	EProtocolType	GetProtocolType() const;
+	SOCKET_API std::wstring			GetIp();
+	SOCKET_API uint16				GetPort() const;
+	SOCKET_API sockaddr_storage		GetSockAddr() const;
+	SOCKET_API int32				GetAddrSize() const;
+	SOCKET_API EProtocolType		GetProtocolType() const;
 
 public:
-	void			Clear();
-	bool			IsValid() const;
-	bool			CompareEndpoints(const IPAddress& addr);
-	std::wstring	ToString();
+	SOCKET_API void					Clear();
+	SOCKET_API bool					IsValid() const;
+	SOCKET_API bool					CompareEndpoints(const IPAddress& addr);
+	SOCKET_API std::wstring			ToString();
+
+protected:
+	void							SetDefaultAddressFamily();
+	void							SetAddress(const IPAddress& ipAddr);
 
 private:
-	SOCKADDR_IN mAddr;
-	//sockaddr_storage mAddr;	//IPv6까지 한다면 이걸로 해야함, 언리얼 참고
+	sockaddr_storage mAddr;	//IPv6까지 한다면 이걸로 해야함, 언리얼 참고
 };

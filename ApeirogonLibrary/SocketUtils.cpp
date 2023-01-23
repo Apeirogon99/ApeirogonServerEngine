@@ -3,53 +3,98 @@
 
 using namespace std;
 
-Socket* SocketUtils::CreateSocket(EProtocolType protocolType, ESocketType socketType)
+LPFN_CONNECTEX		SocketUtils::ConnectEx = nullptr;
+LPFN_DISCONNECTEX	SocketUtils::DisconnectEx = nullptr;
+LPFN_ACCEPTEX		SocketUtils::AcceptEx = nullptr;
+
+void SocketUtils::Init()
+{
+	int32 result = 0;
+	WSADATA data;
+	WORD	ver = MAKEWORD(2, 2);
+
+	result = ::WSAStartup(ver, &data);
+	if (SOCKET_ERROR == result)
+	{
+		return;
+	}
+
+	WinSocketPtr dummySocket = CreateSocket(EProtocolType::IPv4, ESocketType::SOCKTYPE_Streaming);
+
+	BindWindowsFunction(dummySocket, WSAID_CONNECTEX, reinterpret_cast<LPVOID*>(&ConnectEx));
+	BindWindowsFunction(dummySocket, WSAID_DISCONNECTEX, reinterpret_cast<LPVOID*>(&DisconnectEx));
+	BindWindowsFunction(dummySocket, WSAID_ACCEPTEX, reinterpret_cast<LPVOID*>(&AcceptEx));
+
+	DestroySocket(dummySocket);
+}
+
+void SocketUtils::Clear()
+{
+	WSACleanup();
+}
+
+bool SocketUtils::BindWindowsFunction(WinSocketPtr socket, GUID guid, LPVOID* fn)
+{
+	int32 result = 0;
+	DWORD bytes = 0;
+	result = ::WSAIoctl(socket->GetSocket(), SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), fn, sizeof(*fn), OUT & bytes, NULL, NULL);
+
+	if (SOCKET_ERROR == result)
+	{
+		WinSocketError(L"SocketUtils::BindWindowsFunction()");
+		return false;
+	}
+
+	return true;
+}
+
+WinSocketPtr SocketUtils::CreateSocket(EProtocolType protocolType, ESocketType socketType)
 {
 	SOCKET sock = INVALID_SOCKET;
-	Socket* newSock = nullptr;
+	WinSocketPtr newWinSock = nullptr;
 
 	if (protocolType == EProtocolType::None)
 	{
-		protocolType = EProtocolType::IPv4;
+		return nullptr;
 	}
 
-	int32 af = static_cast<int32>(protocolType);
+	int32 family = static_cast<int32>(protocolType);
 	int32 type = static_cast<int32>(socketType);
 	int32 protocol = (socketType == ESocketType::SOCKTYPE_Streaming) ? IPPROTO_TCP : IPPROTO_UDP;
 
-	sock = ::WSASocket(af, type, protocol, NULL, 0, WSA_FLAG_OVERLAPPED);
+	sock = ::WSASocket(family, type, protocol, NULL, 0, WSA_FLAG_OVERLAPPED);
 	//sock = socket(af, type, protocol);
 
 	if (sock == INVALID_SOCKET)
 	{
-		PrintSocketError(L"CreateSocket");
+		WinSocketError(L"CreateSocket");
 		closesocket(sock);
-	}
-	else
-	{
-		newSock = new Socket(sock, protocolType, socketType);
+		return nullptr;
 	}
 
-	if (!newSock)
+	newWinSock = std::make_shared<WinSocket>(sock, protocolType, socketType);
+	//newSock = new WinSocket(sock, protocolType, socketType);
+	if (nullptr == newWinSock)
 	{
 		printf("[CreateSocket] : Failed to create socket\n");
 	}
 
-	return newSock;
+	return newWinSock;
 }
 
-void SocketUtils::DestroySocket(Socket* sock)
+void SocketUtils::DestroySocket(WinSocketPtr sock)
 {
 	if (sock)
 	{
-		delete sock;
+		//sock->Close();
+		sock.reset();
 	}
-	
-	sock = nullptr;
 }
 
-void SocketUtils::PrintSocketError(const WCHAR* function)
+void SocketUtils::WinSocketError(const WCHAR* function)
 {
+	//후에는 로그로 가야함
+
 	int32 code = WSAGetLastError();
 	if(code == WSA_IO_PENDING)
 	{

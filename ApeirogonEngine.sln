@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IdentityServer", "IdentityS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ApeirogonLibrary", "ApeirogonLibrary\ApeirogonLibrary.vcxproj", "{7CC6AA95-DD7C-49CD-8BC1-A66A2706C2AB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeLab", "CodeLab\CodeLab.vcxproj", "{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{7CC6AA95-DD7C-49CD-8BC1-A66A2706C2AB}.Release|x64.Build.0 = Release|x64
 		{7CC6AA95-DD7C-49CD-8BC1-A66A2706C2AB}.Release|x86.ActiveCfg = Release|Win32
 		{7CC6AA95-DD7C-49CD-8BC1-A66A2706C2AB}.Release|x86.Build.0 = Release|Win32
+		{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}.Debug|x64.ActiveCfg = Debug|x64
+		{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}.Debug|x64.Build.0 = Debug|x64
+		{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}.Debug|x86.ActiveCfg = Debug|Win32
+		{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}.Debug|x86.Build.0 = Debug|Win32
+		{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}.Release|x64.ActiveCfg = Release|x64
+		{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}.Release|x64.Build.0 = Release|x64
+		{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}.Release|x86.ActiveCfg = Release|Win32
+		{15A8BA3D-0164-4B78-BEFF-97A9E77EA880}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
