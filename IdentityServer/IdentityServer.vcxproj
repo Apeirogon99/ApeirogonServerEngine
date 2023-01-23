@@ -19,19 +19,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Appearance.h" />
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="IdentityForward.h" />
+    <ClInclude Include="IdentityDBHandler.h" />
+    <ClInclude Include="IdentityGameState.h" />
+    <ClInclude Include="IdentityLibaray.h" />
+    <ClInclude Include="IdentityListener.h" />
     <ClInclude Include="IdentityPacket.pb.h" />
-    <ClInclude Include="IdentityPacketHandler.h" />
+    <ClInclude Include="IdentityPlayerState.h" />
+    <ClInclude Include="IdentityServerPacketHandler.h" />
+    <ClInclude Include="IdentityService.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="IdentityDBHandler.cpp" />
+    <ClCompile Include="IdentityGameState.cpp" />
+    <ClCompile Include="IdentityLibaray.cpp" />
+    <ClCompile Include="IdentityListener.cpp" />
     <ClCompile Include="IdentityPacket.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="IdentityPacketHandler.cpp" />
+    <ClCompile Include="IdentityPlayerState.cpp" />
     <ClCompile Include="IdentityServer.cpp" />
+    <ClCompile Include="IdentityServerPacketHandler.cpp" />
+    <ClCompile Include="IdentityService.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
@@ -99,22 +115,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)ApeirgonBuilds\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)ApeirogonBuilds\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)ApeirogonLibrary\;$(SolutionDir)ProtobufBuilds\Include\;$(SolutionDir)ProtobufBuilds\CommonPacket\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)ApeirgonBuilds\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)ApeirogonBuilds\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)ApeirogonLibrary\;$(SolutionDir)ProtobufBuilds\Include\;$(SolutionDir)ProtobufBuilds\CommonPacket\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)ApeirgonBuilds\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)ApeirogonBuilds\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)ApeirogonLibrary\;$(SolutionDir)ProtobufBuilds\Include\;$(SolutionDir)ProtobufBuilds\CommonPacket\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)ApeirgonBuilds\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)ApeirogonBuilds\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)ApeirogonLibrary\;$(SolutionDir)ProtobufBuilds\Include\;$(SolutionDir)ProtobufBuilds\CommonPacket\;$(IncludePath)</IncludePath>
   </PropertyGroup>

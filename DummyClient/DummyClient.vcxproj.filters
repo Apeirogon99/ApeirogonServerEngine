@@ -37,7 +37,7 @@
     <ClCompile Include="IdentityPacket.pb.cc">
       <Filter>Source\Packet\Private</Filter>
     </ClCompile>
-    <ClCompile Include="ClientPacketHandler.cpp">
+    <ClCompile Include="IdentityClientPacketHandler.cpp">
       <Filter>Source\Packet\Private</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,7 +48,7 @@
     <ClInclude Include="IdentityPacket.pb.h">
       <Filter>Source\Packet\Public</Filter>
     </ClInclude>
-    <ClInclude Include="ClientPacketHandler.h">
+    <ClInclude Include="IdentityClientPacketHandler.h">
       <Filter>Source\Packet\Public</Filter>
     </ClInclude>
   </ItemGroup>

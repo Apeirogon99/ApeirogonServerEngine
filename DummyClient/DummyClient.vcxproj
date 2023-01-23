@@ -71,22 +71,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)ApeirgonBuilds\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)ApeirogonBuilds\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)ApeirogonLibrary\;$(SolutionDir)ProtobufBuilds\Include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)ApeirgonBuilds\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)ApeirogonBuilds\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)ApeirogonLibrary\;$(SolutionDir)ProtobufBuilds\Include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)ApeirgonBuilds\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)ApeirogonBuilds\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)ApeirogonLibrary\;$(SolutionDir)ProtobufBuilds\Include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)ApeirgonBuilds\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)ApeirogonBuilds\$(Configuration)\</OutDir>
     <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionDir)ApeirogonLibrary\;$(SolutionDir)ProtobufBuilds\Include\;$(IncludePath)</IncludePath>
   </PropertyGroup>
@@ -159,8 +159,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ClientPacketHandler.cpp" />
     <ClCompile Include="DummyClient.cpp" />
+    <ClCompile Include="IdentityClientPacketHandler.cpp" />
     <ClCompile Include="IdentityPacket.pb.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -179,7 +179,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClientPacketHandler.h" />
+    <ClInclude Include="IdentityClientPacketHandler.h" />
     <ClInclude Include="IdentityPacket.pb.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>

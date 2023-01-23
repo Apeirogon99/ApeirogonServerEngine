@@ -25,15 +25,69 @@
     <Filter Include="Soruce\Packet\Private">
       <UniqueIdentifier>{c60f0c2e-21a3-492c-b045-8867f683535f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Soruce\Contents">
+      <UniqueIdentifier>{56371205-146b-4647-96ce-98998d9ccad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Contents\Public">
+      <UniqueIdentifier>{0a6245e5-3f4f-4b36-b8b8-fc518dc26182}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Contents\Private">
+      <UniqueIdentifier>{5fd18621-631d-454f-8b4a-946cd45cbe08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\DB">
+      <UniqueIdentifier>{376f295d-88f8-4491-b676-1738b21dc000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\DB\Public">
+      <UniqueIdentifier>{44cb9f08-b96f-409d-8459-407f048fd140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\DB\Private">
+      <UniqueIdentifier>{79b5f4d9-3ab2-43f4-a731-23566b74e108}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Framework">
+      <UniqueIdentifier>{d1c2eed8-ed77-4461-8ffd-f3641aba8304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Framework\Public">
+      <UniqueIdentifier>{be443d6a-93e7-4291-acba-f7e55d6a41cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Framework\Private">
+      <UniqueIdentifier>{cf171bef-3aab-4d8e-b88d-1de5c26de1f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Soruce\pch\Public</Filter>
     </ClInclude>
-    <ClInclude Include="IdentityPacketHandler.h">
+    <ClInclude Include="IdentityPacket.pb.h">
       <Filter>Soruce\Packet\Public</Filter>
     </ClInclude>
-    <ClInclude Include="IdentityPacket.pb.h">
+    <ClInclude Include="IdentityDBHandler.h">
+      <Filter>Soruce\DB\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityService.h">
+      <Filter>Soruce\Framework\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityForward.h">
+      <Filter>Soruce\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityLibaray.h">
+      <Filter>Soruce\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Appearance.h">
+      <Filter>Soruce\pch\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Soruce\Contents\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityListener.h">
+      <Filter>Soruce\Framework\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityPlayerState.h">
+      <Filter>Soruce\Framework\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityGameState.h">
+      <Filter>Soruce\Framework\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityServerPacketHandler.h">
       <Filter>Soruce\Packet\Public</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,10 +98,31 @@
     <ClCompile Include="IdentityServer.cpp">
       <Filter>Soruce\main</Filter>
     </ClCompile>
-    <ClCompile Include="IdentityPacketHandler.cpp">
+    <ClCompile Include="IdentityPacket.pb.cc">
       <Filter>Soruce\Packet\Private</Filter>
     </ClCompile>
-    <ClCompile Include="IdentityPacket.pb.cc">
+    <ClCompile Include="IdentityDBHandler.cpp">
+      <Filter>Soruce\DB\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityService.cpp">
+      <Filter>Soruce\Framework\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityLibaray.cpp">
+      <Filter>Soruce\pch\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Soruce\Contents\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityListener.cpp">
+      <Filter>Soruce\Framework\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityPlayerState.cpp">
+      <Filter>Soruce\Framework\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityGameState.cpp">
+      <Filter>Soruce\Framework\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityServerPacketHandler.cpp">
       <Filter>Soruce\Packet\Private</Filter>
     </ClCompile>
   </ItemGroup>
