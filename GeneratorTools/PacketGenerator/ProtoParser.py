@@ -17,7 +17,7 @@ class ProtoParser():
 			if line.startswith('message') == False:
 				continue
 
-			pkt_name = line.split()[1].upper()
+			pkt_name = line.split()[1]
 			if pkt_name.startswith(self.recv_prefix):
 				self.recv_pkt.append(Packet(pkt_name, self.id))
 			elif pkt_name.startswith(self.send_prefix):
