@@ -1,5 +1,11 @@
 #pragma once
 
+#ifdef DLL_DEVELOPMENT
+#define APEIROGON_API __declspec(dllimport)
+#else
+#define APEIROGON_API __declspec(dllexport)
+#endif // DLL_DEVELOPMENT
+
 enum class EDBMSTypes
 {
 	None,
@@ -20,16 +26,16 @@ class ADOConnectionInfo
 public:
 	//Security = SqlClinet, OleDb(SPPI), OracleClinet
 	//Trusted = ODBC
-	ADO_API ADOConnectionInfo();
-	ADO_API ADOConnectionInfo(const WCHAR* provider, const WCHAR* server, const WCHAR* database, const WCHAR* security, const WCHAR* trusted, const WCHAR* id, const WCHAR* password, const EDBMSTypes type);
+	APEIROGON_API ADOConnectionInfo();
+	APEIROGON_API ADOConnectionInfo(const WCHAR* provider, const WCHAR* server, const WCHAR* database, const WCHAR* security, const WCHAR* trusted, const WCHAR* id, const WCHAR* password, const EDBMSTypes type);
 
-	ADO_API ADOConnectionInfo(const ADOConnectionInfo& info);
+	APEIROGON_API ADOConnectionInfo(const ADOConnectionInfo& info);
 
-	ADO_API ADOConnectionInfo& operator=(const ADOConnectionInfo& info);
+	APEIROGON_API ADOConnectionInfo& operator=(const ADOConnectionInfo& info);
 
 public:
-	ADO_API void SetInfo(const WCHAR* provider, const WCHAR* server, const WCHAR* database, const WCHAR* security, const WCHAR* trusted, const WCHAR* id, const WCHAR* password);
-	ADO_API const WCHAR* ToString() const;
+	APEIROGON_API void SetInfo(const WCHAR* provider, const WCHAR* server, const WCHAR* database, const WCHAR* security, const WCHAR* trusted, const WCHAR* id, const WCHAR* password);
+	APEIROGON_API const WCHAR* ToString() const;
 
 public:
 	//const WCHAR*	mProvider;
@@ -55,6 +61,6 @@ public:
 
 	static long			GetDataTypeSize(const _variant_t& value, DataTypeEnum dataType);
 
-	static ADO_API void ADOError(const WCHAR* funcName, _com_error& error);
+	static APEIROGON_API void ADOError(const WCHAR* funcName, _com_error& error);
 };
 

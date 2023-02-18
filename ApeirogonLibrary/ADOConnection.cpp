@@ -102,6 +102,7 @@ void ADOConnection::Close()
 	if (IsOpen())
 	{
 		connectionInterface->Close();
+		connectionInterface->PutConnectionString("");
 	}
 }
 

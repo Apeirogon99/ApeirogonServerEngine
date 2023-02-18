@@ -5,23 +5,23 @@ class ADOConnectionEvents;
 class ADOConnection : public _ConnectionPtr
 {
 public:
-	ADO_API ADOConnection();
-	ADO_API ~ADOConnection();
-	ADO_API ADOConnection(const ADOConnection& connection);
-	ADO_API ADOConnection& operator=(const ADOConnection& connection);
+	APEIROGON_API ADOConnection();
+	APEIROGON_API ~ADOConnection();
+	APEIROGON_API ADOConnection(const ADOConnection& connection);
+	APEIROGON_API ADOConnection& operator=(const ADOConnection& connection);
 
 public:
-	ADO_API void Open(const ADOConnectionInfo& connInfo);
-	ADO_API void OpenEx(const ADOConnectionInfo& connInfo);
-	ADO_API bool IsOpen() const;
-	ADO_API void Close();
+	APEIROGON_API void Open(const ADOConnectionInfo& connInfo);
+	APEIROGON_API void OpenEx(const ADOConnectionInfo& connInfo);
+	APEIROGON_API bool IsOpen() const;
+	APEIROGON_API void Close();
 
-	ADO_API void SetActiveEvent();
-	ADO_API void SetDeactiveateEvent();
+	APEIROGON_API void SetActiveEvent();
+	APEIROGON_API void SetDeactiveateEvent();
 
-	ADO_API const WCHAR* GetDatabaseName() const;
-	ADO_API ADOConnectionInfo GetConnectionInfo() const;
-	ADO_API void SetConnectionInfo(const ADOConnectionInfo& info);
+	APEIROGON_API const WCHAR* GetDatabaseName() const;
+	APEIROGON_API ADOConnectionInfo GetConnectionInfo() const;
+	APEIROGON_API void SetConnectionInfo(const ADOConnectionInfo& info);
 
 protected:
 	void Initlialze();

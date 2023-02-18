@@ -2,13 +2,13 @@
 class ADOService
 {
 public:
-	ADO_API ADOService(const size_t poolSize = 10);
-	ADO_API ~ADOService();
+	APEIROGON_API ADOService(const size_t poolSize = 10);
+	APEIROGON_API ~ADOService();
 
-	ADO_API bool Run();
-	ADO_API void PushConnectionPool(ADOConnection& conn, const ADOConnectionInfo& info);
-	ADO_API void PrintConnectionPoolState();
-	ADO_API bool WaitConnectionPool();
+	APEIROGON_API bool Run();
+	APEIROGON_API void PushConnectionPool(ADOConnection& conn, const ADOConnectionInfo& info);
+	APEIROGON_API void PrintConnectionPoolState();
+	APEIROGON_API bool WaitConnectionPool();
 
 protected:
 	void KeepConnection();

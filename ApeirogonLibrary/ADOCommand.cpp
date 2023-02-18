@@ -66,6 +66,20 @@ HRESULT ADOCommand::PutRefActiveConnection(ADOConnection& connection)
 	return commandInterface->GetActiveConnection() != nullptr ? S_OK : S_FALSE;
 }
 
+void ADOCommand::ResetStoredProcedure()
+{
+	HRESULT hResult = S_FALSE;
+
+	auto commandInterface = this->GetInterfacePtr();
+	if (!commandInterface)
+	{
+		wprintf(L"[DBCommand::StoredProcCommand] is not valid commandInterface\n");
+		return;
+	}
+
+	commandInterface->PutCommandText("");
+}
+
 void ADOCommand::SetStoredProcedure(ADOConnection& connection, const WCHAR* storedProcName)
 {
 	HRESULT hResult = S_FALSE;
@@ -154,6 +168,38 @@ void ADOCommand::SetInputParam(const WCHAR* inputName, ADOVariant& value)
 	{
 		return;
 	}
+
+	mParams[mCurParamsCount++] = inputName;
+}
+
+void ADOCommand::SetOutputParam(const WCHAR* outputName, DataTypeEnum inDataType, long inDataSize)
+{
+	HRESULT					result = S_FALSE;
+	ParameterDirectionEnum	parmDirction = ParameterDirectionEnum::adParamOutput;
+
+	auto commandInterface = this->GetInterfacePtr();
+	if (!commandInterface)
+	{
+		return;
+	}
+
+	_ParameterPtr paramRet = commandInterface->CreateParameter(outputName, inDataType, parmDirction, inDataSize, NULL);
+
+	if (!paramRet)
+	{
+		return;
+	}
+
+	result = commandInterface->Parameters->Append(paramRet);
+
+	//paramRet->Value = NULL;
+
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	mParams[mCurParamsCount++] = outputName;
 }
 
 void ADOCommand::SetOutputParam(const WCHAR* outputName, ADOVariant& value)
@@ -169,7 +215,7 @@ void ADOCommand::SetOutputParam(const WCHAR* outputName, ADOVariant& value)
 		return;
 	}
 
-	_ParameterPtr paramRet = commandInterface->CreateParameter(outputName, dataType, parmDirction, dataTypeSize, value.mVar);
+	_ParameterPtr paramRet = commandInterface->CreateParameter(outputName, dataType, parmDirction, dataTypeSize, NULL);
 
 	if (!paramRet)
 	{
@@ -184,6 +230,8 @@ void ADOCommand::SetOutputParam(const WCHAR* outputName, ADOVariant& value)
 	{
 		return;
 	}
+
+	mParams[mCurParamsCount++] = outputName;
 }
 
 void ADOCommand::SetReturnParam()
@@ -298,4 +346,32 @@ ADOVariant ADOCommand::GetParam(const WCHAR* name)
 
 	_variant_t tempParam = parameters->Item[name]->GetValue();
 	return tempParam;
+}
+
+ADOVariant ADOCommand::GetOutputParam(const WCHAR* name)
+{
+	auto commandInterface = this->GetInterfacePtr();
+	if (!commandInterface)
+	{
+		wprintf(L"[DBCommand::GetParam, name] is not valid commandInterface\n");
+		return NULL;
+	}
+
+	auto parameters = commandInterface->GetParameters();
+	if (!parameters)
+	{
+		wprintf(L"[DBCommand::GetParam, name] is not valid parameters\n");
+		return NULL;
+	}
+
+	for (int i = 0; i < mCurParamsCount; ++i)
+	{
+		if (::wcscmp(mParams[i], name) == 0)
+		{
+			return GetParam(i + 1);
+		}
+	}
+
+	_variant_t variant;
+	return variant;
 }

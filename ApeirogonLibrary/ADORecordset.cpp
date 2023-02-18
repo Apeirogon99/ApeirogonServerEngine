@@ -15,12 +15,18 @@ ADORecordset::~ADORecordset()
 
 ADORecordset::ADORecordset(_RecordsetPtr recordset)
 {
+	Initlialze();
+	SetActiveEvent();
+
 	if (recordset)
 		Attach(recordset, true);
 }
 
 ADORecordset& ADORecordset::operator=(_RecordsetPtr recordset)
 {
+	Initlialze();
+	SetActiveEvent();
+
 	if (recordset)
 		Attach(recordset, true);
 
