@@ -104,6 +104,12 @@ inline uint32 RingBuffer::GetFreeSize() const
 	return GetTotalSize() - GetUsedSize();
 }
 
+inline uint32 RingBuffer::GetRecvMaxSize() const
+{
+	uint32 maxSize = GetTotalSize() - GetWritePos();
+	return maxSize;
+}
+
 //
 //SendRingBuffer
 //
@@ -219,7 +225,7 @@ uint32 RecvRingBuffer::Dequeue(BYTE* dest, const uint32 len)
 		const uint32 OverLen = (PrevReadPos + len) - GetTotalSize();
 		const uint32 LessLen = len - OverLen;
 
-		::memcpy(&dest[0], &GetBuffer()[PrevReadPos], LessLen);
+		::memcpy(dest, &GetBuffer()[PrevReadPos], LessLen);
 		::memcpy(&dest[LessLen], &GetBuffer()[0], OverLen);
 		MoveFront(OverLen + LessLen);
 		//mReadPos = (mReadPos + OverLen + LessLen) % mBufferSize;

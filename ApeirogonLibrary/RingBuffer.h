@@ -33,6 +33,7 @@ public:
 	inline uint32				GetUsedSize() const;
 	inline uint32				GetTotalSize() const;
 	inline uint32				GetFreeSize()	const;
+	inline uint32				GetRecvMaxSize() const;
 
 private:
 	uint32	mWritePos;
