@@ -163,7 +163,7 @@ int main(void)
 
 		DECODE_SINGIN(sock);
 
-		Sleep(1000);
+		Sleep(33);
 
 	} while (true);
 
