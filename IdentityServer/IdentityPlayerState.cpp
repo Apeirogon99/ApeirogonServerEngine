@@ -1,6 +1,14 @@
 #include "pch.h"
 #include "IdentityPlayerState.h"
 
+RemotePlayer::RemotePlayer()
+{
+}
+
+RemotePlayer::~RemotePlayer()
+{
+}
+
 IdentityPlayerState::IdentityPlayerState()
 {
 }
@@ -11,72 +19,78 @@ IdentityPlayerState::~IdentityPlayerState()
 
 void IdentityPlayerState::OnConnected()
 {
+	Protocol::S2C_EnterServer enterServer;
+	PacketSessionPtr session = GetPacketSessionRef();
+
+	bool valid = session->IsValid();
+	if (false == valid)
+	{
+		enterServer.set_error(-1);
+	}
+	else
+	{
+		RemotePlayerPtr newRemotePlayer = std::make_shared<RemotePlayer>();
+		PlayerStatePtr playerState = std::static_pointer_cast<IdentityPlayerState>(session);
+		playerState->SetRemotePlayer(newRemotePlayer);
+		enterServer.set_error(0);
+	}
+
+	SendBufferPtr sendBuffer = IdentityServerPacketHandler::MakeSendBuffer(session, enterServer);
+	Send(sendBuffer);
 }
 
 void IdentityPlayerState::OnSend(uint32 len)
 {
+
 }
 
 void IdentityPlayerState::OnDisconnected()
 {
-}
-
-void IdentityPlayerState::OnRecvPacket(RecvRingBuffer& buffer, const uint32 len)
-{
+	Protocol::S2C_LeaveServer leavePacket;
 	PacketSessionPtr session = GetPacketSessionRef();
-	//PacketHeader* header = reinterpret_cast<PacketHeader*>(buffer.GetReadBuffer());
-
-	// TODO : packetId 대역 체크
-	bool result = false;
-	result = IdentityServerPacketHandler::HandlePacket(session, buffer.GetReadBuffer(), len);
-	if (false == result)
+	bool valid = session->IsValid();
+	if (false == valid)
 	{
-		this->SessionLog(L"IdentityPlayerState::OnRecvPacket() : Failed to handle packet");
-		return;
+		leavePacket.set_error(-1);
+	}
+	else
+	{
+		leavePacket.set_error(0);
 	}
 
-	//PacketHeader headerRecv;
-	//buffer.Dequeue(reinterpret_cast<BYTE*>(&headerRecv), sizeof(PacketHeader));
+	SendBufferPtr sendBuffer = IdentityServerPacketHandler::MakeSendBuffer(session, leavePacket);
+	Send(sendBuffer);
+}
 
-	//const uint32 dataSize = headerRecv.size - sizeof(PacketHeader);
+void IdentityPlayerState::OnRecvPacket(BYTE* buffer, const uint32 len)
+{
+	PacketSessionPtr session = GetPacketSessionRef();
 
-	//Identity::C2S_Singin C2S_pktSingin;
-	//C2S_pktSingin.ParseFromArray(buffer.GetReadBuffer(), dataSize);
-	//buffer.MoveFront(dataSize);
+	bool result = false;
+	result = IdentityServerPacketHandler::HandlePacket(session, buffer, len);
+	if (false == result)
+	{
+		this->SessionLog(L"IdentityPlayerState::OnRecvPacket() : Failed to handle packet\n");
+		return;
+	}
+}
 
-	//std::string id = C2S_pktSingin.id();
-	//std::string ps = C2S_pktSingin.password();
+RemotePlayerPtr IdentityPlayerState::GetRemotePlayer()
+{
+	return mRemotePlayer;
+}
 
-	//printf("Server Recv : [%d (Byte)] [ID : %s][PS : %s]\n", len, id.c_str(), ps.c_str());
+void IdentityPlayerState::SetRemotePlayer(RemotePlayerPtr& inRemotePlayer)
+{
+	mRemotePlayer = std::move(inRemotePlayer);
+}
 
-	////SEND
-	//SessionManagerPtr sessionManger = GetSessionManager();
-	//if (nullptr == sessionManger)
-	//{
-	//	return;
-	//}
+int32 IdentityPlayerState::GetGlobalID()
+{
+	return mGlobalID;
+}
 
-	//Identity::S2C_Singin S2C_pktSingin;
-	//S2C_pktSingin.set_idtoken("TEST TOKEN");
-
-	//const uint16 S2CdataSize = static_cast<uint16>(S2C_pktSingin.ByteSizeLong());
-	//const uint16 S2CpacketSize = S2CdataSize + sizeof(PacketHeader);
-
-	//SendRingBuffer& sendRingBuffer = sessionManger->GetSendRingBuffer();
-	//SendBufferPtr S2CBuffer = std::make_shared<SendBuffer>(sendRingBuffer.Writer(S2CpacketSize), S2CpacketSize);
-
-	//PacketHeader* header = reinterpret_cast<PacketHeader*>(S2CBuffer->Buffer());
-	//header->size = S2CpacketSize;
-	//header->id = S2C_SINGIN;
-
-
-	//S2C_pktSingin.SerializeToArray(&header[1], S2CdataSize);
-
-	//sendRingBuffer.Reserve(S2CpacketSize);
-
-
-	//for (int i = 0; i < (rand() % 10) + 1; ++i)
-	//{
-	//	Send(S2CBuffer);
-	//}
+void IdentityPlayerState::SetGlobalID(int32 inGlobalID)
+{
+	mGlobalID = inGlobalID;
 }

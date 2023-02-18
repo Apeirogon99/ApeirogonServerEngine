@@ -218,6 +218,7 @@
 ////		runtime.End();
 ////
 ////		const WCHAR* guidString = L"A7886D57-2A2B-4EB7-B082-C06C41B38496";
+// 7E46A4BF-CCE4-49EA-BF7D-5FA35C9CEC80
 ////
 ////		DBCommand cmd;
 ////		cmd.SetStoredProcedure(conn, L"dbo.sp_test");

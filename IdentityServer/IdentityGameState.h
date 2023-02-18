@@ -8,6 +8,9 @@ public:
 	IdentityGameState(const IdentityGameState& player) = delete;
 	IdentityGameState& operator=(const IdentityGameState& player) = delete;
 
+public:
+
+
 private:
 
 };

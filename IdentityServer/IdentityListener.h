@@ -2,7 +2,7 @@
 class IdentityListener : public Listener
 {
 public:
-	IdentityListener(const IPAddressPtr& ipAddr);
+	IdentityListener(IPAddressPtr& ipAddr);
 	virtual ~IdentityListener();
 
 	IdentityListener(const IdentityListener& player) = delete;

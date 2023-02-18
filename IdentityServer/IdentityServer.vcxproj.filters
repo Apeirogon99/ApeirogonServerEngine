@@ -4,131 +4,146 @@
     <Filter Include="Soruce">
       <UniqueIdentifier>{e93e6de1-53b4-4814-8559-366092896375}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Soruce\pch">
-      <UniqueIdentifier>{07671e0e-0f88-4cc1-a418-41be217cf8d6}</UniqueIdentifier>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{2442ac71-a733-452b-9f5c-32d05b452742}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Soruce\pch\Public">
-      <UniqueIdentifier>{1e52e377-ef58-48b6-82cf-825a86217d6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Soruce\pch\Private">
+    <Filter Include="PCH\Private">
       <UniqueIdentifier>{396ddfed-022b-4e91-bd00-9cf433f218c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Soruce\main">
-      <UniqueIdentifier>{8f9c7da1-fafc-45af-86d1-f9b92bed3fcb}</UniqueIdentifier>
+    <Filter Include="PCH\Public">
+      <UniqueIdentifier>{1e52e377-ef58-48b6-82cf-825a86217d6a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Soruce\Packet">
+    <Filter Include="Soruce\Public">
+      <UniqueIdentifier>{6d7c0387-49fb-45e0-9e8f-b168cc572c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Private">
+      <UniqueIdentifier>{a435b29d-9604-4084-b9e8-1fa48f4d1f57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Public\ContentsType">
+      <UniqueIdentifier>{fb3c9937-9b3c-4c2e-967f-e0115922cc51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Private\Packet">
       <UniqueIdentifier>{c8d0a36c-eebe-4968-a841-9c33c8b2dd8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Soruce\Packet\Public">
-      <UniqueIdentifier>{e1a6c9fe-4d24-4dc1-8a42-47ea17c00a13}</UniqueIdentifier>
+    <Filter Include="Main">
+      <UniqueIdentifier>{504f88cc-5f5f-44a6-9322-77b86a620d9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Soruce\Packet\Private">
-      <UniqueIdentifier>{c60f0c2e-21a3-492c-b045-8867f683535f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Soruce\Contents">
-      <UniqueIdentifier>{56371205-146b-4647-96ce-98998d9ccad2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Soruce\Contents\Public">
-      <UniqueIdentifier>{0a6245e5-3f4f-4b36-b8b8-fc518dc26182}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Soruce\Contents\Private">
-      <UniqueIdentifier>{5fd18621-631d-454f-8b4a-946cd45cbe08}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Soruce\DB">
-      <UniqueIdentifier>{376f295d-88f8-4491-b676-1738b21dc000}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Soruce\DB\Public">
-      <UniqueIdentifier>{44cb9f08-b96f-409d-8459-407f048fd140}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Soruce\DB\Private">
-      <UniqueIdentifier>{79b5f4d9-3ab2-43f4-a731-23566b74e108}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Soruce\Framework">
+    <Filter Include="Soruce\Private\Framework">
       <UniqueIdentifier>{d1c2eed8-ed77-4461-8ffd-f3641aba8304}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Soruce\Framework\Public">
-      <UniqueIdentifier>{be443d6a-93e7-4291-acba-f7e55d6a41cc}</UniqueIdentifier>
+    <Filter Include="Soruce\Public\Packet">
+      <UniqueIdentifier>{2ebefb69-1a78-4ec0-8f1e-d0130426883f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Soruce\Framework\Private">
-      <UniqueIdentifier>{cf171bef-3aab-4d8e-b88d-1de5c26de1f7}</UniqueIdentifier>
+    <Filter Include="Soruce\Public\Framework">
+      <UniqueIdentifier>{2d594c27-f261-4b73-80c1-8c0d39b6d7cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Public\Database">
+      <UniqueIdentifier>{c2db87f8-78a7-45e6-b1d0-66f3ff68a679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Private\Database">
+      <UniqueIdentifier>{376f295d-88f8-4491-b676-1738b21dc000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Public\GameContents">
+      <UniqueIdentifier>{6d1a53d7-5d73-4401-9899-c7be10f4f197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Private\GameContents">
+      <UniqueIdentifier>{56371205-146b-4647-96ce-98998d9ccad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Private\Utils">
+      <UniqueIdentifier>{7a1d080f-25c7-42c9-9d33-a573ee28502e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Soruce\Public\Utils">
+      <UniqueIdentifier>{55173c1d-cb50-4563-b4dd-c94e0f8dbf49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
-      <Filter>Soruce\pch\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IdentityPacket.pb.h">
-      <Filter>Soruce\Packet\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IdentityDBHandler.h">
-      <Filter>Soruce\DB\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IdentityService.h">
-      <Filter>Soruce\Framework\Public</Filter>
+      <Filter>PCH\Public</Filter>
     </ClInclude>
     <ClInclude Include="IdentityForward.h">
-      <Filter>Soruce\pch\Public</Filter>
+      <Filter>PCH\Public</Filter>
     </ClInclude>
     <ClInclude Include="IdentityLibaray.h">
-      <Filter>Soruce\pch\Public</Filter>
+      <Filter>PCH\Public</Filter>
     </ClInclude>
     <ClInclude Include="Appearance.h">
-      <Filter>Soruce\pch\Public</Filter>
+      <Filter>Soruce\Public\ContentsType</Filter>
     </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>Soruce\Contents\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IdentityListener.h">
-      <Filter>Soruce\Framework\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IdentityPlayerState.h">
-      <Filter>Soruce\Framework\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IdentityGameState.h">
-      <Filter>Soruce\Framework\Public</Filter>
+    <ClInclude Include="IdentityPacket.pb.h">
+      <Filter>Soruce\Public\Packet</Filter>
     </ClInclude>
     <ClInclude Include="IdentityServerPacketHandler.h">
-      <Filter>Soruce\Packet\Public</Filter>
+      <Filter>Soruce\Public\Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityService.h">
+      <Filter>Soruce\Public\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityPlayerState.h">
+      <Filter>Soruce\Public\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityListener.h">
+      <Filter>Soruce\Public\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityGameState.h">
+      <Filter>Soruce\Public\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="IdentityDBHandler.h">
+      <Filter>Soruce\Public\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Soruce\Public\GameContents</Filter>
+    </ClInclude>
+    <ClInclude Include="Verified.h">
+      <Filter>Soruce\Public\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="DBError.h">
+      <Filter>Soruce\Public\Database</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>Soruce\pch\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="IdentityServer.cpp">
-      <Filter>Soruce\main</Filter>
-    </ClCompile>
-    <ClCompile Include="IdentityPacket.pb.cc">
-      <Filter>Soruce\Packet\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="IdentityDBHandler.cpp">
-      <Filter>Soruce\DB\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="IdentityService.cpp">
-      <Filter>Soruce\Framework\Private</Filter>
+      <Filter>PCH\Private</Filter>
     </ClCompile>
     <ClCompile Include="IdentityLibaray.cpp">
-      <Filter>Soruce\pch\Private</Filter>
+      <Filter>PCH\Private</Filter>
     </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>Soruce\Contents\Private</Filter>
+    <ClCompile Include="IdentityServer.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="IdentityListener.cpp">
-      <Filter>Soruce\Framework\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="IdentityPlayerState.cpp">
-      <Filter>Soruce\Framework\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="IdentityGameState.cpp">
-      <Filter>Soruce\Framework\Private</Filter>
+    <ClCompile Include="IdentityPacket.pb.cc">
+      <Filter>Soruce\Private\Packet</Filter>
     </ClCompile>
     <ClCompile Include="IdentityServerPacketHandler.cpp">
-      <Filter>Soruce\Packet\Private</Filter>
+      <Filter>Soruce\Private\Packet</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityGameState.cpp">
+      <Filter>Soruce\Private\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityListener.cpp">
+      <Filter>Soruce\Private\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityPlayerState.cpp">
+      <Filter>Soruce\Private\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityService.cpp">
+      <Filter>Soruce\Private\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="IdentityDBHandler.cpp">
+      <Filter>Soruce\Private\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Soruce\Private\GameContents</Filter>
+    </ClCompile>
+    <ClCompile Include="Verified.cpp">
+      <Filter>Soruce\Private\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="DBError.cpp">
+      <Filter>Soruce\Private\Database</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\ProtobufMake\bin\src\IdentityPacket.proto">
-      <Filter>Soruce\Packet\Public</Filter>
+    <None Include="..\Protobuf\Generator\bin\ProtoSoruce\IdentityPacket.proto">
+      <Filter>Soruce\Public\Packet</Filter>
     </None>
   </ItemGroup>
 </Project>
