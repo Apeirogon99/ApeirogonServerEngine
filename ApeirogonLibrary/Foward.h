@@ -7,6 +7,8 @@ class AcceptEvent;
 class RecvEvent;
 class SendEvent;
 
+class SMTP;
+
 class Session;
 class PacketSession;
 class Service;
@@ -30,6 +32,7 @@ using SessionPtr = std::shared_ptr<Session>;
 using ListenerPtr = std::shared_ptr<Listener>;
 using WinSocketPtr = std::shared_ptr<WinSocket>;
 using IPAddressPtr = std::shared_ptr<IPAddress>;
+using SMTPPtr = std::shared_ptr<SMTP>;
 
 using SendBufferPtr = std::shared_ptr<SendBuffer>;
 
