@@ -14,9 +14,12 @@ public:
 	SessionPtr	CreateSession();
 	bool		InsertSession(const SessionPtr& session);
 	bool		ReleaseSession(const SessionPtr& session);
+	bool		FindSession(const SessionPtr& session);
+	void		BroadCastSession(SendBufferPtr sendBuffer);
 	void		Shutdown();
 
 public:
+	
 	uint32		GetSessionCount() const;
 	uint32		GetMaxSessionCount() const;
 	APEIROGON_API SendRingBuffer& GetSendRingBuffer();
@@ -24,12 +27,13 @@ public:
 public:
 	APEIROGON_API void SessionManagerLog(const WCHAR* log, ...);
 
-private:
+protected:
 	uint32					mSessionCount;
 	uint32					mMaxSessionCount;
 	std::set<SessionPtr>	mSessions;
 	SessionFactory			mSessionFactory;
 	ServicePtr				mService;
+	FastSpinLock			mFastSpinLock;
 	SendRingBuffer			mSendRingBuffer;
 	std::mutex				mLock;
 };

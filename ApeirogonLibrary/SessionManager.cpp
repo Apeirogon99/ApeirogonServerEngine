@@ -36,7 +36,7 @@ bool SessionManager::Prepare(const ServicePtr& service)
 
 SessionPtr SessionManager::CreateSession()
 {
-	std::lock_guard<std::mutex> lock(mLock);
+	FastLockGuard lockGuard(mFastSpinLock);
 
 	if (mSessionFactory == nullptr)
 	{
@@ -60,7 +60,7 @@ SessionPtr SessionManager::CreateSession()
 
 bool SessionManager::InsertSession(const SessionPtr& session)
 {
-	std::lock_guard<std::mutex> lock(mLock);
+	FastLockGuard lockGuard(mFastSpinLock);
 
 	auto result = mSessions.insert(session);
 	if (false == result.second)
@@ -70,12 +70,15 @@ bool SessionManager::InsertSession(const SessionPtr& session)
 	}
 
 	mSessionCount++;
+
+	SessionManagerLog(L"[SessionManager::InsertSession()] (CUR : %ld)\n", mSessionCount);
+
 	return true;
 }
 
 bool SessionManager::ReleaseSession(const SessionPtr& session)
 {
-	std::lock_guard<std::mutex> lock(mLock);
+	FastLockGuard lockGuard(mFastSpinLock);
 
 	size_t result;
 	result = mSessions.erase(session);
@@ -86,12 +89,33 @@ bool SessionManager::ReleaseSession(const SessionPtr& session)
 	}
 
 	mSessionCount--;
+
+	SessionManagerLog(L"[SessionManager::ReleaseSession()] (CUR : %ld)\n", mSessionCount);
 	
 	return true;
 }
 
+bool SessionManager::FindSession(const SessionPtr& session)
+{
+	FastLockGuard lockGuard(mFastSpinLock);
+	auto findSession = mSessions.find(session);
+	return findSession != mSessions.end() ? true : false;
+}
+
+void SessionManager::BroadCastSession(SendBufferPtr sendBuffer)
+{
+	FastLockGuard lockGuard(mFastSpinLock);
+
+	for (SessionPtr session : mSessions)
+	{
+		session->Send(sendBuffer);
+	}
+}
+
 void SessionManager::Shutdown()
 {
+	FastLockGuard lockGuard(mFastSpinLock);
+
 	for (SessionPtr session : mSessions)
 	{
 		session->Shutdown();
@@ -120,5 +144,7 @@ SendRingBuffer& SessionManager::GetSendRingBuffer()
 
 void SessionManager::SessionManagerLog(const WCHAR* log, ...)
 {
+#if _DEBUG
 	mService->GetLoggerManager()->WriteLog(log);
+#endif
 }
