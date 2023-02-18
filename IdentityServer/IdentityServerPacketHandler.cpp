@@ -60,8 +60,8 @@ bool Handle_C2S_Singin(PacketSessionPtr& session, Protocol::C2S_Singin& pkt)
 		singinPacket.set_error(ret);
 		singinPacket.set_ticket("");
 
-		int32 global_id = cmd.GetOutputParam(L"@global_id");
-		playerState->SetGlobalID(global_id);
+		//int32 global_id = cmd.GetOutputParam(L"@global_id");
+		//playerState->SetGlobalID(global_id);
 	}
 	else
 	{

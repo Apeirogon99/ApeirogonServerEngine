@@ -65,20 +65,18 @@ bool Session::RegisterConnect()
     mConnectEvnet.Init();
     mConnectEvnet.owner = shared_from_this();
 
-    SessionManagerPtr manager = mSessionManager.lock();
-    if (nullptr == manager)
+
+    SessionManagerPtr sessionManager = mSessionManager.lock();
+    if (nullptr == sessionManager)
     {
         return false;
     }
 
-    
-
-    //IPAddressPtr listenerAddr = mService->GetListener()->GetIpAddress();
-    //if (false == mSocket->ConnectEx(listenerAddr, mConnectEvnet))
-    //{
-    //    mConnectEvnet.owner = nullptr;
-    //    return false;
-    //}
+    if (false == mSocket->ConnectEx(ipAddr, mConnectEvnet))
+    {
+        mConnectEvnet.owner = nullptr;
+        return false;
+    }
 
     return true;
 }
@@ -134,18 +132,23 @@ void Session::RegisterSend()
 void Session::ProcessConnect()
 {
     mConnectEvnet.owner = nullptr;
-
     mIsConnect.store(true);
+
+    //if (false == mSocket->UpdateConnectSocket(true))
+    //{
+    //    Disconnect(L"Failed to UpdateConnectSocket");
+    //}
 
     SessionManagerPtr manager = mSessionManager.lock();
     if (nullptr == manager)
     {
+        Disconnect(L"Invalid session manager");
         return;
     }
 
     if (false == manager->InsertSession(GetSession()))
     {
-        SessionLog(L"Session::ProcessConnect()");
+        Disconnect(L"Failed to insert connect session");
         return;
     }
 
@@ -226,6 +229,7 @@ void Session::ProcessSend(const uint32 numOfBytes)
 
 void Session::Connect()
 {
+    RegisterConnect();
 }
 
 void Session::Disconnect(const WCHAR* cause)
@@ -275,6 +279,14 @@ void Session::Shutdown()
     mSocket.reset();
     mIpAddr.reset();
     mSessionManager.reset();
+}
+
+bool Session::IsValid()
+{
+    SessionManagerPtr manager =  mSessionManager.lock();
+    SessionPtr session = std::static_pointer_cast<Session>(shared_from_this());
+    bool valid = manager->FindSession(session);
+    return valid;
 }
 
 void Session::SessionLog(const WCHAR* log , ...)

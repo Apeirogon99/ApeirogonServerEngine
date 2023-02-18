@@ -171,7 +171,7 @@ bool WinSocket::Close()
         return error != SOCKET_ERROR;
     }
 
-    return false;
+    return true;
 }
 
 bool WinSocket::Connect(IPAddressPtr& ipAddr)
@@ -202,6 +202,11 @@ bool WinSocket::Connect(IPAddressPtr& ipAddr)
 
 bool WinSocket::ConnectEx(const IPAddressPtr& ipAddr, ConnectEvent& connectEvent)
 {
+    if (GetSocketType() != ESocketType::SOCKTYPE_Streaming)
+    {
+        return false;
+    }
+
     const int32 addrSize = ipAddr->GetAddrSize();
     sockaddr_storage sockAddr = ipAddr->GetSockAddr();
     PVOID sendBuffer = nullptr;
@@ -223,8 +228,28 @@ bool WinSocket::ConnectEx(const IPAddressPtr& ipAddr, ConnectEvent& connectEvent
     return true;
 }
 
+bool WinSocket::DisConnect()
+{
+    if (false == this->Shutdown())
+    {
+        return false;
+    }
+
+    if (false == this->Close())
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool WinSocket::DisConnectEx(DisconnectEvent& disconnectEvent)
 {
+    if (GetSocketType() != ESocketType::SOCKTYPE_Streaming)
+    {
+        return false;
+    }
+
     DWORD flag = TF_REUSE_SOCKET;
     DWORD reserved = 0;
     bool result = SocketUtils::DisconnectEx(mSocket, &disconnectEvent, flag, reserved);
@@ -242,11 +267,6 @@ bool WinSocket::DisConnectEx(DisconnectEvent& disconnectEvent)
     return true;
 }
 
-bool WinSocket::HasPendingConnection()
-{
-    return false;
-}
-
 bool WinSocket::Listen(int32 maxBacklog)
 {
     if (mSocket == INVALID_SOCKET)
@@ -260,6 +280,53 @@ bool WinSocket::Listen(int32 maxBacklog)
     {
         SocketUtils::WinSocketError(L"Socket::Listen()");
         return false;
+    }
+
+    return true;
+}
+
+bool WinSocket::Shutdown()
+{
+    bool result = false;
+    result = ::shutdown(mSocket, SD_BOTH);
+
+    if (false == result)
+    {
+        SocketUtils::WinSocketError(L"Socket::Shutdown()");
+        return false;
+    }
+
+    return true;
+}
+
+bool WinSocket::Wait(const int32 waitTime)
+{
+    bool result = WaitForPendingConnection(waitTime);
+    return result == true ? true : false;
+}
+
+bool WinSocket::WaitForPendingConnection(const int32 waitTime)
+{
+    std::this_thread::sleep_for(std::chrono::seconds(waitTime));
+
+    int32 seconds = 0;
+    int32 result = setsockopt(mSocket, SOL_SOCKET, SO_CONNECT_TIME, reinterpret_cast<char*>(&seconds), sizeof(seconds));
+
+    if (result != NO_ERROR) {
+        SocketUtils::WinSocketError(L"WinSocket::WaitForPendingConnection()");
+        return false;
+    }
+    else
+    {
+        if (seconds == 0xFFFFFFFF)
+        {
+            wprintf(L"Connection not established yet\n");
+            return false;
+        }
+        else
+        {
+            wprintf(L"Connection has been established %ld seconds\n", seconds);
+        }
     }
 
     return true;
@@ -378,20 +445,7 @@ bool WinSocket::SetLinger(bool bShouldLinger, int32 Timeout)
     return true;
 }
 
-bool WinSocket::SetMulticatInterface()
-{
-    return false;
-}
 
-bool WinSocket::SetMulticastLoopBack()
-{
-    return false;
-}
-
-bool WinSocket::SetMulticatTtl()
-{
-    return false;
-}
 
 bool WinSocket::SetNoDelay(bool bIsNoDelay)
 {
@@ -445,16 +499,6 @@ bool WinSocket::SetReceiveBufferSize(int32 size)
     return true;
 }
 
-bool WinSocket::SetRecvErr()
-{
-    return false;
-}
-
-bool WinSocket::SetRetrieveTimestamp()
-{
-    return false;
-}
-
 bool WinSocket::SetReuseAddr(bool bAllowReuse)
 {
     int Param = bAllowReuse ? 1 : 0;
@@ -495,10 +539,17 @@ bool WinSocket::UpdateAcceptSocket(SOCKET listenSocket)
     return true;
 }
 
-template<typename T>
-bool WinSocket::SetSocketOption(int32 level, int32 optName, T optVal)
+bool WinSocket::UpdateConnectSocket(bool bIsMaintain)
 {
-    return SOCKET_ERROR != ::setsockopt(mSocket, level, optName, reinterpret_cast<char*>(&optVal), sizeof(T));
+    int32 result = setsockopt(mSocket, SOL_SOCKET, SO_UPDATE_CONNECT_CONTEXT, reinterpret_cast<char*>(&bIsMaintain), sizeof(bIsMaintain));
+
+    if (result == SOCKET_ERROR)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::UpdateConnectSocket()");
+        return false;
+    }
+
+    return true;
 }
 
 bool WinSocket::Recv(int8* data, int32 dataSize, int32& BytesRead)
@@ -553,7 +604,7 @@ bool WinSocket::RecvEx(RecvEvent& recvEvnet)
     }
 
     WSABUF recvBuffer;
-    recvBuffer.buf = reinterpret_cast<char*>(recvEvnet.buffer);
+    recvBuffer.buf = reinterpret_cast<int8*>(recvEvnet.buffer);
     recvBuffer.len = recvEvnet.len;
 
     //WSABUF* recvBuffer = buffer;

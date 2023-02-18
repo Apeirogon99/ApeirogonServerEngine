@@ -16,6 +16,7 @@ PacketSessionPtr PacketSession::GetPacketSessionRef()
 
 uint32 PacketSession::OnRecv(RecvRingBuffer& buffer, uint32 len)
 {
+	BYTE packetBuffer[1024];
 	uint32 processLen = 0;
 
 	while (true)
@@ -27,14 +28,18 @@ uint32 PacketSession::OnRecv(RecvRingBuffer& buffer, uint32 len)
 
 		PacketHeader header;
 		buffer.Peek(reinterpret_cast<BYTE*>(&header), sizeof(PacketHeader));
-		if (dataSize < header.size)
+		const uint16 packetSize = header.size;
+		if (dataSize < packetSize)
 			break;
 
-		OnRecvPacket(buffer, header.size);
+		memset(packetBuffer, NULL, 1024);
+		buffer.Dequeue(packetBuffer, packetSize);
 
-		buffer.MoveFront(header.size);
+		OnRecvPacket(packetBuffer, packetSize);
 
-		processLen += header.size;
+		//buffer.MoveFront(packetSize);
+
+		processLen += packetSize;
 	}
 
 	return processLen;

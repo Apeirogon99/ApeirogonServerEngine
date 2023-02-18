@@ -21,13 +21,10 @@ void SendQueue::Push(SendBufferPtr sendBuffer)
 
 	mBuffer[mFront] = sendBuffer;
 	mFront = (mFront + 1) % mQueueSize;
-
-	wprintf(L"PUSH : (%ld)\n", mFront);
 }
 
 void SendQueue::PopAll(std::vector<SendBufferPtr>& sendBuffers)
 {
-	wprintf(L"POPALL : (%ld ~ %ld)\n", mFront, mRear);
 	FastLockGuard lockGuard(mFastSpinLock);
 	while (mRear != mFront)
 	{

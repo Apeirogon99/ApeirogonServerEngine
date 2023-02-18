@@ -48,6 +48,8 @@ public:
 	APEIROGON_API virtual void OnSend(uint32 len) abstract;
 	APEIROGON_API virtual void OnDisconnected() abstract;
 
+	APEIROGON_API bool IsValid();
+
 	APEIROGON_API void SessionLog(const WCHAR* log, ...);
 
 public:
