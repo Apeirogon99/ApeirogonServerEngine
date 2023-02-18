@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>8e49c3f6-b62d-47e1-8437-deb167dc2638</ProjectGuid>
+    <ProjectGuid>7d07bdfd-50c0-448c-a473-09c1c9d171d9</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PacketGenerator.py</StartupFile>
+    <StartupFile>PacketFileModify.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>PacketGenerator</Name>
-    <RootNamespace>PacketGenerator</RootNamespace>
+    <Name>PacketFileModify</Name>
+    <RootNamespace>PacketFileModify</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,15 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ProtoParser.py" />
-    <Compile Include="PacketGenerator.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Templates\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Templates\UEPacketHandler.h" />
-    <Content Include="Templates\PacketHandler.h" />
+    <Compile Include="FileModifyHeader.py" />
+    <Compile Include="FileModifySource.py" />
+    <Compile Include="PacketFileModify.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

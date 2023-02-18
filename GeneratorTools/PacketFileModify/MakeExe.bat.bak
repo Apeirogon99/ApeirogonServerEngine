@@ -1,0 +1,7 @@
+pushd %~dp0
+pyinstaller --onefile FileModify.py
+MOVE .\dist\FileModify.exe ..\..\Protobuf\Generator\bin\FileModify.exe
+@RD /S /Q .\build
+@RD /S /Q .\dist
+DEL /S /F /Q .\FileModify.spec
+PAUSE
