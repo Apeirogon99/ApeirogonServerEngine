@@ -90,7 +90,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,7 +108,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -126,7 +126,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -144,7 +144,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -185,11 +185,13 @@
     <ClInclude Include="SessionManager.h" />
     <ClInclude Include="SharedPtr.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SMTP.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="SocketTypes.h" />
     <ClInclude Include="SocketUtils.h" />
     <ClInclude Include="ThreadManager.h" />
     <ClInclude Include="SimpleTime.h" />
+    <ClInclude Include="Ticket.h" />
     <ClInclude Include="WinDump.h" />
   </ItemGroup>
   <ItemGroup>
@@ -226,10 +228,12 @@
     <ClCompile Include="SessionManager.cpp" />
     <ClCompile Include="SharedPtr.cpp" />
     <ClCompile Include="Singleton.cpp" />
+    <ClCompile Include="SMTP.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="SocketUtils.cpp" />
     <ClCompile Include="ThreadManager.cpp" />
     <ClCompile Include="SimpleTime.cpp" />
+    <ClCompile Include="Ticket.cpp" />
     <ClCompile Include="WinDump.cpp" />
   </ItemGroup>
   <ItemGroup>

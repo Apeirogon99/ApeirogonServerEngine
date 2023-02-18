@@ -1,22 +1,11 @@
 #pragma once
 
-#ifdef DLL_DEVELOPMENT
-#define ADO_API __declspec(dllimport)
-#define SOCKET_API __declspec(dllimport)
-#define APEIROGON_API __declspec(dllimport)
-#else
-#define ADO_API __declspec(dllexport)
-#define SOCKET_API __declspec(dllexport)
-#define APEIROGON_API __declspec(dllexport)
-#endif // DLL_DEVELOPMENT
-
 //==========================//
 //		   Default			//
 //==========================//
 #include <tchar.h>
 #include <iostream>
 #include <stdio.h>
-#include <string>
 #include <cmath>
 #include <memory>
 #include <chrono>
@@ -31,14 +20,6 @@
 #include <sys/timeb.h>
 
 //==========================//
-//		   WinSock			//
-//==========================//
-#include <WinSock2.h>
-#include <MSWSock.h>
-#include <WS2tcpip.h>
-#pragma comment(lib, "ws2_32.lib")
-
-//==========================//
 //		     STL			//
 //==========================//
 #include <array>
@@ -46,6 +27,15 @@
 #include <vector>
 #include <functional>
 #include <queue>
+#include <string>
+
+//==========================//
+//		   WinSock			//
+//==========================//
+#include <WinSock2.h>
+#include <MSWSock.h>
+#include <WS2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
 
 //==========================//
 //		     TYPE			//
@@ -120,3 +110,8 @@
 #include "PacketSession.h"
 #include "SessionManager.h"
 #include "Service.h"
+
+//==========================//
+//		     SMTP			//
+//==========================//
+#include "SMTP.h"

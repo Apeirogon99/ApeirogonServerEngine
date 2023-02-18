@@ -4,294 +4,315 @@
     <Filter Include="Source">
       <UniqueIdentifier>{bd08e2e7-b7fd-4131-89a9-62a325677218}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\pch">
-      <UniqueIdentifier>{65f7de7c-fa5d-4a7f-998c-82b181acba43}</UniqueIdentifier>
+    <Filter Include="Source\Public">
+      <UniqueIdentifier>{08a8843c-a337-494a-9c89-36a320883e22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\pch\Private">
-      <UniqueIdentifier>{82a0db08-039d-4577-9098-8437f9deb242}</UniqueIdentifier>
+    <Filter Include="Source\Private">
+      <UniqueIdentifier>{c67a60f3-81b8-4717-9a17-7d4abef53ae7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\pch\Public">
-      <UniqueIdentifier>{46874c7c-c3d7-4b2f-9419-0cef021022c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Main">
-      <UniqueIdentifier>{fad7c6d9-0a33-4a32-a712-ca7df39fe284}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\DB">
+    <Filter Include="Source\Private\DB">
       <UniqueIdentifier>{0355d986-f0d9-4435-936e-9c2caac53f03}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Sync">
-      <UniqueIdentifier>{51a2adfd-2afe-4b2c-909f-d58d3474278a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Sync\Public">
-      <UniqueIdentifier>{4d412950-32cd-420d-8205-2bf4240e3666}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Sync\Private">
-      <UniqueIdentifier>{4956d893-73ef-44af-8ad4-ef987ed25467}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\DB\ADO">
+    <Filter Include="Source\Private\DB\ADO">
       <UniqueIdentifier>{76bf6197-3b52-4549-886a-0ee9720ac894}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Time">
-      <UniqueIdentifier>{f08a4810-93d5-42d4-8ab0-223cccb1f63d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Time\Public">
-      <UniqueIdentifier>{2a8c924a-9d29-4725-ad16-a70112e1c585}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Time\Private">
-      <UniqueIdentifier>{a235148c-557c-4618-8b3f-7e5ca73456fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\DB\ADO\Public">
-      <UniqueIdentifier>{ce2f50af-5357-4a64-aa05-91a4afc3773d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\DB\ADO\Private">
-      <UniqueIdentifier>{cd2f2f14-6d19-4be8-8543-4fc47b304be6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Utils">
-      <UniqueIdentifier>{6ecc6f32-aa16-418e-aec6-d6d8571bba4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Utils\Public">
-      <UniqueIdentifier>{c8305114-45d3-42d2-8717-8a879544039a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Utils\Private">
-      <UniqueIdentifier>{54a6854b-6932-40e5-99c4-84472cfc05ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Socket">
-      <UniqueIdentifier>{f1d10a3c-a186-4911-a628-c5df1614ca44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Socket\Public">
-      <UniqueIdentifier>{8b6f0fcd-eb8a-41e1-abe8-b70282a316e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Socket\Private">
-      <UniqueIdentifier>{6de12345-f26e-4d7c-a5c3-bb1195d61b0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Network">
-      <UniqueIdentifier>{4d4c8921-412d-4f84-92f3-d9db6cbe9d3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Network\Public">
-      <UniqueIdentifier>{535dedcc-c022-4480-9ee4-3146d5d4a196}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Network\Private">
-      <UniqueIdentifier>{fe77bead-e447-43e9-8bcf-7af5e1c4607c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Memory">
+    <Filter Include="Source\Private\Memory">
       <UniqueIdentifier>{129a6c79-a61c-4642-8868-bace5f940be0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Memory\Public">
-      <UniqueIdentifier>{99694bb8-2cb1-421e-91d4-aef2dfb873c0}</UniqueIdentifier>
+    <Filter Include="Source\Private\Network">
+      <UniqueIdentifier>{4d4c8921-412d-4f84-92f3-d9db6cbe9d3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Memory\Private">
-      <UniqueIdentifier>{f96d82e7-8f51-40e1-82c4-f320c4786cd2}</UniqueIdentifier>
+    <Filter Include="Source\Private\Socket">
+      <UniqueIdentifier>{f1d10a3c-a186-4911-a628-c5df1614ca44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Sync">
+      <UniqueIdentifier>{51a2adfd-2afe-4b2c-909f-d58d3474278a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Time">
+      <UniqueIdentifier>{f08a4810-93d5-42d4-8ab0-223cccb1f63d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Utils">
+      <UniqueIdentifier>{6ecc6f32-aa16-418e-aec6-d6d8571bba4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\DB">
+      <UniqueIdentifier>{b6258a54-9d4d-4a63-93ea-dd15e5d9f50b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DllMain">
+      <UniqueIdentifier>{67ae99f3-902e-479a-aa11-8922a53b4bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH">
+      <UniqueIdentifier>{756d0048-6e04-4b38-b781-831112cdc757}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH\Public">
+      <UniqueIdentifier>{1597212b-1c9c-44ec-a276-cc9ecfb5b29a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH\Private">
+      <UniqueIdentifier>{ac267a5b-6fa6-4d4a-a56a-7725cdd41944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH\Private\Default">
+      <UniqueIdentifier>{61225fee-906c-4c78-9a9a-4294810c948b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH\Public\Default">
+      <UniqueIdentifier>{1b1f7650-a36f-485a-90f4-e5e4b1765a23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH\Private\Library">
+      <UniqueIdentifier>{588c8d7a-4322-4c2d-8f10-6f1d5e072015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PCH\Public\Library">
+      <UniqueIdentifier>{4edc9f7a-72ab-4ce9-9358-8dde305b4a09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Memory">
+      <UniqueIdentifier>{a8129be3-a8d0-42b5-b9f4-863e018b4f41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Network">
+      <UniqueIdentifier>{f810ebcd-eede-4694-b731-974f1380015f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Socket">
+      <UniqueIdentifier>{2961b5db-5384-479a-8015-499e70e2bbc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Sync">
+      <UniqueIdentifier>{0e51e6e6-0e6a-4db9-bee0-9e8c2c5de323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Time">
+      <UniqueIdentifier>{e1f8465e-59f3-4a2c-82af-c28d642fb608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Utils">
+      <UniqueIdentifier>{4ecce052-7cab-4721-abcd-f27eb3e79123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\DB\ADO">
+      <UniqueIdentifier>{14105f20-4c8e-4a1c-a684-a884f1eadc06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\DB\OLEDB">
+      <UniqueIdentifier>{6a02f968-4c19-4815-ae3d-b381d135b19d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\SMTP">
+      <UniqueIdentifier>{330c963b-4a44-41d1-b1f5-d43179297c36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\SMTP">
+      <UniqueIdentifier>{a492f0e6-3a27-48d5-b9f4-fa650e289d33}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
-      <Filter>Source\Main</Filter>
+      <Filter>DllMain</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
-      <Filter>Source\pch\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket.cpp">
-      <Filter>Source\Socket\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="IPAddress.cpp">
-      <Filter>Source\Socket\Private</Filter>
+      <Filter>PCH\Private\Library</Filter>
     </ClCompile>
     <ClCompile Include="ApeirogonLibrary.cpp">
-      <Filter>Source\pch\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="SocketUtils.cpp">
-      <Filter>Source\Socket\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="SharedPtr.cpp">
-      <Filter>Source\Sync\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Runtime.cpp">
-      <Filter>Source\Time\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ADOConnection.cpp">
-      <Filter>Source\DB\ADO\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ADOCommand.cpp">
-      <Filter>Source\DB\ADO\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ADORecordset.cpp">
-      <Filter>Source\DB\ADO\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ADOUtils.cpp">
-      <Filter>Source\DB\ADO\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ADOService.cpp">
-      <Filter>Source\DB\ADO\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ADOEvent.cpp">
-      <Filter>Source\DB\ADO\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ADOVariant.cpp">
-      <Filter>Source\DB\ADO\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Singleton.cpp">
-      <Filter>Source\Utils\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="IOCP.cpp">
-      <Filter>Source\Network\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="IOCPEvent.cpp">
-      <Filter>Source\Network\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="RingBuffer.cpp">
-      <Filter>Source\Utils\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Listener.cpp">
-      <Filter>Source\Network\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Service.cpp">
-      <Filter>Source\Network\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Session.cpp">
-      <Filter>Source\Network\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="SessionManager.cpp">
-      <Filter>Source\Network\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="PacketSession.cpp">
-      <Filter>Source\Network\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>Source\Utils\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="ThreadManager.cpp">
-      <Filter>Source\Network\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="RWLock.cpp">
-      <Filter>Source\Sync\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="FastSpinLock.cpp">
-      <Filter>Source\Sync\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="WinDump.cpp">
-      <Filter>Source\Utils\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="SimpleTime.cpp">
-      <Filter>Source\Time\Private</Filter>
+      <Filter>PCH\Private\Library</Filter>
     </ClCompile>
     <ClCompile Include="EngineAssert.cpp">
-      <Filter>Source\Utils\Private</Filter>
+      <Filter>Source\Private\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Source\Private\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Singleton.cpp">
+      <Filter>Source\Private\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="WinDump.cpp">
+      <Filter>Source\Private\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Runtime.cpp">
+      <Filter>Source\Private\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleTime.cpp">
+      <Filter>Source\Private\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="FastSpinLock.cpp">
+      <Filter>Source\Private\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="RWLock.cpp">
+      <Filter>Source\Private\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedPtr.cpp">
+      <Filter>Source\Private\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="IPAddress.cpp">
+      <Filter>Source\Private\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
+      <Filter>Source\Private\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketUtils.cpp">
+      <Filter>Source\Private\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="IOCP.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="IOCPEvent.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Listener.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketSession.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Service.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionManager.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadManager.cpp">
+      <Filter>Source\Private\Network</Filter>
     </ClCompile>
     <ClCompile Include="SendQueue.cpp">
-      <Filter>Source\Utils\Private</Filter>
+      <Filter>Source\Private\Memory</Filter>
     </ClCompile>
     <ClCompile Include="SendBuffer.cpp">
-      <Filter>Source\Utils\Private</Filter>
+      <Filter>Source\Private\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="RingBuffer.cpp">
+      <Filter>Source\Private\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ADOVariant.cpp">
+      <Filter>Source\Private\DB\ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="ADOCommand.cpp">
+      <Filter>Source\Private\DB\ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="ADOConnection.cpp">
+      <Filter>Source\Private\DB\ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="ADOEvent.cpp">
+      <Filter>Source\Private\DB\ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="ADORecordset.cpp">
+      <Filter>Source\Private\DB\ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="ADOService.cpp">
+      <Filter>Source\Private\DB\ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="ADOUtils.cpp">
+      <Filter>Source\Private\DB\ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="Ticket.cpp">
+      <Filter>Source\Private\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="SMTP.cpp">
+      <Filter>Source\Private\SMTP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Source\pch\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket.h">
-      <Filter>Source\Socket\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IPAddress.h">
-      <Filter>Source\Socket\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="SocketTypes.h">
-      <Filter>Source\Socket\Public</Filter>
+    <ClInclude Include="DefaultSize.h">
+      <Filter>PCH\Public\Default</Filter>
     </ClInclude>
     <ClInclude Include="DefaultTypes.h">
-      <Filter>Source\pch\Public</Filter>
+      <Filter>PCH\Public\Default</Filter>
     </ClInclude>
     <ClInclude Include="ApeirogonLibrary.h">
-      <Filter>Source\pch\Public</Filter>
+      <Filter>PCH\Public\Library</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultSize.h">
-      <Filter>Source\pch\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="SocketUtils.h">
-      <Filter>Source\Socket\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="SharedPtr.h">
-      <Filter>Source\Sync\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Runtime.h">
-      <Filter>Source\Time\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ADOConnection.h">
-      <Filter>Source\DB\ADO\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ADOCommand.h">
-      <Filter>Source\DB\ADO\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ADORecordset.h">
-      <Filter>Source\DB\ADO\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ADOUtils.h">
-      <Filter>Source\DB\ADO\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ADOService.h">
-      <Filter>Source\DB\ADO\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ADOEvent.h">
-      <Filter>Source\DB\ADO\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ADOVariant.h">
-      <Filter>Source\DB\ADO\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Source\Utils\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IOCP.h">
-      <Filter>Source\Network\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="IOCPEvent.h">
-      <Filter>Source\Network\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="RingBuffer.h">
-      <Filter>Source\Utils\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Listener.h">
-      <Filter>Source\Network\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Service.h">
-      <Filter>Source\Network\Public</Filter>
+    <ClInclude Include="pch.h">
+      <Filter>PCH\Public\Library</Filter>
     </ClInclude>
     <ClInclude Include="Foward.h">
-      <Filter>Source\pch\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Session.h">
-      <Filter>Source\Network\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="SessionManager.h">
-      <Filter>Source\Network\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketSession.h">
-      <Filter>Source\Network\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>Source\Utils\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="ThreadManager.h">
-      <Filter>Source\Network\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="RWLock.h">
-      <Filter>Source\Sync\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="FastSpinLock.h">
-      <Filter>Source\Sync\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="WinDump.h">
-      <Filter>Source\Utils\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleTime.h">
-      <Filter>Source\Time\Public</Filter>
+      <Filter>PCH\Public\Default</Filter>
     </ClInclude>
     <ClInclude Include="EngineAssert.h">
-      <Filter>Source\Utils\Public</Filter>
+      <Filter>Source\Public\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SendQueue.h">
-      <Filter>Source\Utils\Public</Filter>
+    <ClInclude Include="Logger.h">
+      <Filter>Source\Public\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Source\Public\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="WinDump.h">
+      <Filter>Source\Public\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Runtime.h">
+      <Filter>Source\Public\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleTime.h">
+      <Filter>Source\Public\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedPtr.h">
+      <Filter>Source\Public\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="FastSpinLock.h">
+      <Filter>Source\Public\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="RWLock.h">
+      <Filter>Source\Public\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketUtils.h">
+      <Filter>Source\Public\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="SocketTypes.h">
+      <Filter>Source\Public\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket.h">
+      <Filter>Source\Public\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="IPAddress.h">
+      <Filter>Source\Public\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="IOCP.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="IOCPEvent.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Listener.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketSession.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Service.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="SessionManager.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadManager.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="RingBuffer.h">
+      <Filter>Source\Public\Memory</Filter>
     </ClInclude>
     <ClInclude Include="SendBuffer.h">
-      <Filter>Source\Utils\Public</Filter>
+      <Filter>Source\Public\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="SendQueue.h">
+      <Filter>Source\Public\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ADOCommand.h">
+      <Filter>Source\Public\DB\ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="ADOConnection.h">
+      <Filter>Source\Public\DB\ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="ADOEvent.h">
+      <Filter>Source\Public\DB\ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="ADORecordset.h">
+      <Filter>Source\Public\DB\ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="ADOService.h">
+      <Filter>Source\Public\DB\ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="ADOUtils.h">
+      <Filter>Source\Public\DB\ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="ADOVariant.h">
+      <Filter>Source\Public\DB\ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="Ticket.h">
+      <Filter>Source\Public\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SMTP.h">
+      <Filter>Source\Public\SMTP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

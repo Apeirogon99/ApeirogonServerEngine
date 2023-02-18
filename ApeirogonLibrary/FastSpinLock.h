@@ -1,4 +1,11 @@
 #pragma once
+
+#ifdef DLL_DEVELOPMENT
+#define APEIROGON_API __declspec(dllimport)
+#else
+#define APEIROGON_API __declspec(dllexport)
+#endif // DLL_DEVELOPMENT
+
 class FastSpinLock
 {
 	enum class Default
