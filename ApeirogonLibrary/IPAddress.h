@@ -3,38 +3,38 @@
 class IPAddress
 {
 public:
-	SOCKET_API IPAddress();
-	SOCKET_API IPAddress(const IPAddress& ipAddr);
-	SOCKET_API IPAddress& operator=(const IPAddress& ipAddr);
+	APEIROGON_API IPAddress();
+	APEIROGON_API IPAddress(const IPAddress& ipAddr);
+	APEIROGON_API IPAddress& operator=(const IPAddress& ipAddr);
 
-	SOCKET_API ~IPAddress();
-
-public:
-	SOCKET_API void					SetIp(const in_addr& IPv4Addr);
-	SOCKET_API void					SetIp(const in6_addr& IPv6Addr);
-	SOCKET_API void					SetIp(const sockaddr_in& IPv4Addr);
-	SOCKET_API void					SetIp(const sockaddr_in6& IPv6Addr);
-	SOCKET_API void					SetIp(const sockaddr_storage& IpAddr);
-	SOCKET_API void					SetIp(const WCHAR* ip, const uint16 port, const EProtocolType type);
-
-	SOCKET_API void					SetAnyAddress();
-	SOCKET_API void					SetBroadcastAddress();
-	SOCKET_API void					SetLoopbackAddress();
-
-	SOCKET_API void					SetPort(const uint16 port);
+	APEIROGON_API ~IPAddress();
 
 public:
-	SOCKET_API std::wstring			GetIp();
-	SOCKET_API uint16				GetPort() const;
-	SOCKET_API sockaddr_storage		GetSockAddr() const;
-	SOCKET_API int32				GetAddrSize() const;
-	SOCKET_API EProtocolType		GetProtocolType() const;
+	APEIROGON_API void					SetIp(const in_addr& inIPv4Addr);
+	APEIROGON_API void					SetIp(const in6_addr& inIPv6Addr);
+	APEIROGON_API void					SetIp(const sockaddr_in& inIPv4Addr);
+	APEIROGON_API void					SetIp(const sockaddr_in6& inIPv6Addr);
+	APEIROGON_API void					SetIp(const sockaddr_storage& IpAddr);
+	APEIROGON_API void					SetIp(const WCHAR* ip, const uint16 port, const EProtocolType type);
+
+	APEIROGON_API void					SetAnyAddress();
+	APEIROGON_API void					SetBroadcastAddress();
+	APEIROGON_API void					SetLoopbackAddress();
+
+	APEIROGON_API void					SetPort(const uint16 port);
 
 public:
-	SOCKET_API void					Clear();
-	SOCKET_API bool					IsValid() const;
-	SOCKET_API bool					CompareEndpoints(const IPAddress& addr);
-	SOCKET_API std::wstring			ToString();
+	APEIROGON_API std::wstring			GetIp();
+	APEIROGON_API uint16				GetPort() const;
+	APEIROGON_API sockaddr_storage		GetSockAddr() const;
+	APEIROGON_API int32				GetAddrSize() const;
+	APEIROGON_API EProtocolType		GetProtocolType() const;
+
+public:
+	APEIROGON_API void					Clear();
+	APEIROGON_API bool					IsValid() const;
+	APEIROGON_API bool					CompareEndpoints(const IPAddress& addr);
+	APEIROGON_API std::wstring			ToString();
 
 protected:
 	void							SetDefaultAddressFamily();

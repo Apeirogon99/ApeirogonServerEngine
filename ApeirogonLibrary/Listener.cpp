@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Listener.h"
 
-Listener::Listener(const IPAddressPtr& ipAddr) : mListenSocket(nullptr), mIpAddr(std::move(ipAddr))
+Listener::Listener(IPAddressPtr& ipAddr) : mListenSocket(nullptr), mIpAddr(std::move(ipAddr))
 {
 	
 }

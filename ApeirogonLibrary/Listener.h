@@ -3,7 +3,7 @@
 class Listener : public IocpObject
 {
 public:
-	APEIROGON_API Listener(const IPAddressPtr& ipAddr);
+	APEIROGON_API Listener(IPAddressPtr& ipAddr);
 	APEIROGON_API virtual ~Listener();
 
 public:

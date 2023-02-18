@@ -24,40 +24,43 @@ IPAddress::~IPAddress()
 	wprintf(L"IPAddress::~IPAddress() : Close ip address\n");
 }
 
-void IPAddress::SetIp(const in_addr& IPv4Addr)
+void IPAddress::SetIp(const in_addr& inIPv4Addr)
 {
 	Clear();
-	reinterpret_cast<sockaddr_in*>(&mAddr)->sin_addr = IPv4Addr;
-	mAddr.ss_family = AF_INET;
+	sockaddr_in* IPv4Addr = reinterpret_cast<sockaddr_in*>(&mAddr);
+	IPv4Addr->sin_family = AF_INET;
+	IPv4Addr->sin_addr = inIPv4Addr;
 }
 
-void IPAddress::SetIp(const in6_addr& IPv6Addr)
+void IPAddress::SetIp(const in6_addr& inIPv6Addr)
 {
 	Clear();
-	reinterpret_cast<sockaddr_in6*>(&mAddr)->sin6_addr = IPv6Addr;
-	mAddr.ss_family = AF_INET6;
+	sockaddr_in6* IPv6Addr = reinterpret_cast<sockaddr_in6*>(&mAddr);
+	IPv6Addr->sin6_family = AF_INET6;
+	IPv6Addr->sin6_addr = inIPv6Addr;
 }
 
-void IPAddress::SetIp(const sockaddr_in& IPv4Addr)
+void IPAddress::SetIp(const sockaddr_in& inIPv4Addr)
 {
 	Clear();
-	reinterpret_cast<sockaddr_in*>(&mAddr)->sin_addr = IPv4Addr.sin_addr;
-	mAddr.ss_family = AF_INET;
-	SetPort(IPv4Addr.sin_port);
+	sockaddr_in* IPv4Addr = reinterpret_cast<sockaddr_in*>(&mAddr);
+	IPv4Addr->sin_family = AF_INET;
+	IPv4Addr->sin_addr = inIPv4Addr.sin_addr;
+	SetPort(inIPv4Addr.sin_port);
 }
 
-void IPAddress::SetIp(const sockaddr_in6& IPv6Addr)
+void IPAddress::SetIp(const sockaddr_in6& inIPv6Addr)
 {
 	Clear();
-	reinterpret_cast<sockaddr_in6*>(&mAddr)->sin6_addr = IPv6Addr.sin6_addr;
-	mAddr.ss_family = AF_INET6;
-	SetPort(IPv6Addr.sin6_port);
+	sockaddr_in6* IPv6Addr = reinterpret_cast<sockaddr_in6*>(&mAddr);
+	IPv6Addr->sin6_family = AF_INET6;
+	IPv6Addr->sin6_addr = inIPv6Addr.sin6_addr;
+	SetPort(inIPv6Addr.sin6_port);
 }
 
 void IPAddress::SetIp(const sockaddr_storage& IpAddr)
 {
 	Clear();
-
 	const EProtocolType currentType = static_cast<const EProtocolType>(IpAddr.ss_family);
 
 	if (currentType == EProtocolType::IPv4)
@@ -81,8 +84,8 @@ void IPAddress::SetIp(const sockaddr_storage& IpAddr)
 
 void IPAddress::SetIp(const WCHAR* ip, const uint16 port, const EProtocolType type)
 {
-	Clear();
 
+	Clear();
 	//const size_t ipAddrLen = wcslen(ip);
 	//if (ipAddrLen != INET_ADDRSTRLEN && ipAddrLen != INET6_ADDRSTRLEN)
 	//{
@@ -96,14 +99,14 @@ void IPAddress::SetIp(const WCHAR* ip, const uint16 port, const EProtocolType ty
 	if (currentType == EProtocolType::IPv4)
 	{
 		sockaddr_in* IPv4Addr = reinterpret_cast<sockaddr_in*>(&mAddr);
-		mAddr.ss_family = AF_INET;
+		IPv4Addr->sin_family = AF_INET;
 		::InetPtonW(AF_INET, ip, &IPv4Addr->sin_addr);
 		SetPort(port);
 	}
 	else if (currentType == EProtocolType::IPv6)
 	{
 		sockaddr_in6* IPv6Addr = reinterpret_cast<sockaddr_in6*>(&mAddr);
-		mAddr.ss_family = AF_INET6;
+		IPv6Addr->sin6_family = AF_INET6;
 		::InetPtonW(AF_INET6, ip, &IPv6Addr->sin6_addr);
 		SetPort(port);
 	}
@@ -241,6 +244,7 @@ uint16 IPAddress::GetPort() const
 
 EProtocolType IPAddress::GetProtocolType() const
 {
+
 	USHORT currentType = static_cast<USHORT>(mAddr.ss_family);
 
 	if (currentType == AF_INET)
@@ -251,10 +255,8 @@ EProtocolType IPAddress::GetProtocolType() const
 	{
 		return EProtocolType::IPv6;
 	}
-	else
-	{
-		return EProtocolType::None;
-	}
+
+	return EProtocolType::None;
 }
 
 sockaddr_storage IPAddress::GetSockAddr() const
