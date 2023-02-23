@@ -67,10 +67,6 @@ PROTOBUF_CONSTEXPR SCharacterData::SCharacterData(
   , /*decltype(_impl_.job_)*/0
   , /*decltype(_impl_.tribe_)*/0
   , /*decltype(_impl_.position_)*/0
-  , /*decltype(_impl_.skin_)*/0u
-  , /*decltype(_impl_.hair_)*/0u
-  , /*decltype(_impl_.eye_)*/0u
-  , /*decltype(_impl_.eyebrow_)*/0u
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SCharacterDataDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SCharacterDataDefaultTypeInternal()
@@ -81,6 +77,54 @@ struct SCharacterDataDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SCharacterDataDefaultTypeInternal _SCharacterData_default_instance_;
+PROTOBUF_CONSTEXPR SCharacterAppearance::SCharacterAppearance(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.body_color_)*/0u
+  , /*decltype(_impl_.hair_color_)*/0u
+  , /*decltype(_impl_.eye_color_)*/0u
+  , /*decltype(_impl_.head_)*/0
+  , /*decltype(_impl_.ears_)*/0
+  , /*decltype(_impl_.feet_)*/0
+  , /*decltype(_impl_.hair_)*/0
+  , /*decltype(_impl_.facials_01_)*/0
+  , /*decltype(_impl_.facials_02_)*/0
+  , /*decltype(_impl_.helmet_)*/0
+  , /*decltype(_impl_.shoulders_)*/0
+  , /*decltype(_impl_.skirt_)*/0
+  , /*decltype(_impl_.legs_)*/0
+  , /*decltype(_impl_.legs_add_)*/0
+  , /*decltype(_impl_.hands_)*/0
+  , /*decltype(_impl_.hands_add_)*/0
+  , /*decltype(_impl_.chest_)*/0
+  , /*decltype(_impl_.chest_add_)*/0
+  , /*decltype(_impl_.cape_)*/0
+  , /*decltype(_impl_.bracers_)*/0
+  , /*decltype(_impl_.bracers_add_)*/0
+  , /*decltype(_impl_.boots_)*/0
+  , /*decltype(_impl_.belt_)*/0
+  , /*decltype(_impl_.tabard_)*/0
+  , /*decltype(_impl_.back_2hl_)*/0
+  , /*decltype(_impl_.back_shield_)*/0
+  , /*decltype(_impl_.back_weapon_l_)*/0
+  , /*decltype(_impl_.back_weapon_r_)*/0
+  , /*decltype(_impl_.back_bow_)*/0
+  , /*decltype(_impl_.quiver_)*/0
+  , /*decltype(_impl_.weapon_r_arrow_)*/0
+  , /*decltype(_impl_.weapon_shield_)*/0
+  , /*decltype(_impl_.weapon_l_)*/0
+  , /*decltype(_impl_.weapon_r_)*/0
+  , /*decltype(_impl_.hip_l_)*/0
+  , /*decltype(_impl_.hip_r_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct SCharacterAppearanceDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR SCharacterAppearanceDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~SCharacterAppearanceDefaultTypeInternal() {}
+  union {
+    SCharacterAppearance _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 SCharacterAppearanceDefaultTypeInternal _SCharacterAppearance_default_instance_;
 PROTOBUF_CONSTEXPR C2S_EnterServer::C2S_EnterServer(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.error_)*/0
@@ -255,6 +299,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR S2C_LoadCharacters::S2C_LoadCharacters(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.character_)*/{}
+  , /*decltype(_impl_.appearance_)*/{}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct S2C_LoadCharactersDefaultTypeInternal {
   PROTOBUF_CONSTEXPR S2C_LoadCharactersDefaultTypeInternal()
@@ -293,7 +338,8 @@ struct S2C_SelectServerDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S2C_SelectServerDefaultTypeInternal _S2C_SelectServer_default_instance_;
 PROTOBUF_CONSTEXPR C2S_CreateCharacter::C2S_CreateCharacter(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.character_)*/nullptr
+    /*decltype(_impl_.data_)*/nullptr
+  , /*decltype(_impl_.appearance_)*/nullptr
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct C2S_CreateCharacterDefaultTypeInternal {
   PROTOBUF_CONSTEXPR C2S_CreateCharacterDefaultTypeInternal()
@@ -317,6 +363,85 @@ struct S2C_CreateCharacterDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S2C_CreateCharacterDefaultTypeInternal _S2C_CreateCharacter_default_instance_;
+PROTOBUF_CONSTEXPR C2S_AppearanceCharacter::C2S_AppearanceCharacter(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.character_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct C2S_AppearanceCharacterDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR C2S_AppearanceCharacterDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~C2S_AppearanceCharacterDefaultTypeInternal() {}
+  union {
+    C2S_AppearanceCharacter _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C2S_AppearanceCharacterDefaultTypeInternal _C2S_AppearanceCharacter_default_instance_;
+PROTOBUF_CONSTEXPR S2C_AppearanceCharacter::S2C_AppearanceCharacter(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.error_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct S2C_AppearanceCharacterDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR S2C_AppearanceCharacterDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~S2C_AppearanceCharacterDefaultTypeInternal() {}
+  union {
+    S2C_AppearanceCharacter _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S2C_AppearanceCharacterDefaultTypeInternal _S2C_AppearanceCharacter_default_instance_;
+PROTOBUF_CONSTEXPR C2S_DeleteCharacter::C2S_DeleteCharacter(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct C2S_DeleteCharacterDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR C2S_DeleteCharacterDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~C2S_DeleteCharacterDefaultTypeInternal() {}
+  union {
+    C2S_DeleteCharacter _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C2S_DeleteCharacterDefaultTypeInternal _C2S_DeleteCharacter_default_instance_;
+PROTOBUF_CONSTEXPR S2C_DeleteCharacter::S2C_DeleteCharacter(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.error_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct S2C_DeleteCharacterDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR S2C_DeleteCharacterDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~S2C_DeleteCharacterDefaultTypeInternal() {}
+  union {
+    S2C_DeleteCharacter _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S2C_DeleteCharacterDefaultTypeInternal _S2C_DeleteCharacter_default_instance_;
+PROTOBUF_CONSTEXPR C2S_UpdateNickName::C2S_UpdateNickName(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.old_name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.new_name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct C2S_UpdateNickNameDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR C2S_UpdateNickNameDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~C2S_UpdateNickNameDefaultTypeInternal() {}
+  union {
+    C2S_UpdateNickName _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 C2S_UpdateNickNameDefaultTypeInternal _C2S_UpdateNickName_default_instance_;
+PROTOBUF_CONSTEXPR S2C_UpdateNickName::S2C_UpdateNickName(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.error_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct S2C_UpdateNickNameDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR S2C_UpdateNickNameDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~S2C_UpdateNickNameDefaultTypeInternal() {}
+  union {
+    S2C_UpdateNickName _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S2C_UpdateNickNameDefaultTypeInternal _S2C_UpdateNickName_default_instance_;
 PROTOBUF_CONSTEXPR C2S_TravelServer::C2S_TravelServer(
     ::_pbi::ConstantInitialized) {}
 struct C2S_TravelServerDefaultTypeInternal {
@@ -342,7 +467,7 @@ struct S2C_TravelServerDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 S2C_TravelServerDefaultTypeInternal _S2C_TravelServer_default_instance_;
 }  // namespace Protocol
-static ::_pb::Metadata file_level_metadata_IdentityPacket_2eproto[22];
+static ::_pb::Metadata file_level_metadata_IdentityPacket_2eproto[29];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_IdentityPacket_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_IdentityPacket_2eproto = nullptr;
 
@@ -372,10 +497,48 @@ const uint32_t TableStruct_IdentityPacket_2eproto::offsets[] PROTOBUF_SECTION_VA
   PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterData, _impl_.job_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterData, _impl_.tribe_),
   PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterData, _impl_.position_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterData, _impl_.skin_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterData, _impl_.hair_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterData, _impl_.eye_),
-  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterData, _impl_.eyebrow_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.body_color_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.hair_color_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.eye_color_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.head_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.ears_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.feet_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.hair_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.facials_01_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.facials_02_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.helmet_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.shoulders_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.skirt_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.legs_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.legs_add_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.hands_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.hands_add_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.chest_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.chest_add_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.cape_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.bracers_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.bracers_add_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.boots_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.belt_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.tabard_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.back_2hl_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.back_shield_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.back_weapon_l_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.back_weapon_r_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.back_bow_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.quiver_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.weapon_r_arrow_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.weapon_shield_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.weapon_l_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.weapon_r_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.hip_l_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::SCharacterAppearance, _impl_.hip_r_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C2S_EnterServer, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -477,6 +640,7 @@ const uint32_t TableStruct_IdentityPacket_2eproto::offsets[] PROTOBUF_SECTION_VA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::S2C_LoadCharacters, _impl_.character_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_LoadCharacters, _impl_.appearance_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C2S_SelectServer, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -497,7 +661,8 @@ const uint32_t TableStruct_IdentityPacket_2eproto::offsets[] PROTOBUF_SECTION_VA
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_CreateCharacter, _impl_.character_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_CreateCharacter, _impl_.data_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_CreateCharacter, _impl_.appearance_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::S2C_CreateCharacter, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -505,6 +670,49 @@ const uint32_t TableStruct_IdentityPacket_2eproto::offsets[] PROTOBUF_SECTION_VA
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::Protocol::S2C_CreateCharacter, _impl_.error_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_AppearanceCharacter, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_AppearanceCharacter, _impl_.character_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_AppearanceCharacter, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_AppearanceCharacter, _impl_.error_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_DeleteCharacter, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_DeleteCharacter, _impl_.name_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_DeleteCharacter, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_DeleteCharacter, _impl_.error_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_UpdateNickName, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_UpdateNickName, _impl_.old_name_),
+  PROTOBUF_FIELD_OFFSET(::Protocol::C2S_UpdateNickName, _impl_.new_name_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_UpdateNickName, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::Protocol::S2C_UpdateNickName, _impl_.error_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Protocol::C2S_TravelServer, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -522,31 +730,39 @@ const uint32_t TableStruct_IdentityPacket_2eproto::offsets[] PROTOBUF_SECTION_VA
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::Protocol::UserData)},
   { 14, -1, -1, sizeof(::Protocol::SCharacterData)},
-  { 29, -1, -1, sizeof(::Protocol::C2S_EnterServer)},
-  { 36, -1, -1, sizeof(::Protocol::S2C_EnterServer)},
-  { 43, -1, -1, sizeof(::Protocol::C2S_LeaveServer)},
-  { 50, -1, -1, sizeof(::Protocol::S2C_LeaveServer)},
-  { 57, -1, -1, sizeof(::Protocol::C2S_Singin)},
-  { 65, -1, -1, sizeof(::Protocol::S2C_Singin)},
-  { 73, -1, -1, sizeof(::Protocol::C2S_Singup)},
-  { 82, -1, -1, sizeof(::Protocol::S2C_Singup)},
-  { 89, -1, -1, sizeof(::Protocol::C2S_EmailVerified)},
-  { 96, -1, -1, sizeof(::Protocol::S2C_EmailVerified)},
-  { 103, -1, -1, sizeof(::Protocol::C2S_LoadServer)},
-  { 109, -1, -1, sizeof(::Protocol::S2C_LoadServer)},
-  { 117, -1, -1, sizeof(::Protocol::C2S_LoadCharacters)},
-  { 123, -1, -1, sizeof(::Protocol::S2C_LoadCharacters)},
-  { 130, -1, -1, sizeof(::Protocol::C2S_SelectServer)},
-  { 137, -1, -1, sizeof(::Protocol::S2C_SelectServer)},
-  { 144, -1, -1, sizeof(::Protocol::C2S_CreateCharacter)},
-  { 151, -1, -1, sizeof(::Protocol::S2C_CreateCharacter)},
-  { 158, -1, -1, sizeof(::Protocol::C2S_TravelServer)},
-  { 164, -1, -1, sizeof(::Protocol::S2C_TravelServer)},
+  { 25, -1, -1, sizeof(::Protocol::SCharacterAppearance)},
+  { 67, -1, -1, sizeof(::Protocol::C2S_EnterServer)},
+  { 74, -1, -1, sizeof(::Protocol::S2C_EnterServer)},
+  { 81, -1, -1, sizeof(::Protocol::C2S_LeaveServer)},
+  { 88, -1, -1, sizeof(::Protocol::S2C_LeaveServer)},
+  { 95, -1, -1, sizeof(::Protocol::C2S_Singin)},
+  { 103, -1, -1, sizeof(::Protocol::S2C_Singin)},
+  { 111, -1, -1, sizeof(::Protocol::C2S_Singup)},
+  { 120, -1, -1, sizeof(::Protocol::S2C_Singup)},
+  { 127, -1, -1, sizeof(::Protocol::C2S_EmailVerified)},
+  { 134, -1, -1, sizeof(::Protocol::S2C_EmailVerified)},
+  { 141, -1, -1, sizeof(::Protocol::C2S_LoadServer)},
+  { 147, -1, -1, sizeof(::Protocol::S2C_LoadServer)},
+  { 155, -1, -1, sizeof(::Protocol::C2S_LoadCharacters)},
+  { 161, -1, -1, sizeof(::Protocol::S2C_LoadCharacters)},
+  { 169, -1, -1, sizeof(::Protocol::C2S_SelectServer)},
+  { 176, -1, -1, sizeof(::Protocol::S2C_SelectServer)},
+  { 183, -1, -1, sizeof(::Protocol::C2S_CreateCharacter)},
+  { 191, -1, -1, sizeof(::Protocol::S2C_CreateCharacter)},
+  { 198, -1, -1, sizeof(::Protocol::C2S_AppearanceCharacter)},
+  { 205, -1, -1, sizeof(::Protocol::S2C_AppearanceCharacter)},
+  { 212, -1, -1, sizeof(::Protocol::C2S_DeleteCharacter)},
+  { 219, -1, -1, sizeof(::Protocol::S2C_DeleteCharacter)},
+  { 226, -1, -1, sizeof(::Protocol::C2S_UpdateNickName)},
+  { 234, -1, -1, sizeof(::Protocol::S2C_UpdateNickName)},
+  { 241, -1, -1, sizeof(::Protocol::C2S_TravelServer)},
+  { 247, -1, -1, sizeof(::Protocol::S2C_TravelServer)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_UserData_default_instance_._instance,
   &::Protocol::_SCharacterData_default_instance_._instance,
+  &::Protocol::_SCharacterAppearance_default_instance_._instance,
   &::Protocol::_C2S_EnterServer_default_instance_._instance,
   &::Protocol::_S2C_EnterServer_default_instance_._instance,
   &::Protocol::_C2S_LeaveServer_default_instance_._instance,
@@ -565,6 +781,12 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::Protocol::_S2C_SelectServer_default_instance_._instance,
   &::Protocol::_C2S_CreateCharacter_default_instance_._instance,
   &::Protocol::_S2C_CreateCharacter_default_instance_._instance,
+  &::Protocol::_C2S_AppearanceCharacter_default_instance_._instance,
+  &::Protocol::_S2C_AppearanceCharacter_default_instance_._instance,
+  &::Protocol::_C2S_DeleteCharacter_default_instance_._instance,
+  &::Protocol::_S2C_DeleteCharacter_default_instance_._instance,
+  &::Protocol::_C2S_UpdateNickName_default_instance_._instance,
+  &::Protocol::_S2C_UpdateNickName_default_instance_._instance,
   &::Protocol::_C2S_TravelServer_default_instance_._instance,
   &::Protocol::_S2C_TravelServer_default_instance_._instance,
 };
@@ -574,11 +796,26 @@ const char descriptor_table_protodef_IdentityPacket_2eproto[] PROTOBUF_SECTION_V
   "rData\022\n\n\002id\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\022\020\n\010a"
   "ctivate\030\003 \001(\010\022\021\n\tconfirmed\030\004 \001(\010\022\r\n\005emai"
   "l\030\005 \001(\t\022\020\n\010verified\030\006 \001(\010\022\023\n\013update_date"
-  "\030\007 \001(\t\022\023\n\013create_date\030\010 \001(\t\"\225\001\n\016SCharact"
-  "erData\022\014\n\004name\030\001 \001(\014\022\r\n\005level\030\002 \001(\005\022\013\n\003j"
-  "ob\030\003 \001(\005\022\r\n\005tribe\030\004 \001(\005\022\020\n\010position\030\005 \001("
-  "\005\022\014\n\004skin\030\006 \001(\r\022\014\n\004hair\030\007 \001(\r\022\013\n\003eye\030\010 \001"
-  "(\r\022\017\n\007eyebrow\030\t \001(\r\" \n\017C2S_EnterServer\022\r"
+  "\030\007 \001(\t\022\023\n\013create_date\030\010 \001(\t\"[\n\016SCharacte"
+  "rData\022\014\n\004name\030\001 \001(\014\022\r\n\005level\030\002 \001(\005\022\013\n\003jo"
+  "b\030\003 \001(\005\022\r\n\005tribe\030\004 \001(\005\022\020\n\010position\030\005 \001(\005"
+  "\"\220\005\n\024SCharacterAppearance\022\022\n\nbody_color\030"
+  "\001 \001(\r\022\022\n\nhair_color\030\002 \001(\r\022\021\n\teye_color\030\003"
+  " \001(\r\022\014\n\004head\030\004 \001(\005\022\014\n\004ears\030\005 \001(\005\022\014\n\004feet"
+  "\030\006 \001(\005\022\014\n\004hair\030\007 \001(\005\022\022\n\nfacials_01\030\010 \001(\005"
+  "\022\022\n\nfacials_02\030\t \001(\005\022\016\n\006helmet\030\n \001(\005\022\021\n\t"
+  "shoulders\030\013 \001(\005\022\r\n\005skirt\030\014 \001(\005\022\014\n\004legs\030\r"
+  " \001(\005\022\020\n\010legs_add\030\016 \001(\005\022\r\n\005hands\030\017 \001(\005\022\021\n"
+  "\thands_add\030\020 \001(\005\022\r\n\005chest\030\021 \001(\005\022\021\n\tchest"
+  "_add\030\022 \001(\005\022\014\n\004cape\030\023 \001(\005\022\017\n\007bracers\030\024 \001("
+  "\005\022\023\n\013bracers_add\030\025 \001(\005\022\r\n\005boots\030\026 \001(\005\022\014\n"
+  "\004belt\030\027 \001(\005\022\016\n\006tabard\030\030 \001(\005\022\020\n\010back_2hl\030"
+  "\031 \001(\005\022\023\n\013back_shield\030\032 \001(\005\022\025\n\rback_weapo"
+  "n_l\030\033 \001(\005\022\025\n\rback_weapon_r\030\034 \001(\005\022\020\n\010back"
+  "_bow\030\035 \001(\005\022\016\n\006quiver\030\036 \001(\005\022\026\n\016weapon_r_a"
+  "rrow\030\037 \001(\005\022\025\n\rweapon_shield\030  \001(\005\022\020\n\010wea"
+  "pon_l\030! \001(\005\022\020\n\010weapon_r\030\" \001(\005\022\r\n\005hip_l\030#"
+  " \001(\005\022\r\n\005hip_r\030$ \001(\005\" \n\017C2S_EnterServer\022\r"
   "\n\005error\030\001 \001(\005\" \n\017S2C_EnterServer\022\r\n\005erro"
   "r\030\001 \001(\005\" \n\017C2S_LeaveServer\022\r\n\005error\030\001 \001("
   "\005\" \n\017S2C_LeaveServer\022\r\n\005error\030\001 \001(\005\"*\n\nC"
@@ -590,21 +827,30 @@ const char descriptor_table_protodef_IdentityPacket_2eproto[] PROTOBUF_SECTION_V
   "ified\030\001 \001(\t\"\"\n\021S2C_EmailVerified\022\r\n\005erro"
   "r\030\001 \001(\005\"\020\n\016C2S_LoadServer\"*\n\016S2C_LoadSer"
   "ver\022\014\n\004port\030\001 \003(\005\022\n\n\002ip\030\002 \003(\t\"\024\n\022C2S_Loa"
-  "dCharacters\"A\n\022S2C_LoadCharacters\022+\n\tcha"
-  "racter\030\001 \003(\0132\030.Protocol.SCharacterData\"&"
-  "\n\020C2S_SelectServer\022\022\n\nserver_num\030\001 \001(\005\"!"
-  "\n\020S2C_SelectServer\022\r\n\005error\030\001 \001(\005\"B\n\023C2S"
-  "_CreateCharacter\022+\n\tcharacter\030\001 \001(\0132\030.Pr"
-  "otocol.SCharacterData\"$\n\023S2C_CreateChara"
-  "cter\022\r\n\005error\030\001 \001(\005\"\022\n\020C2S_TravelServer\""
-  "!\n\020S2C_TravelServer\022\r\n\005error\030\001 \001(\005b\006prot"
-  "o3"
+  "dCharacters\"u\n\022S2C_LoadCharacters\022+\n\tcha"
+  "racter\030\001 \003(\0132\030.Protocol.SCharacterData\0222"
+  "\n\nappearance\030\002 \003(\0132\036.Protocol.SCharacter"
+  "Appearance\"&\n\020C2S_SelectServer\022\022\n\nserver"
+  "_num\030\001 \001(\005\"!\n\020S2C_SelectServer\022\r\n\005error\030"
+  "\001 \001(\005\"q\n\023C2S_CreateCharacter\022&\n\004data\030\001 \001"
+  "(\0132\030.Protocol.SCharacterData\0222\n\nappearan"
+  "ce\030\002 \001(\0132\036.Protocol.SCharacterAppearance"
+  "\"$\n\023S2C_CreateCharacter\022\r\n\005error\030\001 \001(\005\"F"
+  "\n\027C2S_AppearanceCharacter\022+\n\tcharacter\030\001"
+  " \001(\0132\030.Protocol.SCharacterData\"(\n\027S2C_Ap"
+  "pearanceCharacter\022\r\n\005error\030\001 \001(\005\"#\n\023C2S_"
+  "DeleteCharacter\022\014\n\004name\030\001 \001(\014\"$\n\023S2C_Del"
+  "eteCharacter\022\r\n\005error\030\001 \001(\005\"8\n\022C2S_Updat"
+  "eNickName\022\020\n\010old_name\030\001 \001(\014\022\020\n\010new_name\030"
+  "\002 \001(\014\"#\n\022S2C_UpdateNickName\022\r\n\005error\030\001 \001"
+  "(\005\"\022\n\020C2S_TravelServer\"!\n\020S2C_TravelServ"
+  "er\022\r\n\005error\030\001 \001(\005b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_IdentityPacket_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_IdentityPacket_2eproto = {
-    false, false, 1122, descriptor_table_protodef_IdentityPacket_2eproto,
+    false, false, 2105, descriptor_table_protodef_IdentityPacket_2eproto,
     "IdentityPacket.proto",
-    &descriptor_table_IdentityPacket_2eproto_once, nullptr, 0, 22,
+    &descriptor_table_IdentityPacket_2eproto_once, nullptr, 0, 29,
     schemas, file_default_instances, TableStruct_IdentityPacket_2eproto::offsets,
     file_level_metadata_IdentityPacket_2eproto, file_level_enum_descriptors_IdentityPacket_2eproto,
     file_level_service_descriptors_IdentityPacket_2eproto,
@@ -1125,10 +1371,6 @@ SCharacterData::SCharacterData(const SCharacterData& from)
     , decltype(_impl_.job_){}
     , decltype(_impl_.tribe_){}
     , decltype(_impl_.position_){}
-    , decltype(_impl_.skin_){}
-    , decltype(_impl_.hair_){}
-    , decltype(_impl_.eye_){}
-    , decltype(_impl_.eyebrow_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -1141,8 +1383,8 @@ SCharacterData::SCharacterData(const SCharacterData& from)
       _this->GetArenaForAllocation());
   }
   ::memcpy(&_impl_.level_, &from._impl_.level_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.eyebrow_) -
-    reinterpret_cast<char*>(&_impl_.level_)) + sizeof(_impl_.eyebrow_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.position_) -
+    reinterpret_cast<char*>(&_impl_.level_)) + sizeof(_impl_.position_));
   // @@protoc_insertion_point(copy_constructor:Protocol.SCharacterData)
 }
 
@@ -1156,10 +1398,6 @@ inline void SCharacterData::SharedCtor(
     , decltype(_impl_.job_){0}
     , decltype(_impl_.tribe_){0}
     , decltype(_impl_.position_){0}
-    , decltype(_impl_.skin_){0u}
-    , decltype(_impl_.hair_){0u}
-    , decltype(_impl_.eye_){0u}
-    , decltype(_impl_.eyebrow_){0u}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.name_.InitDefault();
@@ -1194,8 +1432,8 @@ void SCharacterData::Clear() {
 
   _impl_.name_.ClearToEmpty();
   ::memset(&_impl_.level_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.eyebrow_) -
-      reinterpret_cast<char*>(&_impl_.level_)) + sizeof(_impl_.eyebrow_));
+      reinterpret_cast<char*>(&_impl_.position_) -
+      reinterpret_cast<char*>(&_impl_.level_)) + sizeof(_impl_.position_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1242,38 +1480,6 @@ const char* SCharacterData::_InternalParse(const char* ptr, ::_pbi::ParseContext
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
           _impl_.position_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 skin = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
-          _impl_.skin_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 hair = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
-          _impl_.hair_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 eye = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
-          _impl_.eye_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
-        } else
-          goto handle_unusual;
-        continue;
-      // uint32 eyebrow = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
-          _impl_.eyebrow_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -1337,30 +1543,6 @@ uint8_t* SCharacterData::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_position(), target);
   }
 
-  // uint32 skin = 6;
-  if (this->_internal_skin() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(6, this->_internal_skin(), target);
-  }
-
-  // uint32 hair = 7;
-  if (this->_internal_hair() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(7, this->_internal_hair(), target);
-  }
-
-  // uint32 eye = 8;
-  if (this->_internal_eye() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(8, this->_internal_eye(), target);
-  }
-
-  // uint32 eyebrow = 9;
-  if (this->_internal_eyebrow() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(9, this->_internal_eyebrow(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1404,26 +1586,6 @@ size_t SCharacterData::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_position());
   }
 
-  // uint32 skin = 6;
-  if (this->_internal_skin() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_skin());
-  }
-
-  // uint32 hair = 7;
-  if (this->_internal_hair() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_hair());
-  }
-
-  // uint32 eye = 8;
-  if (this->_internal_eye() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_eye());
-  }
-
-  // uint32 eyebrow = 9;
-  if (this->_internal_eyebrow() != 0) {
-    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_eyebrow());
-  }
-
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -1457,18 +1619,6 @@ void SCharacterData::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const :
   if (from._internal_position() != 0) {
     _this->_internal_set_position(from._internal_position());
   }
-  if (from._internal_skin() != 0) {
-    _this->_internal_set_skin(from._internal_skin());
-  }
-  if (from._internal_hair() != 0) {
-    _this->_internal_set_hair(from._internal_hair());
-  }
-  if (from._internal_eye() != 0) {
-    _this->_internal_set_eye(from._internal_eye());
-  }
-  if (from._internal_eyebrow() != 0) {
-    _this->_internal_set_eyebrow(from._internal_eyebrow());
-  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -1493,8 +1643,8 @@ void SCharacterData::InternalSwap(SCharacterData* other) {
       &other->_impl_.name_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(SCharacterData, _impl_.eyebrow_)
-      + sizeof(SCharacterData::_impl_.eyebrow_)
+      PROTOBUF_FIELD_OFFSET(SCharacterData, _impl_.position_)
+      + sizeof(SCharacterData::_impl_.position_)
       - PROTOBUF_FIELD_OFFSET(SCharacterData, _impl_.level_)>(
           reinterpret_cast<char*>(&_impl_.level_),
           reinterpret_cast<char*>(&other->_impl_.level_));
@@ -1504,6 +1654,1075 @@ void SCharacterData::InternalSwap(SCharacterData* other) {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
       file_level_metadata_IdentityPacket_2eproto[1]);
+}
+
+// ===================================================================
+
+class SCharacterAppearance::_Internal {
+ public:
+};
+
+SCharacterAppearance::SCharacterAppearance(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.SCharacterAppearance)
+}
+SCharacterAppearance::SCharacterAppearance(const SCharacterAppearance& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  SCharacterAppearance* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.body_color_){}
+    , decltype(_impl_.hair_color_){}
+    , decltype(_impl_.eye_color_){}
+    , decltype(_impl_.head_){}
+    , decltype(_impl_.ears_){}
+    , decltype(_impl_.feet_){}
+    , decltype(_impl_.hair_){}
+    , decltype(_impl_.facials_01_){}
+    , decltype(_impl_.facials_02_){}
+    , decltype(_impl_.helmet_){}
+    , decltype(_impl_.shoulders_){}
+    , decltype(_impl_.skirt_){}
+    , decltype(_impl_.legs_){}
+    , decltype(_impl_.legs_add_){}
+    , decltype(_impl_.hands_){}
+    , decltype(_impl_.hands_add_){}
+    , decltype(_impl_.chest_){}
+    , decltype(_impl_.chest_add_){}
+    , decltype(_impl_.cape_){}
+    , decltype(_impl_.bracers_){}
+    , decltype(_impl_.bracers_add_){}
+    , decltype(_impl_.boots_){}
+    , decltype(_impl_.belt_){}
+    , decltype(_impl_.tabard_){}
+    , decltype(_impl_.back_2hl_){}
+    , decltype(_impl_.back_shield_){}
+    , decltype(_impl_.back_weapon_l_){}
+    , decltype(_impl_.back_weapon_r_){}
+    , decltype(_impl_.back_bow_){}
+    , decltype(_impl_.quiver_){}
+    , decltype(_impl_.weapon_r_arrow_){}
+    , decltype(_impl_.weapon_shield_){}
+    , decltype(_impl_.weapon_l_){}
+    , decltype(_impl_.weapon_r_){}
+    , decltype(_impl_.hip_l_){}
+    , decltype(_impl_.hip_r_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&_impl_.body_color_, &from._impl_.body_color_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.hip_r_) -
+    reinterpret_cast<char*>(&_impl_.body_color_)) + sizeof(_impl_.hip_r_));
+  // @@protoc_insertion_point(copy_constructor:Protocol.SCharacterAppearance)
+}
+
+inline void SCharacterAppearance::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.body_color_){0u}
+    , decltype(_impl_.hair_color_){0u}
+    , decltype(_impl_.eye_color_){0u}
+    , decltype(_impl_.head_){0}
+    , decltype(_impl_.ears_){0}
+    , decltype(_impl_.feet_){0}
+    , decltype(_impl_.hair_){0}
+    , decltype(_impl_.facials_01_){0}
+    , decltype(_impl_.facials_02_){0}
+    , decltype(_impl_.helmet_){0}
+    , decltype(_impl_.shoulders_){0}
+    , decltype(_impl_.skirt_){0}
+    , decltype(_impl_.legs_){0}
+    , decltype(_impl_.legs_add_){0}
+    , decltype(_impl_.hands_){0}
+    , decltype(_impl_.hands_add_){0}
+    , decltype(_impl_.chest_){0}
+    , decltype(_impl_.chest_add_){0}
+    , decltype(_impl_.cape_){0}
+    , decltype(_impl_.bracers_){0}
+    , decltype(_impl_.bracers_add_){0}
+    , decltype(_impl_.boots_){0}
+    , decltype(_impl_.belt_){0}
+    , decltype(_impl_.tabard_){0}
+    , decltype(_impl_.back_2hl_){0}
+    , decltype(_impl_.back_shield_){0}
+    , decltype(_impl_.back_weapon_l_){0}
+    , decltype(_impl_.back_weapon_r_){0}
+    , decltype(_impl_.back_bow_){0}
+    , decltype(_impl_.quiver_){0}
+    , decltype(_impl_.weapon_r_arrow_){0}
+    , decltype(_impl_.weapon_shield_){0}
+    , decltype(_impl_.weapon_l_){0}
+    , decltype(_impl_.weapon_r_){0}
+    , decltype(_impl_.hip_l_){0}
+    , decltype(_impl_.hip_r_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+SCharacterAppearance::~SCharacterAppearance() {
+  // @@protoc_insertion_point(destructor:Protocol.SCharacterAppearance)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void SCharacterAppearance::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void SCharacterAppearance::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void SCharacterAppearance::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.SCharacterAppearance)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&_impl_.body_color_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.hip_r_) -
+      reinterpret_cast<char*>(&_impl_.body_color_)) + sizeof(_impl_.hip_r_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* SCharacterAppearance::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // uint32 body_color = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.body_color_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 hair_color = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.hair_color_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint32 eye_color = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.eye_color_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 head = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.head_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 ears = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.ears_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 feet = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.feet_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 hair = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.hair_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 facials_01 = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          _impl_.facials_01_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 facials_02 = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
+          _impl_.facials_02_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 helmet = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 80)) {
+          _impl_.helmet_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 shoulders = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 88)) {
+          _impl_.shoulders_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 skirt = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 96)) {
+          _impl_.skirt_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 legs = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 104)) {
+          _impl_.legs_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 legs_add = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 112)) {
+          _impl_.legs_add_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 hands = 15;
+      case 15:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 120)) {
+          _impl_.hands_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 hands_add = 16;
+      case 16:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 128)) {
+          _impl_.hands_add_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 chest = 17;
+      case 17:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 136)) {
+          _impl_.chest_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 chest_add = 18;
+      case 18:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 144)) {
+          _impl_.chest_add_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 cape = 19;
+      case 19:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 152)) {
+          _impl_.cape_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 bracers = 20;
+      case 20:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 160)) {
+          _impl_.bracers_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 bracers_add = 21;
+      case 21:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 168)) {
+          _impl_.bracers_add_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 boots = 22;
+      case 22:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 176)) {
+          _impl_.boots_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 belt = 23;
+      case 23:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 184)) {
+          _impl_.belt_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 tabard = 24;
+      case 24:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 192)) {
+          _impl_.tabard_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 back_2hl = 25;
+      case 25:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 200)) {
+          _impl_.back_2hl_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 back_shield = 26;
+      case 26:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 208)) {
+          _impl_.back_shield_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 back_weapon_l = 27;
+      case 27:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 216)) {
+          _impl_.back_weapon_l_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 back_weapon_r = 28;
+      case 28:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 224)) {
+          _impl_.back_weapon_r_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 back_bow = 29;
+      case 29:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 232)) {
+          _impl_.back_bow_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 quiver = 30;
+      case 30:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 240)) {
+          _impl_.quiver_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 weapon_r_arrow = 31;
+      case 31:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 248)) {
+          _impl_.weapon_r_arrow_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 weapon_shield = 32;
+      case 32:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 0)) {
+          _impl_.weapon_shield_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 weapon_l = 33;
+      case 33:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.weapon_l_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 weapon_r = 34;
+      case 34:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.weapon_r_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 hip_l = 35;
+      case 35:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.hip_l_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 hip_r = 36;
+      case 36:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.hip_r_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* SCharacterAppearance::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.SCharacterAppearance)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 body_color = 1;
+  if (this->_internal_body_color() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(1, this->_internal_body_color(), target);
+  }
+
+  // uint32 hair_color = 2;
+  if (this->_internal_hair_color() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(2, this->_internal_hair_color(), target);
+  }
+
+  // uint32 eye_color = 3;
+  if (this->_internal_eye_color() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(3, this->_internal_eye_color(), target);
+  }
+
+  // int32 head = 4;
+  if (this->_internal_head() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_head(), target);
+  }
+
+  // int32 ears = 5;
+  if (this->_internal_ears() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_ears(), target);
+  }
+
+  // int32 feet = 6;
+  if (this->_internal_feet() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(6, this->_internal_feet(), target);
+  }
+
+  // int32 hair = 7;
+  if (this->_internal_hair() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(7, this->_internal_hair(), target);
+  }
+
+  // int32 facials_01 = 8;
+  if (this->_internal_facials_01() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(8, this->_internal_facials_01(), target);
+  }
+
+  // int32 facials_02 = 9;
+  if (this->_internal_facials_02() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(9, this->_internal_facials_02(), target);
+  }
+
+  // int32 helmet = 10;
+  if (this->_internal_helmet() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(10, this->_internal_helmet(), target);
+  }
+
+  // int32 shoulders = 11;
+  if (this->_internal_shoulders() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(11, this->_internal_shoulders(), target);
+  }
+
+  // int32 skirt = 12;
+  if (this->_internal_skirt() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(12, this->_internal_skirt(), target);
+  }
+
+  // int32 legs = 13;
+  if (this->_internal_legs() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(13, this->_internal_legs(), target);
+  }
+
+  // int32 legs_add = 14;
+  if (this->_internal_legs_add() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(14, this->_internal_legs_add(), target);
+  }
+
+  // int32 hands = 15;
+  if (this->_internal_hands() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(15, this->_internal_hands(), target);
+  }
+
+  // int32 hands_add = 16;
+  if (this->_internal_hands_add() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(16, this->_internal_hands_add(), target);
+  }
+
+  // int32 chest = 17;
+  if (this->_internal_chest() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(17, this->_internal_chest(), target);
+  }
+
+  // int32 chest_add = 18;
+  if (this->_internal_chest_add() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(18, this->_internal_chest_add(), target);
+  }
+
+  // int32 cape = 19;
+  if (this->_internal_cape() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(19, this->_internal_cape(), target);
+  }
+
+  // int32 bracers = 20;
+  if (this->_internal_bracers() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(20, this->_internal_bracers(), target);
+  }
+
+  // int32 bracers_add = 21;
+  if (this->_internal_bracers_add() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(21, this->_internal_bracers_add(), target);
+  }
+
+  // int32 boots = 22;
+  if (this->_internal_boots() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(22, this->_internal_boots(), target);
+  }
+
+  // int32 belt = 23;
+  if (this->_internal_belt() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(23, this->_internal_belt(), target);
+  }
+
+  // int32 tabard = 24;
+  if (this->_internal_tabard() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(24, this->_internal_tabard(), target);
+  }
+
+  // int32 back_2hl = 25;
+  if (this->_internal_back_2hl() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(25, this->_internal_back_2hl(), target);
+  }
+
+  // int32 back_shield = 26;
+  if (this->_internal_back_shield() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(26, this->_internal_back_shield(), target);
+  }
+
+  // int32 back_weapon_l = 27;
+  if (this->_internal_back_weapon_l() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(27, this->_internal_back_weapon_l(), target);
+  }
+
+  // int32 back_weapon_r = 28;
+  if (this->_internal_back_weapon_r() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(28, this->_internal_back_weapon_r(), target);
+  }
+
+  // int32 back_bow = 29;
+  if (this->_internal_back_bow() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(29, this->_internal_back_bow(), target);
+  }
+
+  // int32 quiver = 30;
+  if (this->_internal_quiver() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(30, this->_internal_quiver(), target);
+  }
+
+  // int32 weapon_r_arrow = 31;
+  if (this->_internal_weapon_r_arrow() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(31, this->_internal_weapon_r_arrow(), target);
+  }
+
+  // int32 weapon_shield = 32;
+  if (this->_internal_weapon_shield() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(32, this->_internal_weapon_shield(), target);
+  }
+
+  // int32 weapon_l = 33;
+  if (this->_internal_weapon_l() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(33, this->_internal_weapon_l(), target);
+  }
+
+  // int32 weapon_r = 34;
+  if (this->_internal_weapon_r() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(34, this->_internal_weapon_r(), target);
+  }
+
+  // int32 hip_l = 35;
+  if (this->_internal_hip_l() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(35, this->_internal_hip_l(), target);
+  }
+
+  // int32 hip_r = 36;
+  if (this->_internal_hip_r() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(36, this->_internal_hip_r(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.SCharacterAppearance)
+  return target;
+}
+
+size_t SCharacterAppearance::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.SCharacterAppearance)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // uint32 body_color = 1;
+  if (this->_internal_body_color() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_body_color());
+  }
+
+  // uint32 hair_color = 2;
+  if (this->_internal_hair_color() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_hair_color());
+  }
+
+  // uint32 eye_color = 3;
+  if (this->_internal_eye_color() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_eye_color());
+  }
+
+  // int32 head = 4;
+  if (this->_internal_head() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_head());
+  }
+
+  // int32 ears = 5;
+  if (this->_internal_ears() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_ears());
+  }
+
+  // int32 feet = 6;
+  if (this->_internal_feet() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_feet());
+  }
+
+  // int32 hair = 7;
+  if (this->_internal_hair() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_hair());
+  }
+
+  // int32 facials_01 = 8;
+  if (this->_internal_facials_01() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_facials_01());
+  }
+
+  // int32 facials_02 = 9;
+  if (this->_internal_facials_02() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_facials_02());
+  }
+
+  // int32 helmet = 10;
+  if (this->_internal_helmet() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_helmet());
+  }
+
+  // int32 shoulders = 11;
+  if (this->_internal_shoulders() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_shoulders());
+  }
+
+  // int32 skirt = 12;
+  if (this->_internal_skirt() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_skirt());
+  }
+
+  // int32 legs = 13;
+  if (this->_internal_legs() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_legs());
+  }
+
+  // int32 legs_add = 14;
+  if (this->_internal_legs_add() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_legs_add());
+  }
+
+  // int32 hands = 15;
+  if (this->_internal_hands() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_hands());
+  }
+
+  // int32 hands_add = 16;
+  if (this->_internal_hands_add() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_hands_add());
+  }
+
+  // int32 chest = 17;
+  if (this->_internal_chest() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_chest());
+  }
+
+  // int32 chest_add = 18;
+  if (this->_internal_chest_add() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_chest_add());
+  }
+
+  // int32 cape = 19;
+  if (this->_internal_cape() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_cape());
+  }
+
+  // int32 bracers = 20;
+  if (this->_internal_bracers() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_bracers());
+  }
+
+  // int32 bracers_add = 21;
+  if (this->_internal_bracers_add() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_bracers_add());
+  }
+
+  // int32 boots = 22;
+  if (this->_internal_boots() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_boots());
+  }
+
+  // int32 belt = 23;
+  if (this->_internal_belt() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_belt());
+  }
+
+  // int32 tabard = 24;
+  if (this->_internal_tabard() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_tabard());
+  }
+
+  // int32 back_2hl = 25;
+  if (this->_internal_back_2hl() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_back_2hl());
+  }
+
+  // int32 back_shield = 26;
+  if (this->_internal_back_shield() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_back_shield());
+  }
+
+  // int32 back_weapon_l = 27;
+  if (this->_internal_back_weapon_l() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_back_weapon_l());
+  }
+
+  // int32 back_weapon_r = 28;
+  if (this->_internal_back_weapon_r() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_back_weapon_r());
+  }
+
+  // int32 back_bow = 29;
+  if (this->_internal_back_bow() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_back_bow());
+  }
+
+  // int32 quiver = 30;
+  if (this->_internal_quiver() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_quiver());
+  }
+
+  // int32 weapon_r_arrow = 31;
+  if (this->_internal_weapon_r_arrow() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_weapon_r_arrow());
+  }
+
+  // int32 weapon_shield = 32;
+  if (this->_internal_weapon_shield() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_weapon_shield());
+  }
+
+  // int32 weapon_l = 33;
+  if (this->_internal_weapon_l() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_weapon_l());
+  }
+
+  // int32 weapon_r = 34;
+  if (this->_internal_weapon_r() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_weapon_r());
+  }
+
+  // int32 hip_l = 35;
+  if (this->_internal_hip_l() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_hip_l());
+  }
+
+  // int32 hip_r = 36;
+  if (this->_internal_hip_r() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::Int32Size(
+        this->_internal_hip_r());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SCharacterAppearance::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    SCharacterAppearance::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SCharacterAppearance::GetClassData() const { return &_class_data_; }
+
+
+void SCharacterAppearance::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<SCharacterAppearance*>(&to_msg);
+  auto& from = static_cast<const SCharacterAppearance&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.SCharacterAppearance)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_body_color() != 0) {
+    _this->_internal_set_body_color(from._internal_body_color());
+  }
+  if (from._internal_hair_color() != 0) {
+    _this->_internal_set_hair_color(from._internal_hair_color());
+  }
+  if (from._internal_eye_color() != 0) {
+    _this->_internal_set_eye_color(from._internal_eye_color());
+  }
+  if (from._internal_head() != 0) {
+    _this->_internal_set_head(from._internal_head());
+  }
+  if (from._internal_ears() != 0) {
+    _this->_internal_set_ears(from._internal_ears());
+  }
+  if (from._internal_feet() != 0) {
+    _this->_internal_set_feet(from._internal_feet());
+  }
+  if (from._internal_hair() != 0) {
+    _this->_internal_set_hair(from._internal_hair());
+  }
+  if (from._internal_facials_01() != 0) {
+    _this->_internal_set_facials_01(from._internal_facials_01());
+  }
+  if (from._internal_facials_02() != 0) {
+    _this->_internal_set_facials_02(from._internal_facials_02());
+  }
+  if (from._internal_helmet() != 0) {
+    _this->_internal_set_helmet(from._internal_helmet());
+  }
+  if (from._internal_shoulders() != 0) {
+    _this->_internal_set_shoulders(from._internal_shoulders());
+  }
+  if (from._internal_skirt() != 0) {
+    _this->_internal_set_skirt(from._internal_skirt());
+  }
+  if (from._internal_legs() != 0) {
+    _this->_internal_set_legs(from._internal_legs());
+  }
+  if (from._internal_legs_add() != 0) {
+    _this->_internal_set_legs_add(from._internal_legs_add());
+  }
+  if (from._internal_hands() != 0) {
+    _this->_internal_set_hands(from._internal_hands());
+  }
+  if (from._internal_hands_add() != 0) {
+    _this->_internal_set_hands_add(from._internal_hands_add());
+  }
+  if (from._internal_chest() != 0) {
+    _this->_internal_set_chest(from._internal_chest());
+  }
+  if (from._internal_chest_add() != 0) {
+    _this->_internal_set_chest_add(from._internal_chest_add());
+  }
+  if (from._internal_cape() != 0) {
+    _this->_internal_set_cape(from._internal_cape());
+  }
+  if (from._internal_bracers() != 0) {
+    _this->_internal_set_bracers(from._internal_bracers());
+  }
+  if (from._internal_bracers_add() != 0) {
+    _this->_internal_set_bracers_add(from._internal_bracers_add());
+  }
+  if (from._internal_boots() != 0) {
+    _this->_internal_set_boots(from._internal_boots());
+  }
+  if (from._internal_belt() != 0) {
+    _this->_internal_set_belt(from._internal_belt());
+  }
+  if (from._internal_tabard() != 0) {
+    _this->_internal_set_tabard(from._internal_tabard());
+  }
+  if (from._internal_back_2hl() != 0) {
+    _this->_internal_set_back_2hl(from._internal_back_2hl());
+  }
+  if (from._internal_back_shield() != 0) {
+    _this->_internal_set_back_shield(from._internal_back_shield());
+  }
+  if (from._internal_back_weapon_l() != 0) {
+    _this->_internal_set_back_weapon_l(from._internal_back_weapon_l());
+  }
+  if (from._internal_back_weapon_r() != 0) {
+    _this->_internal_set_back_weapon_r(from._internal_back_weapon_r());
+  }
+  if (from._internal_back_bow() != 0) {
+    _this->_internal_set_back_bow(from._internal_back_bow());
+  }
+  if (from._internal_quiver() != 0) {
+    _this->_internal_set_quiver(from._internal_quiver());
+  }
+  if (from._internal_weapon_r_arrow() != 0) {
+    _this->_internal_set_weapon_r_arrow(from._internal_weapon_r_arrow());
+  }
+  if (from._internal_weapon_shield() != 0) {
+    _this->_internal_set_weapon_shield(from._internal_weapon_shield());
+  }
+  if (from._internal_weapon_l() != 0) {
+    _this->_internal_set_weapon_l(from._internal_weapon_l());
+  }
+  if (from._internal_weapon_r() != 0) {
+    _this->_internal_set_weapon_r(from._internal_weapon_r());
+  }
+  if (from._internal_hip_l() != 0) {
+    _this->_internal_set_hip_l(from._internal_hip_l());
+  }
+  if (from._internal_hip_r() != 0) {
+    _this->_internal_set_hip_r(from._internal_hip_r());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void SCharacterAppearance::CopyFrom(const SCharacterAppearance& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.SCharacterAppearance)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SCharacterAppearance::IsInitialized() const {
+  return true;
+}
+
+void SCharacterAppearance::InternalSwap(SCharacterAppearance* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(SCharacterAppearance, _impl_.hip_r_)
+      + sizeof(SCharacterAppearance::_impl_.hip_r_)
+      - PROTOBUF_FIELD_OFFSET(SCharacterAppearance, _impl_.body_color_)>(
+          reinterpret_cast<char*>(&_impl_.body_color_),
+          reinterpret_cast<char*>(&other->_impl_.body_color_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SCharacterAppearance::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
+      file_level_metadata_IdentityPacket_2eproto[2]);
 }
 
 // ===================================================================
@@ -1681,7 +2900,7 @@ void C2S_EnterServer::InternalSwap(C2S_EnterServer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_EnterServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[2]);
+      file_level_metadata_IdentityPacket_2eproto[3]);
 }
 
 // ===================================================================
@@ -1859,7 +3078,7 @@ void S2C_EnterServer::InternalSwap(S2C_EnterServer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_EnterServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[3]);
+      file_level_metadata_IdentityPacket_2eproto[4]);
 }
 
 // ===================================================================
@@ -2037,7 +3256,7 @@ void C2S_LeaveServer::InternalSwap(C2S_LeaveServer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_LeaveServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[4]);
+      file_level_metadata_IdentityPacket_2eproto[5]);
 }
 
 // ===================================================================
@@ -2215,7 +3434,7 @@ void S2C_LeaveServer::InternalSwap(S2C_LeaveServer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_LeaveServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[5]);
+      file_level_metadata_IdentityPacket_2eproto[6]);
 }
 
 // ===================================================================
@@ -2468,7 +3687,7 @@ void C2S_Singin::InternalSwap(C2S_Singin* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_Singin::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[6]);
+      file_level_metadata_IdentityPacket_2eproto[7]);
 }
 
 // ===================================================================
@@ -2698,7 +3917,7 @@ void S2C_Singin::InternalSwap(S2C_Singin* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_Singin::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[7]);
+      file_level_metadata_IdentityPacket_2eproto[8]);
 }
 
 // ===================================================================
@@ -3001,7 +4220,7 @@ void C2S_Singup::InternalSwap(C2S_Singup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_Singup::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[8]);
+      file_level_metadata_IdentityPacket_2eproto[9]);
 }
 
 // ===================================================================
@@ -3179,7 +4398,7 @@ void S2C_Singup::InternalSwap(S2C_Singup* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_Singup::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[9]);
+      file_level_metadata_IdentityPacket_2eproto[10]);
 }
 
 // ===================================================================
@@ -3382,7 +4601,7 @@ void C2S_EmailVerified::InternalSwap(C2S_EmailVerified* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_EmailVerified::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[10]);
+      file_level_metadata_IdentityPacket_2eproto[11]);
 }
 
 // ===================================================================
@@ -3560,7 +4779,7 @@ void S2C_EmailVerified::InternalSwap(S2C_EmailVerified* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_EmailVerified::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[11]);
+      file_level_metadata_IdentityPacket_2eproto[12]);
 }
 
 // ===================================================================
@@ -3600,7 +4819,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_LoadServer::GetClassData()
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_LoadServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[12]);
+      file_level_metadata_IdentityPacket_2eproto[13]);
 }
 
 // ===================================================================
@@ -3832,7 +5051,7 @@ void S2C_LoadServer::InternalSwap(S2C_LoadServer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_LoadServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[13]);
+      file_level_metadata_IdentityPacket_2eproto[14]);
 }
 
 // ===================================================================
@@ -3872,7 +5091,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_LoadCharacters::GetClassDa
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_LoadCharacters::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[14]);
+      file_level_metadata_IdentityPacket_2eproto[15]);
 }
 
 // ===================================================================
@@ -3892,6 +5111,7 @@ S2C_LoadCharacters::S2C_LoadCharacters(const S2C_LoadCharacters& from)
   S2C_LoadCharacters* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.character_){from._impl_.character_}
+    , decltype(_impl_.appearance_){from._impl_.appearance_}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -3904,6 +5124,7 @@ inline void S2C_LoadCharacters::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.character_){arena}
+    , decltype(_impl_.appearance_){arena}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -3920,6 +5141,7 @@ S2C_LoadCharacters::~S2C_LoadCharacters() {
 inline void S2C_LoadCharacters::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.character_.~RepeatedPtrField();
+  _impl_.appearance_.~RepeatedPtrField();
 }
 
 void S2C_LoadCharacters::SetCachedSize(int size) const {
@@ -3933,6 +5155,7 @@ void S2C_LoadCharacters::Clear() {
   (void) cached_has_bits;
 
   _impl_.character_.Clear();
+  _impl_.appearance_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3952,6 +5175,19 @@ const char* S2C_LoadCharacters::_InternalParse(const char* ptr, ::_pbi::ParseCon
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .Protocol.SCharacterAppearance appearance = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_appearance(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -3992,6 +5228,14 @@ uint8_t* S2C_LoadCharacters::_InternalSerialize(
         InternalWriteMessage(1, repfield, repfield.GetCachedSize(), target, stream);
   }
 
+  // repeated .Protocol.SCharacterAppearance appearance = 2;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_appearance_size()); i < n; i++) {
+    const auto& repfield = this->_internal_appearance(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(2, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4015,6 +5259,13 @@ size_t S2C_LoadCharacters::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
+  // repeated .Protocol.SCharacterAppearance appearance = 2;
+  total_size += 1UL * this->_internal_appearance_size();
+  for (const auto& msg : this->_impl_.appearance_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -4034,6 +5285,7 @@ void S2C_LoadCharacters::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
   (void) cached_has_bits;
 
   _this->_impl_.character_.MergeFrom(from._impl_.character_);
+  _this->_impl_.appearance_.MergeFrom(from._impl_.appearance_);
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -4052,12 +5304,13 @@ void S2C_LoadCharacters::InternalSwap(S2C_LoadCharacters* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   _impl_.character_.InternalSwap(&other->_impl_.character_);
+  _impl_.appearance_.InternalSwap(&other->_impl_.appearance_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_LoadCharacters::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[15]);
+      file_level_metadata_IdentityPacket_2eproto[16]);
 }
 
 // ===================================================================
@@ -4235,7 +5488,7 @@ void C2S_SelectServer::InternalSwap(C2S_SelectServer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_SelectServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[16]);
+      file_level_metadata_IdentityPacket_2eproto[17]);
 }
 
 // ===================================================================
@@ -4413,19 +5666,24 @@ void S2C_SelectServer::InternalSwap(S2C_SelectServer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_SelectServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[17]);
+      file_level_metadata_IdentityPacket_2eproto[18]);
 }
 
 // ===================================================================
 
 class C2S_CreateCharacter::_Internal {
  public:
-  static const ::Protocol::SCharacterData& character(const C2S_CreateCharacter* msg);
+  static const ::Protocol::SCharacterData& data(const C2S_CreateCharacter* msg);
+  static const ::Protocol::SCharacterAppearance& appearance(const C2S_CreateCharacter* msg);
 };
 
 const ::Protocol::SCharacterData&
-C2S_CreateCharacter::_Internal::character(const C2S_CreateCharacter* msg) {
-  return *msg->_impl_.character_;
+C2S_CreateCharacter::_Internal::data(const C2S_CreateCharacter* msg) {
+  return *msg->_impl_.data_;
+}
+const ::Protocol::SCharacterAppearance&
+C2S_CreateCharacter::_Internal::appearance(const C2S_CreateCharacter* msg) {
+  return *msg->_impl_.appearance_;
 }
 C2S_CreateCharacter::C2S_CreateCharacter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
@@ -4437,12 +5695,16 @@ C2S_CreateCharacter::C2S_CreateCharacter(const C2S_CreateCharacter& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   C2S_CreateCharacter* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.character_){nullptr}
+      decltype(_impl_.data_){nullptr}
+    , decltype(_impl_.appearance_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  if (from._internal_has_character()) {
-    _this->_impl_.character_ = new ::Protocol::SCharacterData(*from._impl_.character_);
+  if (from._internal_has_data()) {
+    _this->_impl_.data_ = new ::Protocol::SCharacterData(*from._impl_.data_);
+  }
+  if (from._internal_has_appearance()) {
+    _this->_impl_.appearance_ = new ::Protocol::SCharacterAppearance(*from._impl_.appearance_);
   }
   // @@protoc_insertion_point(copy_constructor:Protocol.C2S_CreateCharacter)
 }
@@ -4452,7 +5714,8 @@ inline void C2S_CreateCharacter::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.character_){nullptr}
+      decltype(_impl_.data_){nullptr}
+    , decltype(_impl_.appearance_){nullptr}
     , /*decltype(_impl_._cached_size_)*/{}
   };
 }
@@ -4468,7 +5731,8 @@ C2S_CreateCharacter::~C2S_CreateCharacter() {
 
 inline void C2S_CreateCharacter::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-  if (this != internal_default_instance()) delete _impl_.character_;
+  if (this != internal_default_instance()) delete _impl_.data_;
+  if (this != internal_default_instance()) delete _impl_.appearance_;
 }
 
 void C2S_CreateCharacter::SetCachedSize(int size) const {
@@ -4481,10 +5745,14 @@ void C2S_CreateCharacter::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  if (GetArenaForAllocation() == nullptr && _impl_.character_ != nullptr) {
-    delete _impl_.character_;
+  if (GetArenaForAllocation() == nullptr && _impl_.data_ != nullptr) {
+    delete _impl_.data_;
   }
-  _impl_.character_ = nullptr;
+  _impl_.data_ = nullptr;
+  if (GetArenaForAllocation() == nullptr && _impl_.appearance_ != nullptr) {
+    delete _impl_.appearance_;
+  }
+  _impl_.appearance_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -4494,10 +5762,18 @@ const char* C2S_CreateCharacter::_InternalParse(const char* ptr, ::_pbi::ParseCo
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // .Protocol.SCharacterData character = 1;
+      // .Protocol.SCharacterData data = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
-          ptr = ctx->ParseMessage(_internal_mutable_character(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_data(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // .Protocol.SCharacterAppearance appearance = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_appearance(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -4531,11 +5807,18 @@ uint8_t* C2S_CreateCharacter::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // .Protocol.SCharacterData character = 1;
-  if (this->_internal_has_character()) {
+  // .Protocol.SCharacterData data = 1;
+  if (this->_internal_has_data()) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, _Internal::character(this),
-        _Internal::character(this).GetCachedSize(), target, stream);
+      InternalWriteMessage(1, _Internal::data(this),
+        _Internal::data(this).GetCachedSize(), target, stream);
+  }
+
+  // .Protocol.SCharacterAppearance appearance = 2;
+  if (this->_internal_has_appearance()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::appearance(this),
+        _Internal::appearance(this).GetCachedSize(), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -4554,11 +5837,18 @@ size_t C2S_CreateCharacter::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // .Protocol.SCharacterData character = 1;
-  if (this->_internal_has_character()) {
+  // .Protocol.SCharacterData data = 1;
+  if (this->_internal_has_data()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *_impl_.character_);
+        *_impl_.data_);
+  }
+
+  // .Protocol.SCharacterAppearance appearance = 2;
+  if (this->_internal_has_appearance()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.appearance_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -4579,9 +5869,13 @@ void C2S_CreateCharacter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_has_character()) {
-    _this->_internal_mutable_character()->::Protocol::SCharacterData::MergeFrom(
-        from._internal_character());
+  if (from._internal_has_data()) {
+    _this->_internal_mutable_data()->::Protocol::SCharacterData::MergeFrom(
+        from._internal_data());
+  }
+  if (from._internal_has_appearance()) {
+    _this->_internal_mutable_appearance()->::Protocol::SCharacterAppearance::MergeFrom(
+        from._internal_appearance());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -4600,13 +5894,18 @@ bool C2S_CreateCharacter::IsInitialized() const {
 void C2S_CreateCharacter::InternalSwap(C2S_CreateCharacter* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(_impl_.character_, other->_impl_.character_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(C2S_CreateCharacter, _impl_.appearance_)
+      + sizeof(C2S_CreateCharacter::_impl_.appearance_)
+      - PROTOBUF_FIELD_OFFSET(C2S_CreateCharacter, _impl_.data_)>(
+          reinterpret_cast<char*>(&_impl_.data_),
+          reinterpret_cast<char*>(&other->_impl_.data_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_CreateCharacter::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[18]);
+      file_level_metadata_IdentityPacket_2eproto[19]);
 }
 
 // ===================================================================
@@ -4784,7 +6083,1175 @@ void S2C_CreateCharacter::InternalSwap(S2C_CreateCharacter* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_CreateCharacter::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[19]);
+      file_level_metadata_IdentityPacket_2eproto[20]);
+}
+
+// ===================================================================
+
+class C2S_AppearanceCharacter::_Internal {
+ public:
+  static const ::Protocol::SCharacterData& character(const C2S_AppearanceCharacter* msg);
+};
+
+const ::Protocol::SCharacterData&
+C2S_AppearanceCharacter::_Internal::character(const C2S_AppearanceCharacter* msg) {
+  return *msg->_impl_.character_;
+}
+C2S_AppearanceCharacter::C2S_AppearanceCharacter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_AppearanceCharacter)
+}
+C2S_AppearanceCharacter::C2S_AppearanceCharacter(const C2S_AppearanceCharacter& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  C2S_AppearanceCharacter* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.character_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_character()) {
+    _this->_impl_.character_ = new ::Protocol::SCharacterData(*from._impl_.character_);
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_AppearanceCharacter)
+}
+
+inline void C2S_AppearanceCharacter::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.character_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+C2S_AppearanceCharacter::~C2S_AppearanceCharacter() {
+  // @@protoc_insertion_point(destructor:Protocol.C2S_AppearanceCharacter)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void C2S_AppearanceCharacter::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete _impl_.character_;
+}
+
+void C2S_AppearanceCharacter::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void C2S_AppearanceCharacter::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C2S_AppearanceCharacter)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  if (GetArenaForAllocation() == nullptr && _impl_.character_ != nullptr) {
+    delete _impl_.character_;
+  }
+  _impl_.character_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C2S_AppearanceCharacter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .Protocol.SCharacterData character = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr = ctx->ParseMessage(_internal_mutable_character(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* C2S_AppearanceCharacter::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C2S_AppearanceCharacter)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .Protocol.SCharacterData character = 1;
+  if (this->_internal_has_character()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, _Internal::character(this),
+        _Internal::character(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C2S_AppearanceCharacter)
+  return target;
+}
+
+size_t C2S_AppearanceCharacter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C2S_AppearanceCharacter)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // .Protocol.SCharacterData character = 1;
+  if (this->_internal_has_character()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.character_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_AppearanceCharacter::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    C2S_AppearanceCharacter::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_AppearanceCharacter::GetClassData() const { return &_class_data_; }
+
+
+void C2S_AppearanceCharacter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<C2S_AppearanceCharacter*>(&to_msg);
+  auto& from = static_cast<const C2S_AppearanceCharacter&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C2S_AppearanceCharacter)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_has_character()) {
+    _this->_internal_mutable_character()->::Protocol::SCharacterData::MergeFrom(
+        from._internal_character());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void C2S_AppearanceCharacter::CopyFrom(const C2S_AppearanceCharacter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C2S_AppearanceCharacter)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C2S_AppearanceCharacter::IsInitialized() const {
+  return true;
+}
+
+void C2S_AppearanceCharacter::InternalSwap(C2S_AppearanceCharacter* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_.character_, other->_impl_.character_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C2S_AppearanceCharacter::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
+      file_level_metadata_IdentityPacket_2eproto[21]);
+}
+
+// ===================================================================
+
+class S2C_AppearanceCharacter::_Internal {
+ public:
+};
+
+S2C_AppearanceCharacter::S2C_AppearanceCharacter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_AppearanceCharacter)
+}
+S2C_AppearanceCharacter::S2C_AppearanceCharacter(const S2C_AppearanceCharacter& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  S2C_AppearanceCharacter* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.error_ = from._impl_.error_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_AppearanceCharacter)
+}
+
+inline void S2C_AppearanceCharacter::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+S2C_AppearanceCharacter::~S2C_AppearanceCharacter() {
+  // @@protoc_insertion_point(destructor:Protocol.S2C_AppearanceCharacter)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void S2C_AppearanceCharacter::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void S2C_AppearanceCharacter::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void S2C_AppearanceCharacter::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S2C_AppearanceCharacter)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.error_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S2C_AppearanceCharacter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 error = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.error_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* S2C_AppearanceCharacter::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_AppearanceCharacter)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 error = 1;
+  if (this->_internal_error() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_AppearanceCharacter)
+  return target;
+}
+
+size_t S2C_AppearanceCharacter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_AppearanceCharacter)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 error = 1;
+  if (this->_internal_error() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_error());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_AppearanceCharacter::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    S2C_AppearanceCharacter::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_AppearanceCharacter::GetClassData() const { return &_class_data_; }
+
+
+void S2C_AppearanceCharacter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<S2C_AppearanceCharacter*>(&to_msg);
+  auto& from = static_cast<const S2C_AppearanceCharacter&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_AppearanceCharacter)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_error() != 0) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void S2C_AppearanceCharacter::CopyFrom(const S2C_AppearanceCharacter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_AppearanceCharacter)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S2C_AppearanceCharacter::IsInitialized() const {
+  return true;
+}
+
+void S2C_AppearanceCharacter::InternalSwap(S2C_AppearanceCharacter* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_.error_, other->_impl_.error_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S2C_AppearanceCharacter::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
+      file_level_metadata_IdentityPacket_2eproto[22]);
+}
+
+// ===================================================================
+
+class C2S_DeleteCharacter::_Internal {
+ public:
+};
+
+C2S_DeleteCharacter::C2S_DeleteCharacter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_DeleteCharacter)
+}
+C2S_DeleteCharacter::C2S_DeleteCharacter(const C2S_DeleteCharacter& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  C2S_DeleteCharacter* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.name_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_name().empty()) {
+    _this->_impl_.name_.Set(from._internal_name(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_DeleteCharacter)
+}
+
+inline void C2S_DeleteCharacter::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.name_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+C2S_DeleteCharacter::~C2S_DeleteCharacter() {
+  // @@protoc_insertion_point(destructor:Protocol.C2S_DeleteCharacter)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void C2S_DeleteCharacter::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.name_.Destroy();
+}
+
+void C2S_DeleteCharacter::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void C2S_DeleteCharacter::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C2S_DeleteCharacter)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.name_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C2S_DeleteCharacter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bytes name = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_name();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* C2S_DeleteCharacter::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C2S_DeleteCharacter)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes name = 1;
+  if (!this->_internal_name().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        1, this->_internal_name(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C2S_DeleteCharacter)
+  return target;
+}
+
+size_t C2S_DeleteCharacter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C2S_DeleteCharacter)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // bytes name = 1;
+  if (!this->_internal_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_name());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_DeleteCharacter::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    C2S_DeleteCharacter::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_DeleteCharacter::GetClassData() const { return &_class_data_; }
+
+
+void C2S_DeleteCharacter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<C2S_DeleteCharacter*>(&to_msg);
+  auto& from = static_cast<const C2S_DeleteCharacter&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C2S_DeleteCharacter)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_name().empty()) {
+    _this->_internal_set_name(from._internal_name());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void C2S_DeleteCharacter::CopyFrom(const C2S_DeleteCharacter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C2S_DeleteCharacter)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C2S_DeleteCharacter::IsInitialized() const {
+  return true;
+}
+
+void C2S_DeleteCharacter::InternalSwap(C2S_DeleteCharacter* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.name_, lhs_arena,
+      &other->_impl_.name_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C2S_DeleteCharacter::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
+      file_level_metadata_IdentityPacket_2eproto[23]);
+}
+
+// ===================================================================
+
+class S2C_DeleteCharacter::_Internal {
+ public:
+};
+
+S2C_DeleteCharacter::S2C_DeleteCharacter(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_DeleteCharacter)
+}
+S2C_DeleteCharacter::S2C_DeleteCharacter(const S2C_DeleteCharacter& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  S2C_DeleteCharacter* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.error_ = from._impl_.error_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_DeleteCharacter)
+}
+
+inline void S2C_DeleteCharacter::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+S2C_DeleteCharacter::~S2C_DeleteCharacter() {
+  // @@protoc_insertion_point(destructor:Protocol.S2C_DeleteCharacter)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void S2C_DeleteCharacter::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void S2C_DeleteCharacter::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void S2C_DeleteCharacter::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S2C_DeleteCharacter)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.error_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S2C_DeleteCharacter::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 error = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.error_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* S2C_DeleteCharacter::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_DeleteCharacter)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 error = 1;
+  if (this->_internal_error() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_DeleteCharacter)
+  return target;
+}
+
+size_t S2C_DeleteCharacter::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_DeleteCharacter)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 error = 1;
+  if (this->_internal_error() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_error());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_DeleteCharacter::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    S2C_DeleteCharacter::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_DeleteCharacter::GetClassData() const { return &_class_data_; }
+
+
+void S2C_DeleteCharacter::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<S2C_DeleteCharacter*>(&to_msg);
+  auto& from = static_cast<const S2C_DeleteCharacter&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_DeleteCharacter)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_error() != 0) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void S2C_DeleteCharacter::CopyFrom(const S2C_DeleteCharacter& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_DeleteCharacter)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S2C_DeleteCharacter::IsInitialized() const {
+  return true;
+}
+
+void S2C_DeleteCharacter::InternalSwap(S2C_DeleteCharacter* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_.error_, other->_impl_.error_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S2C_DeleteCharacter::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
+      file_level_metadata_IdentityPacket_2eproto[24]);
+}
+
+// ===================================================================
+
+class C2S_UpdateNickName::_Internal {
+ public:
+};
+
+C2S_UpdateNickName::C2S_UpdateNickName(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.C2S_UpdateNickName)
+}
+C2S_UpdateNickName::C2S_UpdateNickName(const C2S_UpdateNickName& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  C2S_UpdateNickName* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.old_name_){}
+    , decltype(_impl_.new_name_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.old_name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.old_name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_old_name().empty()) {
+    _this->_impl_.old_name_.Set(from._internal_old_name(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.new_name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.new_name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_new_name().empty()) {
+    _this->_impl_.new_name_.Set(from._internal_new_name(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:Protocol.C2S_UpdateNickName)
+}
+
+inline void C2S_UpdateNickName::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.old_name_){}
+    , decltype(_impl_.new_name_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.old_name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.old_name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.new_name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.new_name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+C2S_UpdateNickName::~C2S_UpdateNickName() {
+  // @@protoc_insertion_point(destructor:Protocol.C2S_UpdateNickName)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void C2S_UpdateNickName::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.old_name_.Destroy();
+  _impl_.new_name_.Destroy();
+}
+
+void C2S_UpdateNickName::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void C2S_UpdateNickName::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.C2S_UpdateNickName)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.old_name_.ClearToEmpty();
+  _impl_.new_name_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* C2S_UpdateNickName::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bytes old_name = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_old_name();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bytes new_name = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_new_name();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* C2S_UpdateNickName::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.C2S_UpdateNickName)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bytes old_name = 1;
+  if (!this->_internal_old_name().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        1, this->_internal_old_name(), target);
+  }
+
+  // bytes new_name = 2;
+  if (!this->_internal_new_name().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        2, this->_internal_new_name(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.C2S_UpdateNickName)
+  return target;
+}
+
+size_t C2S_UpdateNickName::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.C2S_UpdateNickName)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // bytes old_name = 1;
+  if (!this->_internal_old_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_old_name());
+  }
+
+  // bytes new_name = 2;
+  if (!this->_internal_new_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_new_name());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData C2S_UpdateNickName::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    C2S_UpdateNickName::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_UpdateNickName::GetClassData() const { return &_class_data_; }
+
+
+void C2S_UpdateNickName::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<C2S_UpdateNickName*>(&to_msg);
+  auto& from = static_cast<const C2S_UpdateNickName&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.C2S_UpdateNickName)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_old_name().empty()) {
+    _this->_internal_set_old_name(from._internal_old_name());
+  }
+  if (!from._internal_new_name().empty()) {
+    _this->_internal_set_new_name(from._internal_new_name());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void C2S_UpdateNickName::CopyFrom(const C2S_UpdateNickName& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.C2S_UpdateNickName)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool C2S_UpdateNickName::IsInitialized() const {
+  return true;
+}
+
+void C2S_UpdateNickName::InternalSwap(C2S_UpdateNickName* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.old_name_, lhs_arena,
+      &other->_impl_.old_name_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.new_name_, lhs_arena,
+      &other->_impl_.new_name_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata C2S_UpdateNickName::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
+      file_level_metadata_IdentityPacket_2eproto[25]);
+}
+
+// ===================================================================
+
+class S2C_UpdateNickName::_Internal {
+ public:
+};
+
+S2C_UpdateNickName::S2C_UpdateNickName(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:Protocol.S2C_UpdateNickName)
+}
+S2C_UpdateNickName::S2C_UpdateNickName(const S2C_UpdateNickName& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  S2C_UpdateNickName* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _this->_impl_.error_ = from._impl_.error_;
+  // @@protoc_insertion_point(copy_constructor:Protocol.S2C_UpdateNickName)
+}
+
+inline void S2C_UpdateNickName::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+}
+
+S2C_UpdateNickName::~S2C_UpdateNickName() {
+  // @@protoc_insertion_point(destructor:Protocol.S2C_UpdateNickName)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void S2C_UpdateNickName::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void S2C_UpdateNickName::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void S2C_UpdateNickName::Clear() {
+// @@protoc_insertion_point(message_clear_start:Protocol.S2C_UpdateNickName)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.error_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* S2C_UpdateNickName::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 error = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.error_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* S2C_UpdateNickName::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Protocol.S2C_UpdateNickName)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 error = 1;
+  if (this->_internal_error() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(1, this->_internal_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Protocol.S2C_UpdateNickName)
+  return target;
+}
+
+size_t S2C_UpdateNickName::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Protocol.S2C_UpdateNickName)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 error = 1;
+  if (this->_internal_error() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_error());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData S2C_UpdateNickName::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    S2C_UpdateNickName::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*S2C_UpdateNickName::GetClassData() const { return &_class_data_; }
+
+
+void S2C_UpdateNickName::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<S2C_UpdateNickName*>(&to_msg);
+  auto& from = static_cast<const S2C_UpdateNickName&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:Protocol.S2C_UpdateNickName)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_error() != 0) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void S2C_UpdateNickName::CopyFrom(const S2C_UpdateNickName& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Protocol.S2C_UpdateNickName)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool S2C_UpdateNickName::IsInitialized() const {
+  return true;
+}
+
+void S2C_UpdateNickName::InternalSwap(S2C_UpdateNickName* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(_impl_.error_, other->_impl_.error_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata S2C_UpdateNickName::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
+      file_level_metadata_IdentityPacket_2eproto[26]);
 }
 
 // ===================================================================
@@ -4824,7 +7291,7 @@ const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*C2S_TravelServer::GetClassData
 ::PROTOBUF_NAMESPACE_ID::Metadata C2S_TravelServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[20]);
+      file_level_metadata_IdentityPacket_2eproto[27]);
 }
 
 // ===================================================================
@@ -5002,7 +7469,7 @@ void S2C_TravelServer::InternalSwap(S2C_TravelServer* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata S2C_TravelServer::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_IdentityPacket_2eproto_getter, &descriptor_table_IdentityPacket_2eproto_once,
-      file_level_metadata_IdentityPacket_2eproto[21]);
+      file_level_metadata_IdentityPacket_2eproto[28]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -5015,6 +7482,10 @@ Arena::CreateMaybeMessage< ::Protocol::UserData >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::Protocol::SCharacterData*
 Arena::CreateMaybeMessage< ::Protocol::SCharacterData >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::SCharacterData >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::SCharacterAppearance*
+Arena::CreateMaybeMessage< ::Protocol::SCharacterAppearance >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::SCharacterAppearance >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::C2S_EnterServer*
 Arena::CreateMaybeMessage< ::Protocol::C2S_EnterServer >(Arena* arena) {
@@ -5087,6 +7558,30 @@ Arena::CreateMaybeMessage< ::Protocol::C2S_CreateCharacter >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::Protocol::S2C_CreateCharacter*
 Arena::CreateMaybeMessage< ::Protocol::S2C_CreateCharacter >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Protocol::S2C_CreateCharacter >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C2S_AppearanceCharacter*
+Arena::CreateMaybeMessage< ::Protocol::C2S_AppearanceCharacter >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C2S_AppearanceCharacter >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S2C_AppearanceCharacter*
+Arena::CreateMaybeMessage< ::Protocol::S2C_AppearanceCharacter >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2C_AppearanceCharacter >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C2S_DeleteCharacter*
+Arena::CreateMaybeMessage< ::Protocol::C2S_DeleteCharacter >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C2S_DeleteCharacter >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S2C_DeleteCharacter*
+Arena::CreateMaybeMessage< ::Protocol::S2C_DeleteCharacter >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2C_DeleteCharacter >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::C2S_UpdateNickName*
+Arena::CreateMaybeMessage< ::Protocol::C2S_UpdateNickName >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::C2S_UpdateNickName >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Protocol::S2C_UpdateNickName*
+Arena::CreateMaybeMessage< ::Protocol::S2C_UpdateNickName >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Protocol::S2C_UpdateNickName >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Protocol::C2S_TravelServer*
 Arena::CreateMaybeMessage< ::Protocol::C2S_TravelServer >(Arena* arena) {

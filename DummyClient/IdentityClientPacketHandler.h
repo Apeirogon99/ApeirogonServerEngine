@@ -23,8 +23,14 @@ enum class EPakcetID: uint16
 	S2C_SelectServer = 1015,
 	C2S_CreateCharacter = 1016,
 	S2C_CreateCharacter = 1017,
-	C2S_TravelServer = 1018,
-	S2C_TravelServer = 1019,
+	C2S_AppearanceCharacter = 1018,
+	S2C_AppearanceCharacter = 1019,
+	C2S_DeleteCharacter = 1020,
+	S2C_DeleteCharacter = 1021,
+	C2S_UpdateNickName = 1022,
+	S2C_UpdateNickName = 1023,
+	C2S_TravelServer = 1024,
+	S2C_TravelServer = 1025,
 };
 
 // Custom Handlers
@@ -38,6 +44,9 @@ bool Handle_S2C_LoadServer(PacketSessionPtr& session, Protocol::S2C_LoadServer& 
 bool Handle_S2C_LoadCharacters(PacketSessionPtr& session, Protocol::S2C_LoadCharacters& pkt);
 bool Handle_S2C_SelectServer(PacketSessionPtr& session, Protocol::S2C_SelectServer& pkt);
 bool Handle_S2C_CreateCharacter(PacketSessionPtr& session, Protocol::S2C_CreateCharacter& pkt);
+bool Handle_S2C_AppearanceCharacter(PacketSessionPtr& session, Protocol::S2C_AppearanceCharacter& pkt);
+bool Handle_S2C_DeleteCharacter(PacketSessionPtr& session, Protocol::S2C_DeleteCharacter& pkt);
+bool Handle_S2C_UpdateNickName(PacketSessionPtr& session, Protocol::S2C_UpdateNickName& pkt);
 bool Handle_S2C_TravelServer(PacketSessionPtr& session, Protocol::S2C_TravelServer& pkt);
 
 class IdentityClientPacketHandler
@@ -56,6 +65,9 @@ public:
 		GPacketHandler[static_cast<uint16>(EPakcetID::S2C_LoadCharacters)] = [](PacketSessionPtr& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S2C_LoadCharacters>(Handle_S2C_LoadCharacters, session, buffer, len); };
 		GPacketHandler[static_cast<uint16>(EPakcetID::S2C_SelectServer)] = [](PacketSessionPtr& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S2C_SelectServer>(Handle_S2C_SelectServer, session, buffer, len); };
 		GPacketHandler[static_cast<uint16>(EPakcetID::S2C_CreateCharacter)] = [](PacketSessionPtr& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S2C_CreateCharacter>(Handle_S2C_CreateCharacter, session, buffer, len); };
+		GPacketHandler[static_cast<uint16>(EPakcetID::S2C_AppearanceCharacter)] = [](PacketSessionPtr& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S2C_AppearanceCharacter>(Handle_S2C_AppearanceCharacter, session, buffer, len); };
+		GPacketHandler[static_cast<uint16>(EPakcetID::S2C_DeleteCharacter)] = [](PacketSessionPtr& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S2C_DeleteCharacter>(Handle_S2C_DeleteCharacter, session, buffer, len); };
+		GPacketHandler[static_cast<uint16>(EPakcetID::S2C_UpdateNickName)] = [](PacketSessionPtr& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S2C_UpdateNickName>(Handle_S2C_UpdateNickName, session, buffer, len); };
 		GPacketHandler[static_cast<uint16>(EPakcetID::S2C_TravelServer)] = [](PacketSessionPtr& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::S2C_TravelServer>(Handle_S2C_TravelServer, session, buffer, len); };
 	}
 
@@ -73,6 +85,9 @@ public:
 	static SendBufferPtr MakeSendBuffer(PacketSessionPtr& session, Protocol::C2S_LoadCharacters& pkt) { return MakeSendBuffer(session, pkt, static_cast<uint16>(EPakcetID::C2S_LoadCharacters)); }
 	static SendBufferPtr MakeSendBuffer(PacketSessionPtr& session, Protocol::C2S_SelectServer& pkt) { return MakeSendBuffer(session, pkt, static_cast<uint16>(EPakcetID::C2S_SelectServer)); }
 	static SendBufferPtr MakeSendBuffer(PacketSessionPtr& session, Protocol::C2S_CreateCharacter& pkt) { return MakeSendBuffer(session, pkt, static_cast<uint16>(EPakcetID::C2S_CreateCharacter)); }
+	static SendBufferPtr MakeSendBuffer(PacketSessionPtr& session, Protocol::C2S_AppearanceCharacter& pkt) { return MakeSendBuffer(session, pkt, static_cast<uint16>(EPakcetID::C2S_AppearanceCharacter)); }
+	static SendBufferPtr MakeSendBuffer(PacketSessionPtr& session, Protocol::C2S_DeleteCharacter& pkt) { return MakeSendBuffer(session, pkt, static_cast<uint16>(EPakcetID::C2S_DeleteCharacter)); }
+	static SendBufferPtr MakeSendBuffer(PacketSessionPtr& session, Protocol::C2S_UpdateNickName& pkt) { return MakeSendBuffer(session, pkt, static_cast<uint16>(EPakcetID::C2S_UpdateNickName)); }
 	static SendBufferPtr MakeSendBuffer(PacketSessionPtr& session, Protocol::C2S_TravelServer& pkt) { return MakeSendBuffer(session, pkt, static_cast<uint16>(EPakcetID::C2S_TravelServer)); }
 
 private:

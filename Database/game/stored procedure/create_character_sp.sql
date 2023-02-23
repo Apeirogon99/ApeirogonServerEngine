@@ -30,10 +30,21 @@ CREATE PROCEDURE create_character_sp
 	@global_id		INT,
 	@server_id		INT,
 
-	@skin			INT,
+	@body_color		INT,
+	@hair_color		INT,
+	@eye_color		INT,
+	
+	@head			INT,
+	@ears			INT,
+	@feet			INT,
 	@hair			INT,
-	@eye			INT,
-	@eyebrow		INT
+	@facials_02		INT,
+	@legs			INT,
+	@hands			INT,
+	@chest			INT,
+	@bracers		INT,
+	@boots			INT
+
 AS
 BEGIN TRY
 	BEGIN TRANSACTION
@@ -70,7 +81,9 @@ BEGIN TRY
 		DECLARE @character_id AS INT
 		INSERT INTO character_table VALUES (@name, @class, @tribe, @level, @position, @global_id, @server_id);
 		SELECT @character_id=id FROM character_table WHERE global_id=@global_id AND name=@name;
-		INSERT INTO custom_table VALUES (@character_id, @skin, @hair, @eye, @eyebrow);
+
+		INSERT INTO appearance_table (character_id, body_color, hair_color, eye_color, head, ears, feet, hair, facials_02, legs, hands, chest, bracers, boots) 
+		VALUES (@character_id, @body_color, @hair_color, @eye_color, @head, @ears, @feet, @hair, @facials_02, @legs, @hands, @chest, @bracers, @boots);
 		COMMIT TRANSACTION
 		RETURN 0
 
@@ -96,7 +109,7 @@ BEGIN
 
 
 	SELECT * FROM character_table
-	SELECT * FROM custom_table
+	SELECT * FROM appearance_table
 
 	SELECT @count=COUNT(*) FROM character_table;
 	
