@@ -76,7 +76,7 @@
 //		   DataBase			//
 //==========================//
 #import "C:\Program Files (x86)\Common Files\System\ado\msado15.dll" no_namespace rename("EOF", "adoEOF")
-#include "./x64/msado15.tlh"
+#include "./../Builds/include/apeirogon/msado15.tlh"
 
 #include <oledb.h>
 
