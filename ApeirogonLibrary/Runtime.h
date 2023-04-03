@@ -20,7 +20,7 @@ public:
 	TIME_API ~Runtime();
 
 	TIME_API void Start();
-	TIME_API void End();
+	TIME_API double End();
 
 protected:
 	const WCHAR* TimeToString();

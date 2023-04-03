@@ -12,11 +12,11 @@ Runtime::~Runtime()
 
 void Runtime::Start()
 {
-	wprintf(L"[%ws::RuntimeStart]\n", mFunc);
+	//wprintf(L"[%ws::RuntimeStart]\n", mFunc);
 	mStart = clock();
 }
 
-void Runtime::End()
+double Runtime::End()
 {
 	mEnd = clock();
 	double result = static_cast<double>(mEnd - mStart);
@@ -39,7 +39,8 @@ void Runtime::End()
 		break;
 	}
 
-	wprintf(L"[%ws::RuntimeEnd] = %lf(%ws)\n", mFunc, time, TimeToString());
+	//wprintf(L"[%ws::RuntimeEnd] = %lf(%ws)\n", mFunc, time, TimeToString());
+	return time;
 }
 
 const WCHAR* Runtime::TimeToString()

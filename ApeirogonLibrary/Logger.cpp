@@ -136,7 +136,7 @@ void FileWrite::Init(const WCHAR* filePath, const WCHAR* fileName)
 
 	mFileStream.imbue(std::locale("korean"));
 	
-	printf("[FileWrite::Init()] : Start write %ws log - Location(%s)\n", mFileName, mFileStream.getloc().c_str());
+	printf("[FileWrite::Init()] : Start write %ws log - Location(%s)\n", mFileName, mFileStream.getloc()._C_str());
 }
 
 void FileWrite::Writer(const WCHAR* fmt, ...)

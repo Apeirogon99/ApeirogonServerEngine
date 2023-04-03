@@ -17,6 +17,7 @@ class IOCPServer;
 class Listener;
 class WinSocket;
 class IPAddress;
+class DatabaseManager;
 
 class SendBuffer;
 
@@ -33,6 +34,7 @@ using ListenerPtr = std::shared_ptr<Listener>;
 using WinSocketPtr = std::shared_ptr<WinSocket>;
 using IPAddressPtr = std::shared_ptr<IPAddress>;
 using SMTPPtr = std::shared_ptr<SMTP>;
+using DatabaseManagerPtr = std::shared_ptr<DatabaseManager>;
 
 using SendBufferPtr = std::shared_ptr<SendBuffer>;
 

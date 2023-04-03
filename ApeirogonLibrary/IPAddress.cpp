@@ -217,7 +217,7 @@ std::wstring IPAddress::GetIp()
 		//LOG
 	}
 
-	return nullptr;
+	return std::wstring();
 }
 
 uint16 IPAddress::GetPort() const
