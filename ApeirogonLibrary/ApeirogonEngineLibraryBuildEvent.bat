@@ -2,6 +2,11 @@
 pushd %~dp0
 SET Project_LD_Server_PATH=P:\Project_LD_Server
 
+rem delete file
+DEL /Q /F "%Project_LD_Server_PATH%\Builds\include\apeirogon\*.h"
+DEL /Q /F ".\..\Builds\include\apeirogon\*.h"
+IF ERRORLEVEL 1 PAUSE
+
 rem copy include header files
 XCOPY /F "./*.h" ".\..\Builds\include\apeirogon" /Y
 XCOPY /F ".\..\Builds\include\apeirogon" "%Project_LD_Server_PATH%\Builds\include\apeirogon" /Y
