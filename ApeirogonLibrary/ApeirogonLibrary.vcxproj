@@ -91,6 +91,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -112,6 +113,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -133,6 +135,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -154,6 +157,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -167,11 +171,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ADOAsync.h" />
     <ClInclude Include="ADOCommand.h" />
     <ClInclude Include="ADOConnection.h" />
     <ClInclude Include="ADOEvent.h" />
     <ClInclude Include="ADORecordset.h" />
-    <ClInclude Include="ADOService.h" />
+    <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="ADOUtils.h" />
     <ClInclude Include="ADOVariant.h" />
     <ClInclude Include="ApeirogonLibrary.h" />
@@ -189,8 +194,8 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RingBuffer.h" />
     <ClInclude Include="Runtime.h" />
-    <ClInclude Include="RWLock.h" />
     <ClInclude Include="SendBuffer.h" />
+    <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="SendQueue.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="Session.h" />
@@ -201,17 +206,19 @@
     <ClInclude Include="Socket.h" />
     <ClInclude Include="SocketTypes.h" />
     <ClInclude Include="SocketUtils.h" />
+    <ClInclude Include="SRWLockGuard.h" />
     <ClInclude Include="ThreadManager.h" />
     <ClInclude Include="SimpleTime.h" />
     <ClInclude Include="Ticket.h" />
     <ClInclude Include="WinDump.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ADOAsync.cpp" />
     <ClCompile Include="ADOCommand.cpp" />
     <ClCompile Include="ADOConnection.cpp" />
     <ClCompile Include="ADOEvent.cpp" />
     <ClCompile Include="ADORecordset.cpp" />
-    <ClCompile Include="ADOService.cpp" />
+    <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="ADOUtils.cpp" />
     <ClCompile Include="ADOVariant.cpp" />
     <ClCompile Include="ApeirogonLibrary.cpp" />
@@ -232,8 +239,8 @@
     </ClCompile>
     <ClCompile Include="RingBuffer.cpp" />
     <ClCompile Include="Runtime.cpp" />
-    <ClCompile Include="RWLock.cpp" />
     <ClCompile Include="SendBuffer.cpp" />
+    <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="SendQueue.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="Session.cpp" />
@@ -243,6 +250,7 @@
     <ClCompile Include="SMTP.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="SocketUtils.cpp" />
+    <ClCompile Include="SRWLockGuard.cpp" />
     <ClCompile Include="ThreadManager.cpp" />
     <ClCompile Include="SimpleTime.cpp" />
     <ClCompile Include="Ticket.cpp" />

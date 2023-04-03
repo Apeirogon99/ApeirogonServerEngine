@@ -59,7 +59,7 @@
 #include <atomic>
 #include "FastSpinLock.h"
 #include "SendQueue.h"
-#include "RWLock.h"
+#include "SRWLockGuard.h"
 
 //==========================//
 //		    UTILS			//
@@ -71,13 +71,13 @@
 #include "WinDump.h"
 #include "EngineAssert.h"
 #include "SendBuffer.h"
+#include "CircularQueue.h"
 
 //==========================//
 //		   DataBase			//
 //==========================//
 #import "C:\Program Files (x86)\Common Files\System\ado\msado15.dll" no_namespace rename("EOF", "adoEOF")
 #include "./../Builds/include/apeirogon/msado15.tlh"
-
 #include <oledb.h>
 
 //==========================//
@@ -89,7 +89,8 @@
 #include "ADORecordset.h"
 #include "ADOCommand.h"
 #include "ADOEvent.h"
-#include "ADOService.h"
+#include "ADOAsync.h"
+#include "DatabaseManager.h"
 
 
 //==========================//

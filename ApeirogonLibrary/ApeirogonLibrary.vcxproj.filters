@@ -82,9 +82,6 @@
     <Filter Include="Source\Public\DB\ADO">
       <UniqueIdentifier>{14105f20-4c8e-4a1c-a684-a884f1eadc06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Public\DB\OLEDB">
-      <UniqueIdentifier>{6a02f968-4c19-4815-ae3d-b381d135b19d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Private\SMTP">
       <UniqueIdentifier>{330c963b-4a44-41d1-b1f5-d43179297c36}</UniqueIdentifier>
     </Filter>
@@ -121,9 +118,6 @@
       <Filter>Source\Private\Time</Filter>
     </ClCompile>
     <ClCompile Include="FastSpinLock.cpp">
-      <Filter>Source\Private\Sync</Filter>
-    </ClCompile>
-    <ClCompile Include="RWLock.cpp">
       <Filter>Source\Private\Sync</Filter>
     </ClCompile>
     <ClCompile Include="SharedPtr.cpp">
@@ -186,7 +180,7 @@
     <ClCompile Include="ADORecordset.cpp">
       <Filter>Source\Private\DB\ADO</Filter>
     </ClCompile>
-    <ClCompile Include="ADOService.cpp">
+    <ClCompile Include="DatabaseManager.cpp">
       <Filter>Source\Private\DB\ADO</Filter>
     </ClCompile>
     <ClCompile Include="ADOUtils.cpp">
@@ -197,6 +191,15 @@
     </ClCompile>
     <ClCompile Include="SMTP.cpp">
       <Filter>Source\Private\SMTP</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularQueue.cpp">
+      <Filter>Source\Private\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="ADOAsync.cpp">
+      <Filter>Source\Private\DB\ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="SRWLockGuard.cpp">
+      <Filter>Source\Private\Sync</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,9 +240,6 @@
       <Filter>Source\Public\Sync</Filter>
     </ClInclude>
     <ClInclude Include="FastSpinLock.h">
-      <Filter>Source\Public\Sync</Filter>
-    </ClInclude>
-    <ClInclude Include="RWLock.h">
       <Filter>Source\Public\Sync</Filter>
     </ClInclude>
     <ClInclude Include="SocketUtils.h">
@@ -299,7 +299,7 @@
     <ClInclude Include="ADORecordset.h">
       <Filter>Source\Public\DB\ADO</Filter>
     </ClInclude>
-    <ClInclude Include="ADOService.h">
+    <ClInclude Include="DatabaseManager.h">
       <Filter>Source\Public\DB\ADO</Filter>
     </ClInclude>
     <ClInclude Include="ADOUtils.h">
@@ -313,6 +313,15 @@
     </ClInclude>
     <ClInclude Include="SMTP.h">
       <Filter>Source\Public\SMTP</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularQueue.h">
+      <Filter>Source\Public\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ADOAsync.h">
+      <Filter>Source\Public\DB\ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="SRWLockGuard.h">
+      <Filter>Source\Public\Sync</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

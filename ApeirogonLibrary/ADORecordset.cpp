@@ -33,6 +33,28 @@ ADORecordset& ADORecordset::operator=(_RecordsetPtr recordset)
 	return *this;
 }
 
+ADORecordset::ADORecordset(const ADORecordset& inRecordset)
+{
+	if (inRecordset)
+	{
+		Initlialze();
+		SetActiveEvent();
+		Attach(inRecordset, true);
+	}
+}
+
+ADORecordset& ADORecordset::operator=(const ADORecordset& inRecordset)
+{
+	if (inRecordset)
+	{
+		Initlialze();
+		SetActiveEvent();
+		Attach(inRecordset, true);
+	}
+
+	return *this;
+}
+
 void ADORecordset::Initlialze()
 {
 	HRESULT hResult = S_FALSE;
@@ -75,13 +97,16 @@ void ADORecordset::Open()
 		return;
 	}
 
+	recordsetInterface->CursorLocation = adUseClient;
+	recordsetInterface->CursorType = adOpenStatic;
+	recordsetInterface->LockType = adLockBatchOptimistic;
+
 	_variant_t		commandText = recordsetInterface->GetSource();
 	_variant_t		activeConnectString = recordsetInterface->GetActiveConnection();
 	CursorTypeEnum	cursorType = CursorTypeEnum::adOpenForwardOnly;
 	LockTypeEnum	lockType = LockTypeEnum::adLockReadOnly;
-	CommandTypeEnum option = CommandTypeEnum::adCmdStoredProc;
-
-	hResult = recordsetInterface->Open(commandText, activeConnectString, cursorType, lockType, option);
+	long option = CommandTypeEnum::adCmdStoredProc | ExecuteOptionEnum::adAsyncExecute;
+	hResult = recordsetInterface->Open(commandText, vtMissing, cursorType, lockType, option);
 }
 
 bool ADORecordset::IsOpen()
@@ -93,8 +118,20 @@ bool ADORecordset::IsOpen()
 	}
 
 	long state = recordsetInterface->GetState();
-
 	return (state == ObjectStateEnum::adStateOpen) ? true : false;
+}
+
+bool ADORecordset::IsComplete()
+{
+	auto recordsetInterface = this->GetInterfacePtr();
+	if (!recordsetInterface)
+	{
+		return false;
+	}
+
+	long state = recordsetInterface->GetState();
+
+	return (state == ObjectStateEnum::adStateClosed) ? true : false;
 }
 
 void ADORecordset::Close()
@@ -108,6 +145,15 @@ void ADORecordset::Close()
 	if (IsOpen())
 	{
 		recordsetInterface->Close();
+	}
+}
+
+void ADORecordset::SetAsync()
+{
+	auto recordsetInterface = this->GetInterfacePtr();
+	if (!recordsetInterface)
+	{
+		return;
 	}
 }
 

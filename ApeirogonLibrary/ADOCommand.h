@@ -5,9 +5,15 @@ public:
 	APEIROGON_API ADOCommand();
 	APEIROGON_API ~ADOCommand();
 
-private:
-	ADOCommand& operator=(const ADOCommand&) = delete;
-	ADOCommand(const ADOCommand&) = delete;
+	APEIROGON_API ADOCommand(_CommandPtr inCommand);
+	APEIROGON_API ADOCommand& operator=(_CommandPtr inCommand);
+
+	APEIROGON_API ADOCommand(const ADOCommand& inCommand);
+	APEIROGON_API ADOCommand& operator=(const ADOCommand& inCommand);
+
+protected:
+	ADOCommand(ADOCommand&&) = delete;
+	ADOCommand& operator=(ADOCommand&&) = delete;
 
 public:
 	APEIROGON_API void			ResetStoredProcedure();
@@ -25,6 +31,8 @@ public:
 	APEIROGON_API ADOVariant	GetParam(const int16 index);
 	APEIROGON_API ADOVariant	GetParam(const WCHAR* name);
 	APEIROGON_API ADOVariant	GetOutputParam(const WCHAR* name);
+
+	APEIROGON_API _CommandPtr	GetCommandPtr() { return *this; }
 
 protected:
 	void Initlialze();

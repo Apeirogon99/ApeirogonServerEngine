@@ -137,6 +137,11 @@ uint32 SessionManager::GetMaxSessionCount() const
 	return mMaxSessionCount;
 }
 
+ServicePtr SessionManager::GetService() const
+{
+	return mService;
+}
+
 SendRingBuffer& SessionManager::GetSendRingBuffer()
 {
 	return mSendRingBuffer;

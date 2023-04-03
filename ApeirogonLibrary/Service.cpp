@@ -11,12 +11,33 @@ Service::~Service()
 	wprintf(L"Service::~Service() : Close service\n");
 }
 
+void Service::ProcessADOWork()
+{
+	ADOAsync& databaseAsync = GetDatabaseManager()->GetAsync();
+	if (databaseAsync.IsCompletionWork())
+	{
+		ADOWork work;
+		if (true == databaseAsync.GetCompeltionWork(work))
+		{
+			PacketSessionPtr&	session = work.mSession;
+			ADOCommand&			command = work.mADOCommand;
+			ADORecordset&		recordset = work.mADORecordset;
+			ADOCallBack&		callback = work.mADOCallBack;
+
+			callback(session, command, recordset);
+		}
+	}
+}
+
 void Service::DoWork()
 {
 	while (IsServiceOpen())
 	{
 		this->GetIOCPServer()->WorkDispatch(10);
+		
 		//Tick();
+
+		ProcessADOWork();
 	}
 }
 
@@ -37,7 +58,9 @@ bool Service::ServiceOpen()
 
 	SetServiceState(EServiceState::Open);
 
-	ServiceLog(L"Service::ServiceOpen() : service is %ws\n", StateToString());
+	const std::wstring ip = mListener->GetIpAddress()->GetIp();
+	const uint16 port = mListener->GetIpAddress()->GetPort();
+	ServiceLog(L"Service::ServiceOpen() : IP[%ws] Port[%d] service is %ws\n", ip.c_str(), port, StateToString());
 
 	//mThreadManager->WorkThreads();
 
@@ -56,6 +79,8 @@ void Service::ServiceClose()
 		SetServiceState(EServiceState::Close);
 
 		mSessionManager->Shutdown();
+
+		mDatabaseManager->Shutdown();
 
 		mListener->Shutdown();
 
@@ -76,6 +101,12 @@ bool Service::Prepare()
 	if (mLoggerManager == nullptr || false == mLoggerManager->Prepare(shared_from_this()))
 	{
 		ServiceLog(L"Service::SetLoggerManager() : failed to prepare for logger manager\n");
+		return false;
+	}
+
+	if (mDatabaseManager == nullptr || false == mDatabaseManager->Prepare(shared_from_this()))
+	{
+		ServiceLog(L"Service::Prepare() : failed to prepare for database manager\n");
 		return false;
 	}
 
@@ -166,6 +197,18 @@ bool Service::SetLoggerManager(LoggerManagerPtr& loggerManager)
 	return true;
 }
 
+bool Service::SetDatabaseManager(DatabaseManagerPtr& inDatabase)
+{
+	mDatabaseManager = std::move(inDatabase);
+	if (nullptr == mDatabaseManager)
+	{
+		ServiceLog(L"Service::SetDatabaseManager() : Invalid database manager\n");
+		return false;
+	}
+
+	return true;
+}
+
 void Service::SetServiceState(const EServiceState state)
 {
 	mServiceState = state;
@@ -231,6 +274,11 @@ ThreadManagerPtr Service::GetThreadManager() const
 LoggerManagerPtr Service::GetLoggerManager() const
 {
 	return mLoggerManager;
+}
+
+DatabaseManagerPtr Service::GetDatabaseManager() const
+{
+	return mDatabaseManager;
 }
 
 void Service::ServiceLog(const WCHAR* log, ...)

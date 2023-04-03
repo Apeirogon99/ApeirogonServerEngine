@@ -150,32 +150,32 @@ long ADOUtils::GetDataTypeSize(const _variant_t& value, DataTypeEnum dataType)
 	case DataTypeEnum::adBSTR:				return static_cast<long>(wcslen(value.bstrVal));
 	case DataTypeEnum::adChapter:			return sizeof(HCHAPTER);
 	case DataTypeEnum::adChar:				return static_cast<long>(wcslen(value.bstrVal));	//문자열의 값
-	;	case DataTypeEnum::adCurrency:			return sizeof(CY);
+	case DataTypeEnum::adCurrency:			return sizeof(CY);
 	case DataTypeEnum::adDate:				return sizeof(DATE);
 	case DataTypeEnum::adDBDate:			return sizeof(DBDATE);
 	case DataTypeEnum::adDBTime:			return sizeof(DBTIME);
 	case DataTypeEnum::adDBTimeStamp:		return sizeof(DBTIMESTAMP);
 	case DataTypeEnum::adDecimal:			return sizeof(DECIMAL);
 	case DataTypeEnum::adDouble:			return sizeof(DOUBLE);
-	case DataTypeEnum::adError:				return sizeof(int32);			//32비트 오류 코드
+	case DataTypeEnum::adError:				return sizeof(int32);								//32비트 오류 코드
 	case DataTypeEnum::adFileTime:			return sizeof(FILETIME);
 	case DataTypeEnum::adGUID:				return sizeof(GUID);
 	case DataTypeEnum::adIDispatch:			return sizeof(IDispatch);
 	case DataTypeEnum::adInteger:			return sizeof(INT);
-		//case DataTypeEnum::adIUnknown:		return sizeof(IUnknown);		//ADO 에서 지원하지 않음
-	case DataTypeEnum::adNumeric:			return sizeof(DECIMAL);			//고정된 정밀도와 배율이 있는 숫자
+	//case DataTypeEnum::adIUnknown:		return sizeof(IUnknown);							//ADO 에서 지원하지 않음
+	case DataTypeEnum::adNumeric:			return sizeof(DECIMAL);								//고정된 정밀도와 배율이 있는 숫자
 	case DataTypeEnum::adPropVariant:		return sizeof(PROPVARIANT);
-	case DataTypeEnum::adSingle:			return sizeof(FLOAT);			//단정밀도 부동 소수점 값
+	case DataTypeEnum::adSingle:			return sizeof(FLOAT);								//단정밀도 부동 소수점 값
 	case DataTypeEnum::adSmallInt:			return sizeof(SHORT);
-	case DataTypeEnum::adTinyInt:			return sizeof(CHAR);			//1바이트 부호 있는 정수
+	case DataTypeEnum::adTinyInt:			return sizeof(CHAR);								//1바이트 부호 있는 정수
 	case DataTypeEnum::adUnsignedBigInt:	return sizeof(ULONGLONG);
 	case DataTypeEnum::adUnsignedInt:		return sizeof(UINT);
 	case DataTypeEnum::adUnsignedSmallInt:	return sizeof(USHORT);
 	case DataTypeEnum::adUnsignedTinyInt:	return sizeof(UCHAR);
-		//case DataTypeEnum::adVariant:			return sizeof(VARIANT);			//ADO에서 지원하지 않음
+	//case DataTypeEnum::adVariant:			return sizeof(VARIANT);								//ADO에서 지원하지 않음
 	case DataTypeEnum::adWChar:				return static_cast<long>(wcslen(value.bstrVal));	//내부 보니까 안에 VT_BSTR로 바뀜
-		//case DataTypeEnum::adUserDefined;	지원X
-		//case DataTypeEnum::adVarNumeric;	지원X
+	//case DataTypeEnum::adUserDefined;	지원X
+	//case DataTypeEnum::adVarNumeric;	지원X
 	default:
 		wprintf(L"[GetDataTypeSize] DefaultType : %d\n", dataType);
 		return -1;

@@ -16,13 +16,21 @@ ADOConnection::~ADOConnection()
 ADOConnection::ADOConnection(const ADOConnection& connection)
 {
 	if (connection)
+	{
+		Initlialze();
+		SetActiveEvent();
 		Attach(connection, true);
+	}
 }
 
 ADOConnection& ADOConnection::operator=(const ADOConnection& connection)
 {
 	if (connection)
+	{
+		Initlialze();
+		SetActiveEvent();
 		Attach(connection, true);
+	}
 
 	return *this;
 }

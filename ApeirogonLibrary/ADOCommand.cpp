@@ -11,6 +11,60 @@ ADOCommand::~ADOCommand()
 	UnInitlialze();
 }
 
+ADOCommand::ADOCommand(_CommandPtr inCommand)
+{
+	if (inCommand)
+	{
+		Initlialze();
+		Attach(inCommand, true);
+	}
+}
+
+ADOCommand& ADOCommand::operator=(_CommandPtr inCommand)
+{
+	if (inCommand)
+	{
+		Initlialze();
+		Attach(inCommand, true);
+	}
+
+	return *this;
+}
+
+ADOCommand::ADOCommand(const ADOCommand& inCommand)
+{
+	if (inCommand)
+	{
+		Initlialze();
+
+		mCurParamsCount = inCommand.mCurParamsCount;
+		for (int32 param = 0; param < mCurParamsCount; ++param)
+		{
+			mParams[param] = inCommand.mParams[param];
+		}
+
+		Attach(inCommand, true);
+	}
+}
+
+ADOCommand& ADOCommand::operator=(const ADOCommand& inCommand)
+{
+	if (inCommand)
+	{
+		Initlialze();
+
+		mCurParamsCount = inCommand.mCurParamsCount;
+		for (int32 param = 0; param < mCurParamsCount; ++param)
+		{
+			mParams[param] = inCommand.mParams[param];
+		}
+
+		Attach(inCommand, true);
+	}
+
+	return *this;
+}
+
 void ADOCommand::Initlialze()
 {
 	HRESULT hResult = S_FALSE;
@@ -45,6 +99,7 @@ void ADOCommand::Initlialze()
 
 void ADOCommand::UnInitlialze()
 {
+
 	CoUninitialize();
 }
 

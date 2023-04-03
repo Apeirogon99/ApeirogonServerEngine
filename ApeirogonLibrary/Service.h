@@ -24,6 +24,7 @@ public:
 
 public:
 	APEIROGON_API virtual void	Tick(const float deltaTime) abstract;
+	void						ProcessADOWork();
 	void						DoWork();
 
 protected:
@@ -35,6 +36,7 @@ protected:
 	APEIROGON_API bool			SetSessionManager(SessionManagerPtr& sessionManager);
 	APEIROGON_API bool			SetThreadManager(ThreadManagerPtr& threadManager);
 	APEIROGON_API bool			SetLoggerManager(LoggerManagerPtr& loggerManager);
+	APEIROGON_API bool			SetDatabaseManager(DatabaseManagerPtr& inDatabase);
 
 	void						SetServiceState(const EServiceState state);
 
@@ -47,6 +49,7 @@ public:
 	IOCPServerPtr				GetIOCPServer() const;
 	ThreadManagerPtr			GetThreadManager() const;
 	LoggerManagerPtr			GetLoggerManager() const;
+	APEIROGON_API DatabaseManagerPtr			GetDatabaseManager() const;
 
 protected:
 	APEIROGON_API void			ServiceLog(const WCHAR* log, ...);
@@ -58,4 +61,5 @@ private:
 	IOCPServerPtr				mIOCPServer;
 	ThreadManagerPtr			mThreadManager;
 	LoggerManagerPtr			mLoggerManager;
+	DatabaseManagerPtr			mDatabaseManager;
 };

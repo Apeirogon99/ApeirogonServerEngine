@@ -22,6 +22,7 @@ public:
 	
 	uint32		GetSessionCount() const;
 	uint32		GetMaxSessionCount() const;
+	APEIROGON_API ServicePtr GetService() const;
 	APEIROGON_API SendRingBuffer& GetSendRingBuffer();
 
 public:

@@ -11,14 +11,19 @@ public:
 	APEIROGON_API ADORecordset(_RecordsetPtr recordset);
 	APEIROGON_API ADORecordset& operator=(_RecordsetPtr recordset);
 
-private:
-	ADORecordset& operator=(const ADORecordset&) = delete;
-	ADORecordset(const ADORecordset&) = delete;
+	APEIROGON_API ADORecordset(const ADORecordset& inRecordset);
+	APEIROGON_API ADORecordset& operator=(const ADORecordset& inRecordset);
+
+protected:
+	ADORecordset(ADORecordset&&) = delete;
+	ADORecordset& operator=(ADORecordset&&) = delete;
 
 public:
 	APEIROGON_API void			Open();
 	APEIROGON_API bool			IsOpen();
+	APEIROGON_API bool			IsComplete();
 	APEIROGON_API void			Close();
+	APEIROGON_API void			SetAsync();
 
 	APEIROGON_API void			MoveFirst();
 	APEIROGON_API void			MoveLast();
