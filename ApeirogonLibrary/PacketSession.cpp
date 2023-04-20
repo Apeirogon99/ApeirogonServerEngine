@@ -14,30 +14,24 @@ PacketSessionPtr PacketSession::GetPacketSessionRef()
 	return std::static_pointer_cast<PacketSession>(shared_from_this());
 }
 
-uint32 PacketSession::OnRecv(RecvRingBuffer& buffer, uint32 len)
+uint32 PacketSession::OnRecv(RingBuffer& inRingBuffer, uint32 inLen)
 {
-	BYTE packetBuffer[1024];
 	uint32 processLen = 0;
-
 	while (true)
 	{
-		int32 dataSize = len - processLen;
+		int32 dataSize = inLen - processLen;
 
 		if (dataSize < sizeof(PacketHeader))
 			break;
 
 		PacketHeader header;
-		buffer.Peek(reinterpret_cast<BYTE*>(&header), sizeof(PacketHeader));
+		inRingBuffer.Peek(reinterpret_cast<BYTE*>(&header), sizeof(PacketHeader));
 		const uint16 packetSize = header.size;
 		if (dataSize < packetSize)
 			break;
 
-		memset(packetBuffer, NULL, 1024);
-		buffer.Dequeue(packetBuffer, packetSize);
-
-		OnRecvPacket(packetBuffer, packetSize);
-
-		//buffer.MoveFront(packetSize);
+		OnRecvPacket(inRingBuffer.GetReadBuffer(), packetSize);
+		inRingBuffer.MoveFront(packetSize);
 
 		processLen += packetSize;
 	}

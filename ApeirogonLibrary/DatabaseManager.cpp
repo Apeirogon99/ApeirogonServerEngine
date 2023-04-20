@@ -3,12 +3,10 @@
 
 using namespace std;
 
-DatabaseManager::DatabaseManager(const size_t poolSize) : mPoolSize(poolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr)
+DatabaseManager::DatabaseManager(const size_t poolSize) : mIsRunning(true), mPoolSize(poolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr)
 {
 	mConnections = new ADOConnection[mPoolSize]();
 	mConnectionInfos = new ADOConnectionInfo[mPoolSize]();
-
-	mDatabaseManagerThread = std::thread(&DatabaseManager::DatabaseLoop, this);
 }
 
 DatabaseManager::~DatabaseManager()
@@ -25,6 +23,8 @@ DatabaseManager::~DatabaseManager()
 
 	mConnections = nullptr;
 	mConnectionInfos = nullptr;
+
+	wprintf(L"[DatabaseManager::~DatabaseManager()]\n");
 }
 
 bool DatabaseManager::Prepare(const ServicePtr& service)
@@ -41,7 +41,8 @@ bool DatabaseManager::Prepare(const ServicePtr& service)
 		return false;
 	}
 
-	std::wcout << L"[DatabaseManager::Prepare] Start DatabaseLoop (thread_id:" << mDatabaseManagerThread.get_id() << L")" << std::endl;
+	mDatabaseManagerThread = std::thread(&DatabaseManager::DatabaseLoop, this);
+	DatabaseLog(L"[DatabaseManager::Prepare()] Thread started working\n");
 	PrintConnectionPoolState();
 
 	return true;
@@ -49,9 +50,11 @@ bool DatabaseManager::Prepare(const ServicePtr& service)
 
 void DatabaseManager::Shutdown()
 {
+
+	mIsRunning = false;
+
 	if (mDatabaseManagerThread.joinable())
 	{
-		std::wcout << L"[DatabaseManager::Shutdown] Stop DatabaseLoop (thread_id:" << mDatabaseManagerThread.get_id() << L")" << std::endl;
 		mDatabaseManagerThread.join();
 	}
 
@@ -63,6 +66,9 @@ void DatabaseManager::Shutdown()
 			connection.Close();
 		}
 	}
+
+	DatabaseLog(L"[DatabaseManager::Shutdown] Database manager successfully shutdown\n");
+	mService.reset();
 }
 
 void DatabaseManager::PushConnectionPool(ADOConnection& inConnection, const ADOConnectionInfo& inConnectioninfo)
@@ -99,24 +105,24 @@ void DatabaseManager::PrintConnectionPoolState()
 		return;
 	}
 
-	wprintf(L"\nPrintConnectionPoolState\n");
+	DatabaseLog(L"[Current ConnectionPool States]\n");
+	wprintf(L"{\n");
 	for (size_t index = 0; index < mUsedSize; ++index)
 	{
 		ADOConnection& connection = mConnections[index];
 		ADOConnectionInfo& connectionInfo = mConnectionInfos[index];
 
-		wprintf(L"[Database::%ws] - ", connection.GetDatabaseName());
+		wprintf(L"\t[Database::%ws] - ", connection.GetDatabaseName());
 		if (connection.IsOpen())
 		{
-			wprintf(L"open\n");
+			wprintf(L"Open\n");
 		}
 		else
 		{
-			wprintf(L"close\n");
+			wprintf(L"Close\n");
 		}
 	}
-
-	wprintf(L"\n");
+	wprintf(L"}\n");
 }
 
 void DatabaseManager::DatabaseLoop()
@@ -135,10 +141,10 @@ void DatabaseManager::DatabaseLoop()
 	static long long	keepConnectionTime = 0;
 	const long long		maxConnectionTime = 6000;
 
-	while (mService->IsServiceOpen())
+	while (mIsRunning)
 	{
 		time.Start();
-		mADOAsync.ProcessAsync();
+		mADOTask.ProcessAsync();
 		processTime = static_cast<long long>(time.End());
 
 		if (processTime > totalProcessTime)
@@ -149,6 +155,7 @@ void DatabaseManager::DatabaseLoop()
 		else
 		{
 			sleepTime = totalProcessTime - processTime;
+			//wprintf(L"[ADOAsync::AsyncLoop] Sleep process time %lld(sec)\n", sleepTime);
 			std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
 
 			keepConnectionTime += (processTime + sleepTime);
@@ -162,9 +169,9 @@ void DatabaseManager::DatabaseLoop()
 	}
 }
 
-ADOAsync& DatabaseManager::GetAsync()
+ADOTask& DatabaseManager::GetTask()
 {
-	return mADOAsync;
+	return mADOTask;
 }
 
 void DatabaseManager::KeepConnection()
@@ -185,4 +192,9 @@ void DatabaseManager::KeepConnection()
 		}
 	}
 
+}
+
+void DatabaseManager::DatabaseLog(const WCHAR* log, ...)
+{
+	mService->GetLoggerManager()->WriteLog(log);
 }

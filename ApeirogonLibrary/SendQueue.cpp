@@ -1,48 +1,62 @@
 #include "pch.h"
 #include "SendQueue.h"
+#include "CircularQueue.h"
 
-SendQueue::SendQueue() : mQueueSize(static_cast<uint32>(Default::MAX_QUEUE_SIZE)), mFront(0), mRear(0)
+SendQueue::SendQueue() : mSendQueue(static_cast<uint32>(Default::MAX_QUEUE_SIZE))
 {
+	
 }
 
 SendQueue::~SendQueue()
 {
 }
 
-void SendQueue::Push(SendBufferPtr sendBuffer)
+void SendQueue::Clear()
 {
-	FastLockGuard lockGuard(mFastSpinLock);
-
-	if (true == IsFull())
+	const uint32 count = mSendQueue.GetCount();
+	for (uint32 index = 0; index < count; ++index)
 	{
-		wprintf(L"SendQueue::Push() : send queue is full\n");
+		SendBufferPtr SendBuffer;
+		mSendQueue.Dequeue(SendBuffer);
+		SendBuffer.reset();
+	}
+}
+
+void SendQueue::Push(SendBufferPtr& inSendBuffer)
+{
+	if (false == mSendQueue.Enqueue(std::move(inSendBuffer)))
+	{
+		wprintf(L"[SendQueue::Push] Push Error");
+	}
+}
+
+void SendQueue::Pop(SendBufferPtr& OutSendBuffer)
+{
+	SendBufferPtr tempSendBuffer;
+	if (false == mSendQueue.Dequeue(tempSendBuffer))
+	{
+		wprintf(L"[SendQueue::Pop] Pop Error");
 		return;
 	}
 
-	mBuffer[mFront] = sendBuffer;
-	mFront = (mFront + 1) % mQueueSize;
+	OutSendBuffer = std::move(tempSendBuffer);
 }
 
-void SendQueue::PopAll(std::vector<SendBufferPtr>& sendBuffers)
+void SendQueue::Pop(std::vector<SendBufferPtr> OutSendBuffers)
 {
-	FastLockGuard lockGuard(mFastSpinLock);
-	while (mRear != mFront)
+	if (false == mSendQueue.Dequeue(OutSendBuffers))
 	{
-		SendBufferPtr popBuffer = mBuffer[mRear];
-		sendBuffers.push_back(popBuffer);
-		mBuffer[mRear].reset();
-		mRear = (mRear + 1) % mQueueSize;
+		wprintf(L"[SendQueue::Pop] PopAll Error");
+		return;
 	}
-}
-
-bool SendQueue::IsFull()
-{
-	const uint32 isFull = (mFront + 1) % mQueueSize;
-	return isFull == mRear ? true : false;
 }
 
 bool SendQueue::IsEmpty()
 {
-	FastLockGuard lockGuard(mFastSpinLock);
-	return mRear == mFront ? true : false;
+	return mSendQueue.IsEmpty();
+}
+
+bool SendQueue::IsFull()
+{
+	return mSendQueue.IsFull();
 }

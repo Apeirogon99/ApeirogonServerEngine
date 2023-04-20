@@ -21,7 +21,7 @@ IPAddress& IPAddress::operator=(const IPAddress& ipAddr)
 
 IPAddress::~IPAddress()
 {
-	wprintf(L"IPAddress::~IPAddress() : Close ip address\n");
+	//wprintf(L"IPAddress::~IPAddress() : Close ip address\n");
 }
 
 void IPAddress::SetIp(const in_addr& inIPv4Addr)

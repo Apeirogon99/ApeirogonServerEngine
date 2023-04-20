@@ -33,6 +33,7 @@ public:
 	APEIROGON_API bool PostDispatch(const uint32 len, const ULONG_PTR key);
 
 protected:
+	void IOCPErrorHandling(IocpEvent* inEvent);
 	void IOCPServerLog(const WCHAR* func);
 
 private:

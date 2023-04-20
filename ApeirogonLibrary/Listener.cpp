@@ -8,7 +8,7 @@ Listener::Listener(IPAddressPtr& ipAddr) : mListenSocket(nullptr), mIpAddr(std::
 
 Listener::~Listener()
 {
-	wprintf(L"Listener::~Listener()\n");
+	wprintf(L"[Listener::~Listener()]\n");
 }
 
 bool Listener::Prepare(const ServicePtr& service)
@@ -56,7 +56,7 @@ bool Listener::Prepare(const ServicePtr& service)
 	}
 
 	const uint32 acceptCount = mService->GetSessionManager()->GetMaxSessionCount();
-	for (uint32 i = 0; i < 3; i++)
+	for (uint32 i = 0; i < acceptCount; i++)
 	{
 		AcceptEvent* acceptEvent = new AcceptEvent();
 		acceptEvent->owner = shared_from_this();
@@ -64,11 +64,14 @@ bool Listener::Prepare(const ServicePtr& service)
 		RegisterAccept(acceptEvent);
 	}
 
+	ListenerLog(L"[Listener::Prepare()] Sessions accept ready\n", acceptCount);
+
 	return true;
 }
 
 void Listener::Shutdown()
 {
+	const uint64 acceptSize = mAcceptEvents.size();
 	for (AcceptEvent* acceptEvent : mAcceptEvents)
 	{
 		acceptEvent->owner.reset();
@@ -76,11 +79,11 @@ void Listener::Shutdown()
 		acceptEvent = nullptr;
 	}
 
+	ListenerLog(L"[Listener::Shutdown()] Listener successfully shutdown\n");
+
 	mService.reset();
 	mIpAddr.reset();
 	mListenSocket.reset();
-
-	wprintf(L"Listener::Shutdown() : listener successfully shutdown\n");
 }
 
 void Listener::CloseSocket()
@@ -126,7 +129,11 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 	bool result = mListenSocket->AcceptEx(newSession, acceptEvent);
 	if (false == result)
 	{
+		int32 error = WSAGetLastError();
+		ListenerLog(L"[Listener::RegisterAccept] (%d)", error);
+
 		RegisterAccept(acceptEvent);
+
 		return;
 	}
 }
@@ -149,7 +156,7 @@ void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 		return;
 	}
 
-	ListenerLog(L"CLIENT ACCEPT : %ws\n", clientIpAddr->ToString().c_str());
+	ListenerLog(L"[CLIENT ACCEPT] %ws\n", clientIpAddr->ToString().c_str());
 
 	session->SetIpAddress(clientIpAddr);
 	session->ProcessConnect();

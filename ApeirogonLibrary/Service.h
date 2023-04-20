@@ -24,8 +24,10 @@ public:
 
 public:
 	APEIROGON_API virtual void	Tick(const float deltaTime) abstract;
-	void						ProcessADOWork();
-	void						DoWork();
+	void						ProcessNetworkIO();
+	void						ProcessDatabaseIO();
+	void						ProcessLogic();
+	void						ServiceScheudler();
 
 protected:
 	//Setting
@@ -42,7 +44,6 @@ protected:
 
 public:
 	bool						IsServiceOpen() const;
-	const WCHAR*				StateToString() const;
 	EServiceState				GetState() const;
 	SessionManagerPtr			GetSessionManager() const;
 	ListenerPtr					GetListener() const;
@@ -62,4 +63,5 @@ private:
 	ThreadManagerPtr			mThreadManager;
 	LoggerManagerPtr			mLoggerManager;
 	DatabaseManagerPtr			mDatabaseManager;
+	TimeStamp					mServiceTime;
 };

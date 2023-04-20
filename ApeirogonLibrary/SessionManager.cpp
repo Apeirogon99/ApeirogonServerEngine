@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "SessionManager.h"
 
-SessionManager::SessionManager(const SessionFactory& sessionFactory, const uint32 maxSessionCount) :mSessionFactory(sessionFactory), mMaxSessionCount(maxSessionCount), mSessionCount(0)
+SessionManager::SessionManager(const SessionFactory& sessionFactory, const uint32 maxSessionCount, const uint32 inBufferSize) :mSessionFactory(sessionFactory), mMaxSessionCount(maxSessionCount), mSessionCount(0), mMaxBufferSize(inBufferSize)
 {
 	
 }
 
 SessionManager::~SessionManager()
 {
-	wprintf(L"SessionManager::~SessionManager()\n");
+	wprintf(L"[SessionManager::~SessionManager()]\n");
 }
 
 bool SessionManager::Prepare(const ServicePtr& service)
@@ -29,7 +29,7 @@ bool SessionManager::Prepare(const ServicePtr& service)
 		return false;
 	}
 
-	mSendRingBuffer.SetBufferSize(1024);
+	SessionManagerLog(L"[SessionManager::Prepare()] Set Session [MAX : %ld, BufferSize : %ld]\n", mMaxSessionCount, mMaxBufferSize);
 
 	return true;
 }
@@ -122,9 +122,8 @@ void SessionManager::Shutdown()
 		session.reset();
 	}
 
+	SessionManagerLog(L"[SessionManager::Shutdown()] Session manager successfully shutdown\n");
 	mService.reset();
-
-	wprintf(L"SessionManager::Shutdown() : session manager successfully shutdown\n");
 }
 
 uint32 SessionManager::GetSessionCount() const
@@ -142,14 +141,7 @@ ServicePtr SessionManager::GetService() const
 	return mService;
 }
 
-SendRingBuffer& SessionManager::GetSendRingBuffer()
-{
-	return mSendRingBuffer;
-}
-
 void SessionManager::SessionManagerLog(const WCHAR* log, ...)
 {
-#if _DEBUG
 	mService->GetLoggerManager()->WriteLog(log);
-#endif
 }

@@ -11,7 +11,7 @@ WinSocket::WinSocket(SOCKET socket, EProtocolType protocolType, ESocketType sock
 
 WinSocket::~WinSocket()
 {
-    wprintf(L"WinSocket::~WinSocket() : Close window socket\n");
+    //wprintf(L"WinSocket::~WinSocket() : Close window socket\n");
 
     if (false == Close())
     {
@@ -105,7 +105,7 @@ WinSocket* WinSocket::Accept()
 bool WinSocket::AcceptEx(const SessionPtr& session, AcceptEvent* acceptEvent)
 {
     SOCKET acceptSocket = session->GetWinSocket()->GetSocket();
-    RecvRingBuffer& outputBuffer = session->GetRecvBuffer();
+    RingBuffer& outputBuffer = session->GetRecvBuffer();
     DWORD receiveDataLength = 0;
     DWORD localAddressLength = sizeof(SOCKADDR_IN) + 16;
     DWORD remoteAddressLength = sizeof(SOCKADDR_IN) + 16;
@@ -127,7 +127,7 @@ bool WinSocket::AcceptEx(const SessionPtr& session, AcceptEvent* acceptEvent)
         int32 error = WSAGetLastError();
         if (error != WSA_IO_PENDING)
         {
-            SocketUtils::WinSocketError(L"WinSocket::AcceptEx()");
+            //SocketUtils::WinSocketError(L"[WinSocket::AcceptEx()]");
             return false;
         }
     }
@@ -604,8 +604,8 @@ bool WinSocket::RecvEx(RecvEvent& recvEvnet)
     }
 
     WSABUF recvBuffer;
-    recvBuffer.buf = reinterpret_cast<int8*>(recvEvnet.buffer);
-    recvBuffer.len = recvEvnet.len;
+    recvBuffer.buf = reinterpret_cast<int8*>(recvEvnet.mRecvBuffer.GetReadBuffer());
+    recvBuffer.len = recvEvnet.mRecvBuffer.GetRecvMaxSize();
 
     //WSABUF* recvBuffer = buffer;
     const DWORD recvBufferCount = 1;

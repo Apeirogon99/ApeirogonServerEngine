@@ -12,7 +12,6 @@ public:
 	LogWriter();
 	virtual ~LogWriter();
 
-	std::wstring GetNowTime(bool useMs);
 	std::wstring GetNowThreadId();
 	std::wstring GetLogMessage(const WCHAR* fmt, va_list args);
 

@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "ThreadManager.h"
 
-ThreadManager::ThreadManager(const uint32 maxThreadCount) : maxThreadCount(maxThreadCount)
+ThreadManager::ThreadManager(const uint32 maxThreadCount, const uint32 inMaxThreadTimeOut) : maxThreadCount(maxThreadCount), maxThreadTimeOut(inMaxThreadTimeOut)
 {
 }
 
 ThreadManager::~ThreadManager()
 {
-	wprintf(L"ThreadManager::~ThreadManager()\n");
+	wprintf(L"[ThreadManager::~ThreadManager()]\n");
 }
 
 bool ThreadManager::Prepare(const ServicePtr& service)
@@ -20,57 +20,49 @@ bool ThreadManager::Prepare(const ServicePtr& service)
 
 	for (uint32 curCount = 0; curCount < maxThreadCount; ++curCount)
 	{
-		mThreads.emplace_back(std::thread());
+		//thread = std::thread(&Service::DoWork, mService.get());
+		mThreads.emplace_back(std::thread(&ThreadManager::DoWorkThreads, this, maxThreadTimeOut));
 	}
+
+	ThreadLog(L"[ThreadManager::Prepare()] %ld Threads started working\n", maxThreadCount);
 
     return true;
 }
 
 void ThreadManager::Shutdown()
 {
-	JoinThreads();
+	StopWorkThreads();
 
+	ThreadLog(L"[ThreadManager::Shutdown()] Thread manager successfully shutdown\n");
 	mService.reset();
-
-	wprintf(L"LoggerManager::Shutdown() : Thread manager successfully shutdown\n");
 }
 
-void ThreadManager::WorkThreads()
+void ThreadManager::DoWorkThreads(const uint32 inTimeOut)
 {
-
-	for (std::thread& thread : mThreads)
+	while (mService->IsServiceOpen())
 	{
-		thread = std::thread(&Service::DoWork, mService.get());
+		mService->GetIOCPServer()->WorkDispatch(inTimeOut);
 	}
-
-	ThreadLog(L"ThreadManager::WorkThreads() : Threads started working successfully\n");
 }
 
-void ThreadManager::JoinThreads()
+void ThreadManager::StopWorkThreads()
 {
 	for (std::thread& thread : mThreads)
 	{
 		if (thread.joinable())
 		{
-			DestroyTLS();
+			//DestroyTLS();
 			thread.join();
 		}
 	}
-	mThreads.clear();
 
-	ThreadLog(L"ThreadManager::WorkThreads() : Threads closed working successfully\n");
+	ThreadLog(L"[ThreadManager::WorkThreads()] %ld Threads stop working\n", maxThreadCount);
 }
 
 
 void ThreadManager::InitTLS()
 {
 	std::cout << GetCurrentThreadId() << " : InitTLS" << std::endl;
-	HRESULT hResult;
-	hResult = OleInitialize(NULL);
-	if (FAILED(hResult))
-	{
-		return;
-	}
 }
 
 void ThreadManager::DestroyTLS()

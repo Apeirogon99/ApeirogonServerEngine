@@ -1,43 +1,53 @@
 #include "pch.h"
 #include "Service.h"
 
-Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mIOCPServer(nullptr), mListener(nullptr)
+Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mIOCPServer(nullptr), mListener(nullptr), mServiceTime(L"Server")
 {
-	WinDump::Init();
+	setlocale(LC_ALL, "");
 }
 
 Service::~Service()
 {
-	wprintf(L"Service::~Service() : Close service\n");
+	wprintf(L"[Service::~Service()] Close Service %lld\n", mServiceTime.GetTimeStamp());
 }
 
-void Service::ProcessADOWork()
+void Service::ProcessNetworkIO()
 {
-	ADOAsync& databaseAsync = GetDatabaseManager()->GetAsync();
-	if (databaseAsync.IsCompletionWork())
+	
+}
+
+void Service::ProcessDatabaseIO()
+{
+	ADOTask& databaseTask = GetDatabaseManager()->GetTask();
+	if (databaseTask.IsCompletionWork())
 	{
-		ADOWork work;
-		if (true == databaseAsync.GetCompeltionWork(work))
+		ADOItem item;
+		if (true == databaseTask.GetCompeltionWork(item))
 		{
-			PacketSessionPtr&	session = work.mSession;
-			ADOCommand&			command = work.mADOCommand;
-			ADORecordset&		recordset = work.mADORecordset;
-			ADOCallBack&		callback = work.mADOCallBack;
+			PacketSessionPtr& session = item.mSession;
+			ADOCommand& command = item.mADOCommand;
+			ADORecordset& recordset = item.mADORecordset;
+			ADOCallBack& callback = item.mADOCallBack;
 
 			callback(session, command, recordset);
 		}
 	}
 }
 
-void Service::DoWork()
+void Service::ProcessLogic()
+{
+	//Tick();
+}
+
+void Service::ServiceScheudler()
 {
 	while (IsServiceOpen())
 	{
-		this->GetIOCPServer()->WorkDispatch(10);
+		ProcessNetworkIO();
 		
-		//Tick();
+		ProcessDatabaseIO();
 
-		ProcessADOWork();
+		ProcessLogic();
 	}
 }
 
@@ -49,25 +59,20 @@ bool Service::ServiceOpen()
 		return false;
 	}
 
+	SetServiceState(EServiceState::Open);
+
 	if (false == Prepare())
 	{
 		ServiceLog(L"Service::ServiceOpen() : failed to prepare\n");
 		return false;
 	}
 
-
-	SetServiceState(EServiceState::Open);
-
 	const std::wstring ip = mListener->GetIpAddress()->GetIp();
 	const uint16 port = mListener->GetIpAddress()->GetPort();
-	ServiceLog(L"Service::ServiceOpen() : IP[%ws] Port[%d] service is %ws\n", ip.c_str(), port, StateToString());
+	ServiceLog(L"[Service::ServiceOpen()] IP[%ws] Port[%d] service is Open\n", ip.c_str(), port);
 
-	//mThreadManager->WorkThreads();
-
-	DoWork();
-
-	//TODO : MainThread
-	//Tick
+	mServiceTime.StartTimeStamp();
+	ServiceScheudler();
 
 	return true;
 }
@@ -92,7 +97,6 @@ void Service::ServiceClose()
 
 	}
 
-	ServiceLog(L"Service::ServiceClose() : service is %ws\n", StateToString());
 }
 
 bool Service::Prepare()
@@ -107,12 +111,6 @@ bool Service::Prepare()
 	if (mDatabaseManager == nullptr || false == mDatabaseManager->Prepare(shared_from_this()))
 	{
 		ServiceLog(L"Service::Prepare() : failed to prepare for database manager\n");
-		return false;
-	}
-
-	if (mThreadManager == nullptr || false == mThreadManager->Prepare(shared_from_this()))
-	{
-		ServiceLog(L"Service::SetThreadManager() : failed to prepare for thread manager\n");
 		return false;
 	}
 
@@ -131,6 +129,12 @@ bool Service::Prepare()
 	if (mListener == nullptr || false == mListener->Prepare(shared_from_this()))
 	{
 		ServiceLog(L"Service::Prepare() : failed to prepare for listener\n");
+		return false;
+	}
+
+	if (mThreadManager == nullptr || false == mThreadManager->Prepare(shared_from_this()))
+	{
+		ServiceLog(L"Service::SetThreadManager() : failed to prepare for thread manager\n");
 		return false;
 	}
 
@@ -217,33 +221,6 @@ void Service::SetServiceState(const EServiceState state)
 bool Service::IsServiceOpen() const
 {
 	return mServiceState == EServiceState::Open ? true : false;
-}
-
-const WCHAR* Service::StateToString() const
-{
-	switch (mServiceState)
-	{
-	case EServiceState::Open:
-		return L"Open";
-		break;
-	case EServiceState::Close:
-		return L"Close";
-		break;
-	case EServiceState::Connecting:
-		return L"Connecting";
-		break;
-	case EServiceState::Executing:
-		return L"Executing";
-		break;
-	case EServiceState::Fetching:
-		return L"Fetching";
-		break;
-	default:
-		return L"Error";
-		break;
-	}
-
-	return L"Error";
 }
 
 EServiceState Service::GetState() const

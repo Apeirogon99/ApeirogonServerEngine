@@ -126,6 +126,24 @@ public:
 		return true;
 	}
 
+	bool Dequeue(std::vector<VariableType> outVariables)
+	{
+		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
+
+		const uint32 curUsed = GetUsedSize();
+		uint32 currentIndex = mHead;
+
+		outVariables.resize(curUsed);
+		for (uint32 index = 0; index < curUsed; ++index)
+		{
+			outVariables[index] = std::move(mQueue[currentIndex]);
+			mHead = ((currentIndex + 0b1) & mIndexMask);
+			currentIndex = mHead;
+		}
+
+		return true;
+	}
+
 	//bool DequeueAll(VariableType outVariables[], uint32& outNumber)
 	//{
 	//	SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);

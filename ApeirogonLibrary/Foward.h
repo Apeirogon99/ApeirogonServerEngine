@@ -25,6 +25,9 @@ class SessionManager;
 class ThreadManager;
 class LoggerManager;
 
+class NetworkTask;
+class NetworkQueue;
+
 using ServicePtr = std::shared_ptr<Service>;
 using PacketSessionPtr = std::shared_ptr<PacketSession>;
 using IOCPServerPtr = std::shared_ptr<IOCPServer>;
@@ -36,6 +39,8 @@ using IPAddressPtr = std::shared_ptr<IPAddress>;
 using SMTPPtr = std::shared_ptr<SMTP>;
 using DatabaseManagerPtr = std::shared_ptr<DatabaseManager>;
 
+using NetworkTaskPtr = std::shared_ptr<NetworkTask>;
+using NetworkQueuePtr = std::shared_ptr<NetworkQueue>;
 using SendBufferPtr = std::shared_ptr<SendBuffer>;
 
 using SessionManagerPtr = std::shared_ptr<SessionManager>;

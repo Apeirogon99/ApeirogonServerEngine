@@ -5,17 +5,18 @@ LoggerManager::LoggerManager(const WCHAR* name, const ELogMode mode) : mName(nam
 {
 	if (mode == ELogMode::File)
 	{
-		wprintf(L"LoggerManager::LoggerManager() : Invalid mode, Try to set the mode again");
+		wprintf(L"[LoggerManager::LoggerManager()] Invalid mode, Try to set the mode again");
 	}
 
 	mLogWriter = new ConsoleWriter;
+
 }
 
 LoggerManager::LoggerManager(const WCHAR* name, const WCHAR* filePath, const ELogMode mode) : mName(name), mLogMode(mode)
 {
 	if (mode == ELogMode::Console)
 	{
-		wprintf(L"LoggerManager::LoggerManager() : Invalid mode, Try to set the mode again");
+		wprintf(L"[LoggerManager::LoggerManager()] Invalid mode, Try to set the mode again");
 	}
 
 	mLogWriter = new FileWrite();
@@ -28,9 +29,9 @@ LoggerManager::LoggerManager(const WCHAR* name, const WCHAR* filePath, const ELo
 
 LoggerManager::~LoggerManager()
 {
-	wprintf(L"LoggerManager::~LoggerManager()\n");
+	wprintf(L"[LoggerManager::~LoggerManager()]\n");
 
-	if (mLogWriter)
+	if (mLogWriter != nullptr)
 	{
 		delete mLogWriter;
 	}
@@ -65,12 +66,14 @@ bool LoggerManager::Prepare(const ServicePtr& service)
 		}
 	}
 
+	WriteLog(L"[LoggerManager::Prepare()] Creating a log\n");
+
 	return true;
 }
 
 void LoggerManager::Shutdown()
 {
-	wprintf(L"LoggerManager::Shutdown() : logger manager successfully shutdown\n");
+	WriteLog(L"[LoggerManager::Shutdown()] logger manager successfully shutdown\n");
 	mService.reset();
 }
 
@@ -84,7 +87,7 @@ void LoggerManager::WriteLog(const WCHAR* fmt, ...)
 
 FileWrite::FileWrite()
 {
-	setlocale(LC_ALL, "");
+	
 }
 
 FileWrite::~FileWrite()
@@ -109,7 +112,7 @@ FileWrite::~FileWrite()
 
 	std::wstring newFilePath;
 	newFilePath += oldFilePath.substr(0, findLog);
-	newFilePath += GetNowTime(false);
+	newFilePath += Time::NowTime(false);
 	newFilePath += L".log";
 
 	if (0 != _wrename(oldFilePath.c_str(), newFilePath.c_str()))
@@ -181,40 +184,11 @@ void ConsoleWriter::Writer(const WCHAR* fmt, ...)
 
 LogWriter::LogWriter()
 {
-
+	setlocale(LC_ALL, "");
 }
 
 LogWriter::~LogWriter()
 {
-}
-
-std::wstring LogWriter::GetNowTime(bool useMs)
-{
-	struct timeb	tb;
-	struct tm		timeptr;
-	wchar_t			dest[100];
-	time_t			temp;
-	std::wstring	curTime;
-
-	ftime(&tb);
-	temp = time(NULL);
-	localtime_s(&timeptr, &temp);
-
-	wcsftime(dest, sizeof(dest), L"[%Y.%m.%d-%H.%M.%S", &timeptr);
-	curTime += dest;
-	if (useMs)
-	{
-		curTime += L":";
-		curTime += std::to_wstring(tb.millitm);
-		curTime += L"]";
-	}
-	else
-	{
-		curTime += L"]";
-	}
-
-
-	return curTime;
 }
 
 std::wstring LogWriter::GetNowThreadId()
@@ -233,7 +207,7 @@ std::wstring LogWriter::GetNowThreadId()
 std::wstring LogWriter::GetLogMessage(const WCHAR* fmt, va_list args)
 {
 	std::wstring tempLog;
-	tempLog += GetNowTime(true);
+	tempLog += Time::NowTime(true);
 	tempLog += GetNowThreadId();
 
 	std::array<WCHAR, 1024> logStr;

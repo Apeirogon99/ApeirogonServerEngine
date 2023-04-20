@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "IOCP.h"
 
-IOCPServer::IOCPServer()
+IOCPServer::IOCPServer() : mIOCPHandle(INVALID_HANDLE_VALUE)
 {
 	
 }
@@ -9,7 +9,7 @@ IOCPServer::IOCPServer()
 IOCPServer::~IOCPServer()
 {
 	::CloseHandle(mIOCPHandle);
-	wprintf(L"IOCPServer::~IOCPServer()\n");
+	wprintf(L"[IOCPServer::~IOCPServer()]\n");
 }
 
 bool IOCPServer::Prepare(const ServicePtr& service)
@@ -28,13 +28,17 @@ bool IOCPServer::Prepare(const ServicePtr& service)
 		return false;
 	}
 
+
+
+	IOCPServerLog(L"[IOCPServer::Prepare()] Server is running");
+
 	return true;
 }
 
 void IOCPServer::Shutdown()
 {
+	IOCPServerLog(L"[IOCPServer::Shutdown()] Iocp server successfully shutdown ");
 	mService.reset();
-	wprintf(L"IOCPServer::Shutdown() : iocp server successfully shutdown\n");
 }
 
 bool IOCPServer::RegisterSocketToIOCP(const WinSocketPtr sock)
@@ -45,7 +49,7 @@ bool IOCPServer::RegisterSocketToIOCP(const WinSocketPtr sock)
 
 	if (result == NULL)
 	{
-		IOCPServerLog(L"IOCP::RegisterSocketToIOCP()");
+		IOCPServerLog(L"[IOCP::RegisterSocketToIOCP()]");
 		return false;
 	}
 
@@ -62,7 +66,8 @@ bool IOCPServer::WorkDispatch(uint32 timeoutMs)
 	
 	if(ret == false)
 	{
-		IOCPServerLog(L"IOCPServer::WorkDispatch()");
+		IOCPServerLog(L"[IOCPServer::WorkDispatch()]");
+		IOCPErrorHandling(iocpEvent);
 		return false;
 	}
 
@@ -80,11 +85,34 @@ bool IOCPServer::PostDispatch(const uint32 len, const ULONG_PTR key)
 	bool ret = ::PostQueuedCompletionStatus(mIOCPHandle, numOfBytes, key, iocpEvent);
 	if (ret == false)
 	{
-		IOCPServerLog(L"IOCPServer::PostDispatch()");
+		IOCPServerLog(L"[IOCPServer::PostDispatch()]");
 		return false;
 	}
 
 	return true;
+}
+
+void IOCPServer::IOCPErrorHandling(IocpEvent* inEvent)
+{
+	int32 code = WSAGetLastError();
+	SessionPtr session = std::static_pointer_cast<Session>(inEvent->owner);
+
+	switch (code)
+	{
+	case ERROR_NETNAME_DELETED:
+		session->Disconnect(L"NETNAME_DELETED");
+		break;
+
+	case WSA_WAIT_TIMEOUT:
+		break;
+
+	case WSA_IO_PENDING:
+		break;
+
+	default:
+		mService->GetLoggerManager()->WriteLog(L"[IOCPServer::IOCPErrorHandling] Can't Handling Error");
+		break;
+	}
 }
 
 void IOCPServer::IOCPServerLog(const WCHAR* func)

@@ -1,5 +1,12 @@
 #pragma once
 
+enum class ESessionMode
+{
+	None,
+	Client,
+	Server
+};
+
 class Session : public IocpObject
 {
 	enum class Default
@@ -44,7 +51,7 @@ public:
 	APEIROGON_API void Recv();
 
 	APEIROGON_API virtual void OnConnected() abstract;
-	APEIROGON_API virtual uint32 OnRecv(RecvRingBuffer& buffer, uint32 len) abstract;
+	APEIROGON_API virtual uint32 OnRecv(RingBuffer& inRingBuffer, uint32 inLen) abstract;
 	APEIROGON_API virtual void OnSend(uint32 len) abstract;
 	APEIROGON_API virtual void OnDisconnected() abstract;
 
@@ -57,24 +64,24 @@ public:
 	SessionPtr GetSession();
 	WinSocketPtr GetWinSocket() const;
 	IPAddressPtr GetIpAddress() const;
-	RecvRingBuffer& GetRecvBuffer();
+	RingBuffer& GetRecvBuffer();
 	APEIROGON_API SessionManagerPtr GetSessionManager();
 
 private:
-	SessionManagerRef mSessionManager;
-	WinSocketPtr mSocket;
-	RecvRingBuffer mRecvBuffer;
-	IPAddressPtr mIpAddr;
+	SessionManagerRef	mSessionManager;
+	WinSocketPtr		mSocket;
+	RingBuffer			mRecvBuffer;
+	IPAddressPtr		mIpAddr;
 
-	ConnectEvent	mConnectEvnet;
-	DisconnectEvent mDisconnectEvent;
-	RecvEvent		mRecvEvent;
-	SendEvent		mSendEvent;
+	ConnectEvent		mConnectEvnet;
+	DisconnectEvent		mDisconnectEvent;
+	RecvEvent			mRecvEvent;
+	SendEvent			mSendEvent;
 
-	volatile LONG	mIsSending;
-	SendQueue		mSendQueue;
-	std::queue<BYTE*> mSendBuffers;
+	volatile LONG		mIsSending;
+	SendQueue			mSendQueue;
+	std::queue<BYTE*>	mSendBuffers;
 
-	std::atomic<bool> mIsConnect;
+	std::atomic<bool>	mIsConnect;
 };
 

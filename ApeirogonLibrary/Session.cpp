@@ -1,16 +1,15 @@
 #include "pch.h"
 #include "Session.h"
 
-Session::Session()
+Session::Session() : mRecvBuffer(0xffff)
 {
     mSocket = SocketUtils::CreateSocket(EProtocolType::IPv4, ESocketType::SOCKTYPE_Streaming);
     _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
-    mRecvBuffer.SetBufferSize(static_cast<uint32>(Default::MAX_RECV_BUFFER));
 }
 
 Session::~Session()
 {
-    wprintf(L"Session::~Session() : Close session\n");
+    //wprintf(L"[Session::~Session()] : Close session\n");
 }
 
 HANDLE Session::GetHandle()
@@ -119,7 +118,7 @@ void Session::RegisterSend()
     mSendEvent.owner = shared_from_this();
 
     // 보낼 데이터를 sendEvent에 등록
-    mSendQueue.PopAll(mSendEvent.sendBuffers);
+    mSendQueue.Pop(mSendEvent.sendBuffers);
 
     if (false == mSocket->SendEx(mSendEvent))
     {
@@ -186,7 +185,13 @@ void Session::ProcessRecv(const uint32 numOfBytes)
         return;
     }
 
-    if (mRecvBuffer.Enqueue(mRecvEvent.buffer, numOfBytes) == false)
+    if (mRecvEvent.mRecvBuffer.GetUsedSize() != numOfBytes)
+    {
+        Disconnect(L"Different used size");
+        return;
+    }
+
+    if (mRecvBuffer.Enqueue(mRecvEvent.mRecvBuffer.GetReadBuffer(), numOfBytes) == false)
     {
         Disconnect(L"Free Overflow");
         return;
@@ -321,7 +326,7 @@ IPAddressPtr Session::GetIpAddress() const
     return mIpAddr;
 }
 
-RecvRingBuffer& Session::GetRecvBuffer()
+RingBuffer& Session::GetRecvBuffer()
 {
     return mRecvBuffer;
 }

@@ -2,7 +2,7 @@
 class ThreadManager
 {
 public:
-	APEIROGON_API ThreadManager(const uint32 maxThreadCount);
+	APEIROGON_API ThreadManager(const uint32 maxThreadCount, const uint32 inMaxThreadTimeOut);
 	APEIROGON_API virtual ~ThreadManager();
 
 	ThreadManager(const ThreadManager& threadManager) = delete;
@@ -13,8 +13,8 @@ public:
 	void		Shutdown();
 
 public:
-	void		WorkThreads();
-	void		JoinThreads();
+	void		DoWorkThreads(const uint32 inTimeOut);
+	void		StopWorkThreads();
 
 	static void InitTLS();
 	static void DestroyTLS();
@@ -24,6 +24,7 @@ protected:
 
 private:
 	uint32						maxThreadCount;
+	uint32						maxThreadTimeOut;
 	std::vector<std::thread>	mThreads;
 	ServicePtr					mService;
 };

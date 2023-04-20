@@ -65,18 +65,12 @@ public:
 
 class RecvEvent : public IocpEvent
 {
-	enum class Default
-	{
-		BufferSize = 0x400,
-	};
-
 public:
-	RecvEvent() : IocpEvent(EventType::Recv) { Clean(); }
-	void Clean() { ZeroMemory(buffer, len); }
+	RecvEvent() : IocpEvent(EventType::Recv), mRecvBuffer(0xffff) { Clean(); }
+	void Clean() { mRecvBuffer.Clean(); }
 	
 public:
-	BYTE buffer[static_cast<uint32>(Default::BufferSize)];
-	uint32 len = static_cast<uint32>(Default::BufferSize);
+	RingBuffer mRecvBuffer;
 };
 
 /*----------------
@@ -88,5 +82,6 @@ class SendEvent : public IocpEvent
 public:
 	SendEvent() : IocpEvent(EventType::Send) { }
 
+	//CircularQueue mSendQeue;
 	std::vector<SendBufferPtr> sendBuffers;
 };

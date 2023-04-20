@@ -22,7 +22,10 @@ public:
 	WinDump& operator=(const WinDump& lock) = delete;
 
 public:
-    APEIROGON_API static void Init();
+    APEIROGON_API static void Init(const WCHAR* inDumpPath);
 	APEIROGON_API static LONG WINAPI ExceptionFilter(struct _EXCEPTION_POINTERS* execptionPointer);
+
+public:
+    static const WCHAR* mDumpPath;
 };
 

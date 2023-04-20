@@ -171,7 +171,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ADOAsync.h" />
+    <ClInclude Include="ADOTask.h" />
     <ClInclude Include="ADOCommand.h" />
     <ClInclude Include="ADOConnection.h" />
     <ClInclude Include="ADOEvent.h" />
@@ -180,6 +180,7 @@
     <ClInclude Include="ADOUtils.h" />
     <ClInclude Include="ADOVariant.h" />
     <ClInclude Include="ApeirogonLibrary.h" />
+    <ClInclude Include="DefaultMacros.h" />
     <ClInclude Include="EngineAssert.h" />
     <ClInclude Include="DefaultSize.h" />
     <ClInclude Include="DefaultTypes.h" />
@@ -190,8 +191,10 @@
     <ClInclude Include="IPAddress.h" />
     <ClInclude Include="Listener.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="NetworkTask.h" />
     <ClInclude Include="PacketSession.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PriorityQueue.h" />
     <ClInclude Include="RingBuffer.h" />
     <ClInclude Include="Runtime.h" />
     <ClInclude Include="SendBuffer.h" />
@@ -210,10 +213,11 @@
     <ClInclude Include="ThreadManager.h" />
     <ClInclude Include="SimpleTime.h" />
     <ClInclude Include="Ticket.h" />
+    <ClInclude Include="TimeStamp.h" />
     <ClInclude Include="WinDump.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ADOAsync.cpp" />
+    <ClCompile Include="ADOTask.cpp" />
     <ClCompile Include="ADOCommand.cpp" />
     <ClCompile Include="ADOConnection.cpp" />
     <ClCompile Include="ADOEvent.cpp" />
@@ -230,6 +234,7 @@
     <ClCompile Include="IPAddress.cpp" />
     <ClCompile Include="Listener.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="NetworkTask.cpp" />
     <ClCompile Include="PacketSession.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -237,6 +242,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PriorityQueue.cpp" />
     <ClCompile Include="RingBuffer.cpp" />
     <ClCompile Include="Runtime.cpp" />
     <ClCompile Include="SendBuffer.cpp" />
@@ -254,6 +260,7 @@
     <ClCompile Include="ThreadManager.cpp" />
     <ClCompile Include="SimpleTime.cpp" />
     <ClCompile Include="Ticket.cpp" />
+    <ClCompile Include="TimeStamp.cpp" />
     <ClCompile Include="WinDump.cpp" />
   </ItemGroup>
   <ItemGroup>

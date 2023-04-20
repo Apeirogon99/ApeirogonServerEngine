@@ -195,11 +195,20 @@
     <ClCompile Include="CircularQueue.cpp">
       <Filter>Source\Private\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="ADOAsync.cpp">
+    <ClCompile Include="ADOTask.cpp">
       <Filter>Source\Private\DB\ADO</Filter>
     </ClCompile>
     <ClCompile Include="SRWLockGuard.cpp">
       <Filter>Source\Private\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkTask.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeStamp.cpp">
+      <Filter>Source\Private\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="PriorityQueue.cpp">
+      <Filter>Source\Private\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -317,11 +326,23 @@
     <ClInclude Include="CircularQueue.h">
       <Filter>Source\Public\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="ADOAsync.h">
+    <ClInclude Include="ADOTask.h">
       <Filter>Source\Public\DB\ADO</Filter>
     </ClInclude>
     <ClInclude Include="SRWLockGuard.h">
       <Filter>Source\Public\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkTask.h">
+      <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeStamp.h">
+      <Filter>Source\Public\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="PriorityQueue.h">
+      <Filter>Source\Public\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultMacros.h">
+      <Filter>PCH\Public\Default</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

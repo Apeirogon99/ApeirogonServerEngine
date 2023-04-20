@@ -24,11 +24,12 @@ public:
 
 	void DatabaseLoop();
 
-	APEIROGON_API ADOAsync& GetAsync();
+	APEIROGON_API ADOTask& GetTask();
 
 protected:
 	APEIROGON_API virtual void InitializeDatabase() abstract;
 	void KeepConnection();
+	void DatabaseLog(const WCHAR* log, ...);
 
 private:
 	size_t						mPoolSize;
@@ -38,7 +39,8 @@ private:
 	ADOConnection*				mConnections;
 	ADOConnectionInfo*			mConnectionInfos;
 
+	bool						mIsRunning;
 	std::thread					mDatabaseManagerThread;
-	ADOAsync					mADOAsync;
+	ADOTask						mADOTask;
 };
 
