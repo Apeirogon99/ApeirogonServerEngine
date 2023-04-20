@@ -111,9 +111,6 @@
     <ClCompile Include="WinDump.cpp">
       <Filter>Source\Private\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Runtime.cpp">
-      <Filter>Source\Private\Time</Filter>
-    </ClCompile>
     <ClCompile Include="SimpleTime.cpp">
       <Filter>Source\Private\Time</Filter>
     </ClCompile>
@@ -238,9 +235,6 @@
     </ClInclude>
     <ClInclude Include="WinDump.h">
       <Filter>Source\Public\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Runtime.h">
-      <Filter>Source\Public\Time</Filter>
     </ClInclude>
     <ClInclude Include="SimpleTime.h">
       <Filter>Source\Public\Time</Filter>

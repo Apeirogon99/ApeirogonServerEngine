@@ -6,7 +6,7 @@ public:
 	~Time();
 
 public:
-	static std::wstring NowTime();
+	static std::wstring NowTime(const bool useMs);
 
 };
 

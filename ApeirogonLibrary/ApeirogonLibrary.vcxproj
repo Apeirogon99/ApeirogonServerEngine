@@ -196,7 +196,6 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PriorityQueue.h" />
     <ClInclude Include="RingBuffer.h" />
-    <ClInclude Include="Runtime.h" />
     <ClInclude Include="SendBuffer.h" />
     <ClInclude Include="CircularQueue.h" />
     <ClInclude Include="SendQueue.h" />
@@ -244,7 +243,6 @@
     </ClCompile>
     <ClCompile Include="PriorityQueue.cpp" />
     <ClCompile Include="RingBuffer.cpp" />
-    <ClCompile Include="Runtime.cpp" />
     <ClCompile Include="SendBuffer.cpp" />
     <ClCompile Include="CircularQueue.cpp" />
     <ClCompile Include="SendQueue.cpp" />

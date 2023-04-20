@@ -40,6 +40,7 @@ private:
 	ADOConnectionInfo*			mConnectionInfos;
 
 	bool						mIsRunning;
+	TimeStamp					mTimeStamp;
 	std::thread					mDatabaseManagerThread;
 	ADOTask						mADOTask;
 };

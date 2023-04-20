@@ -3,7 +3,7 @@
 
 using namespace std;
 
-DatabaseManager::DatabaseManager(const size_t poolSize) : mIsRunning(true), mPoolSize(poolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr)
+DatabaseManager::DatabaseManager(const size_t poolSize) : mIsRunning(true), mPoolSize(poolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mTimeStamp(L"DatabaseManager")
 {
 	mConnections = new ADOConnection[mPoolSize]();
 	mConnectionInfos = new ADOConnectionInfo[mPoolSize]();
@@ -133,7 +133,6 @@ void DatabaseManager::DatabaseLoop()
 
 	// 만약에 큐에 작업이 존재하지 않는다면 쉬게한다
 
-	Runtime				time(L"ADOAsync", ETime::ms);
 	const long long		totalProcessTime = 0x3E8;
 	long long			processTime = 0;
 	long long			sleepTime = 0;
@@ -143,9 +142,9 @@ void DatabaseManager::DatabaseLoop()
 
 	while (mIsRunning)
 	{
-		time.Start();
+		mTimeStamp.StartTimeStamp();
 		mADOTask.ProcessAsync();
-		processTime = static_cast<long long>(time.End());
+		processTime = static_cast<long long>(mTimeStamp.GetTimeStamp(0));
 
 		if (processTime > totalProcessTime)
 		{
