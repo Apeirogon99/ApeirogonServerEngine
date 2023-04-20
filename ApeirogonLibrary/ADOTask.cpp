@@ -1,27 +1,27 @@
 #include "pch.h"
-#include "ADOAsync.h"
+#include "ADOTask.h"
 
-ADOAsync::ADOAsync() : mADOWorkQueue(0xfff), mADOCompletionWorkQueue(0xfff)
+ADOTask::ADOTask() : mADOTaskQueue(0xfff), mADOCompletionWorkQueue(0xfff)
 {
 
 }
 
-ADOAsync::~ADOAsync()
+ADOTask::~ADOTask()
 {
 }
 
-void ADOAsync::ProcessAsync()
+void ADOTask::ProcessAsync()
 {
 	//모든 큐에 있는 비동기 IO작업을 돌면서 끝나있다면 콜백으로 보내준다
-	uint32 workCount = mADOWorkQueue.GetCount();
+	uint32 workCount = mADOTaskQueue.GetCount();
 	for (uint32 peek = 0; peek < workCount; ++peek)
 	{
-		ADOWork work;
-		mADOWorkQueue.Peek(work);
+		ADOItem work;
+		mADOTaskQueue.Peek(work);
 
 		if (work.mADORecordset.IsComplete())
 		{
-			mADOWorkQueue.Dequeue();
+			mADOTaskQueue.Dequeue();
 
 			//PacketSessionPtr&	session = work.mSession;
 			//ADOCommand&		command = work.mADOCommand;
@@ -33,14 +33,14 @@ void ADOAsync::ProcessAsync()
 	}
 }
 
-bool ADOAsync::IsCompletionWork()
+bool ADOTask::IsCompletionWork()
 {
 	return mADOCompletionWorkQueue.IsEmpty() == true ? false : true;
 }
 
-bool ADOAsync::GetCompeltionWork(ADOWork& outWork)
+bool ADOTask::GetCompeltionWork(ADOItem& outWork)
 {
-	ADOWork tempWork;
+	ADOItem tempWork;
 	if (true == mADOCompletionWorkQueue.Dequeue(tempWork))
 	{
 		outWork = tempWork;
@@ -50,8 +50,8 @@ bool ADOAsync::GetCompeltionWork(ADOWork& outWork)
 	return false;
 }
 
-void ADOAsync::AddWork(PacketSessionPtr& inSession, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
+void ADOTask::AddWork(PacketSessionPtr& inSession, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
 {
-	ADOWork newWork(inSession, inADOCommand, inADORecordset, inADOCallBack);
-	mADOWorkQueue.Enqueue(newWork);
+	ADOItem newWork(inSession, inADOCommand, inADORecordset, inADOCallBack);
+	mADOTaskQueue.Enqueue(newWork);
 }
