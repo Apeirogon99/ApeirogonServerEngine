@@ -33,8 +33,8 @@ private:
 class FastLockGuard
 {
 public:
-	FastLockGuard(FastSpinLock& spinLock);
-	~FastLockGuard();
+	APEIROGON_API FastLockGuard(FastSpinLock& spinLock);
+	APEIROGON_API ~FastLockGuard();
 
 private:
 	FastSpinLock& mSpinLock;

@@ -5,7 +5,21 @@ class RingBuffer
 public:
 	APEIROGON_API RingBuffer(const uint32 inCapcity) : mWritePos(0), mReadPos(0)
 	{
-		uint32 newCapcity = static_cast<uint32>(pow(2, floor(log2(inCapcity)) + 1));
+		if (inCapcity > UINT16_MAX)
+		{
+			wprintf(L"[CircularQueue] It's too big to make");
+		}
+
+		int32 newCapcity = 0;
+		if (!((inCapcity & (inCapcity - 1)) == 0))
+		{
+			newCapcity = static_cast<int32>(pow(2, floor(log2(inCapcity)) + 1));
+		}
+		else
+		{
+			newCapcity = static_cast<int32>(inCapcity);
+		}
+
 		mCapcity = newCapcity;
 		mIndexMask = newCapcity - 1;
 		mBuffer = new BYTE[newCapcity]();
@@ -29,21 +43,21 @@ public:
 	RingBuffer& operator=(RingBuffer&&) = delete;
 
 public:
-	APEIROGON_API uint32 Enqueue(const BYTE* inData, const uint32 inSize)
+	APEIROGON_API int32 Enqueue(const BYTE* inData, const int32 inSize)
 	{
-		uint32 processSize = 0;
+		int32 processSize = 0;
 		if (GetFreeSize() < inSize)
 		{
 			return processSize;
 		}
 
-		const uint32 PrevWritePos = GetWritePos();
+		const int32 PrevWritePos = GetWritePos();
 		const bool IsOverBuffer = (PrevWritePos + inSize) > GetTotalSize() ? true : false;
 		if (IsOverBuffer)
 		{
-			const uint32 OverLen = (PrevWritePos + inSize) - GetTotalSize();
-			const uint32 LessLen = inSize - OverLen;
-			const uint32 UsedLen = OverLen + LessLen;
+			const int32 OverLen = (PrevWritePos + inSize) - GetTotalSize();
+			const int32 LessLen = inSize - OverLen;
+			const int32 UsedLen = OverLen + LessLen;
 
 			::memcpy(&GetBuffer()[PrevWritePos], &inData[0], LessLen);
 			::memcpy(&GetBuffer()[0], &inData[LessLen], OverLen);
@@ -60,21 +74,21 @@ public:
 		return processSize;
 	}
 
-	APEIROGON_API uint32 Dequeue(BYTE* OutData, const uint32 inLen)
+	APEIROGON_API int32 Dequeue(BYTE* OutData, const int32 inLen)
 	{
-		uint32 processSize = 0;
+		int32 processSize = 0;
 		if (GetUsedSize() < inLen)
 		{
 			return processSize;
 		}
 
-		const uint32 PrevReadPos = GetReadPos();
+		const int32 PrevReadPos = GetReadPos();
 		const bool IsOverBuffer = (PrevReadPos + inLen) > GetTotalSize() ? true : false;
 		if (IsOverBuffer)
 		{
-			const uint32 OverLen = (PrevReadPos + inLen) - GetTotalSize();
-			const uint32 LessLen = inLen - OverLen;
-			const uint32 UsedLen = OverLen + LessLen;
+			const int32 OverLen = (PrevReadPos + inLen) - GetTotalSize();
+			const int32 LessLen = inLen - OverLen;
+			const int32 UsedLen = OverLen + LessLen;
 
 			::memcpy(OutData, &GetBuffer()[PrevReadPos], LessLen);
 			::memcpy(&OutData[LessLen], &GetBuffer()[0], OverLen);
@@ -91,21 +105,21 @@ public:
 		return processSize;
 	}
 
-	APEIROGON_API uint32 Peek(BYTE* OutData, const uint32 inLen)
+	APEIROGON_API int32 Peek(BYTE* OutData, const int32 inLen)
 	{
-		uint32 processSize = 0;
+		int32 processSize = 0;
 		if (GetUsedSize() < inLen)
 		{
 			return 0;
 		}
 
-		const uint32 PrevReadPos = GetReadPos();
+		const int32 PrevReadPos = GetReadPos();
 		const bool IsOverBuffer = (PrevReadPos + inLen) > GetTotalSize() ? true : false;
 		if (IsOverBuffer)
 		{
-			const uint32 OverLen = (PrevReadPos + inLen) - GetTotalSize();
-			const uint32 LessLen = inLen - OverLen;
-			const uint32 UsedLen = OverLen + LessLen;
+			const int32 OverLen = (PrevReadPos + inLen) - GetTotalSize();
+			const int32 LessLen = inLen - OverLen;
+			const int32 UsedLen = OverLen + LessLen;
 
 			::memcpy(OutData, &GetBuffer()[PrevReadPos], LessLen);
 			::memcpy(&OutData[LessLen], GetBuffer(), OverLen);
@@ -129,22 +143,22 @@ public:
 	}
 
 public:
-	APEIROGON_API void MoveRear(const uint32 inLen)
+	APEIROGON_API void MoveRear(const int32 inLen)
 	{
 		mWritePos = (mWritePos + inLen) & mIndexMask;
 	}
 
-	APEIROGON_API void MoveFront(const uint32 inLen)
+	APEIROGON_API void MoveFront(const int32 inLen)
 	{
 		mReadPos = (mReadPos + inLen) & mIndexMask;
 	}
 
-	inline uint32 GetWritePos() const
+	inline int32 GetWritePos() const
 	{
 		return mWritePos;
 	}
 
-	inline uint32 GetReadPos() const
+	inline int32 GetReadPos() const
 	{
 		return mReadPos;
 	}
@@ -164,9 +178,9 @@ public:
 		return &mBuffer[mReadPos];
 	}
 
-	inline uint32 GetUsedSize() const
+	inline int32 GetUsedSize() const
 	{
-		uint32 usedSize = 0;
+		int32 usedSize = 0;
 		if (GetWritePos() == GetReadPos())
 		{
 			usedSize = 0;
@@ -183,27 +197,27 @@ public:
 		return usedSize;
 	}
 
-	inline uint32 GetTotalSize() const
+	inline int32 GetTotalSize() const
 	{
 		return mCapcity;
 	}
 
-	inline uint32 GetFreeSize()	const
+	inline int32 GetFreeSize()	const
 	{
-		uint32 freeSize = GetTotalSize() - GetUsedSize();
+		int32 freeSize = GetTotalSize() - GetUsedSize();
 		return freeSize;
 	}
 
-	inline uint32 GetRecvMaxSize() const
+	inline int32 GetRecvMaxSize() const
 	{
-		uint32 maxSize = GetTotalSize() - GetWritePos();
+		int32 maxSize = GetTotalSize() - GetWritePos();
 		return maxSize;
 	}
 
 private:
-	uint32			mWritePos;
-	uint32			mReadPos;
-	uint32			mCapcity;
-	uint32			mIndexMask;
+	int32			mWritePos;
+	int32			mReadPos;
+	int32			mCapcity;
+	int32			mIndexMask;
 	BYTE*			mBuffer;
 };

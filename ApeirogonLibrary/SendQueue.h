@@ -4,8 +4,7 @@ class SendQueue
 {
 	enum class Default : int32
 	{
-		DO_ONCE_POPALL_COUNT = 100,
-		MAX_QUEUE_SIZE = 0xffff,
+		MAX_QUEUE_SIZE = 0xfff,
 	};
 
 public:
@@ -22,13 +21,14 @@ public:
 	APEIROGON_API void	Clear();
 	APEIROGON_API void	Push(SendBufferPtr& inSendBuffer);
 	APEIROGON_API void	Pop(SendBufferPtr& OutSendBuffer);
-	APEIROGON_API void	Pop(std::vector<SendBufferPtr> OutSendBuffers);
+	APEIROGON_API void	Pop(std::vector<SendBufferPtr>& OutSendBuffers);
 
 public:
 	APEIROGON_API bool	IsEmpty();
 	APEIROGON_API bool	IsFull();
 
 private:
+	FastSpinLock					mLock;
 	CircularQueue<SendBufferPtr>	mSendQueue;
 };
 

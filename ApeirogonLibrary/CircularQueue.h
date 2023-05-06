@@ -4,10 +4,24 @@ template<typename VariableType>
 class CircularQueue
 {
 public:
-	CircularQueue(uint32 inCapcity) : mHead(0), mTail(0)
+	CircularQueue(const uint32 inCapcity) : mHead(0), mTail(0)
 	{
 		//작업의 효율성을 위해 2의 제곱의 크기로 Capcity의 크기를 증가시켜야함
-		uint32 newCapcity = static_cast<uint32>(pow(2, floor(log2(inCapcity)) + 1));
+		if (inCapcity > UINT16_MAX)
+		{
+			wprintf(L"[CircularQueue] It's too big to make");
+		}
+
+		int32 newCapcity = 0;
+		if (!((inCapcity & (inCapcity - 1)) == 0))
+		{
+			newCapcity = static_cast<int32>(pow(2, floor(log2(inCapcity)) + 1));
+		}
+		else
+		{
+			newCapcity = static_cast<int32>(inCapcity);
+		}
+
 		mCapcity = newCapcity;
 		mIndexMask = newCapcity - 1;
 		mQueue = new VariableType[newCapcity]();
@@ -35,10 +49,10 @@ public:
 	bool Enqueue(const VariableType& inVariable)
 	{
 
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
 
-		const uint32 currentIndex = mTail;
-		const uint32 nextIndex = ((currentIndex + 1) & mIndexMask);
+		const int32 currentIndex = mTail;
+		const int32 nextIndex = ((currentIndex + 1) & mIndexMask);
 
 		if (nextIndex != mHead)
 		{
@@ -53,10 +67,10 @@ public:
 
 	bool Enqueue(VariableType&& inVariable)
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
 
-		const uint32 currentIndex = mTail;
-		const uint32 nextIndex = ((currentIndex + 1) & mIndexMask);
+		const int32 currentIndex = mTail;
+		const int32 nextIndex = ((currentIndex + 1) & mIndexMask);
 
 		if (nextIndex != mHead)
 		{
@@ -71,9 +85,9 @@ public:
 
 	bool Dequeue()
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
 
-		const uint32 currentIndex = mHead;
+		const int32 currentIndex = mHead;
 
 		if (currentIndex != mTail)
 		{
@@ -86,9 +100,9 @@ public:
 
 	bool Dequeue(VariableType& outVariable)
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
 
-		const uint32 currentIndex = mHead;
+		const int32 currentIndex = mHead;
 
 		if (currentIndex != mTail)
 		{
@@ -103,7 +117,7 @@ public:
 
 	bool Dequeue(VariableType outVariables[], const uint32 inNumber)
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
 		if (inNumber > GetUsedSize())
 		{
 			return false;
@@ -114,9 +128,9 @@ public:
 			return false;
 		}
 
-		uint32 currentIndex = mHead;
+		int32 currentIndex = mHead;
 
-		for (uint32 index = 0; index < inNumber; ++index)
+		for (int32 index = 0; index < inNumber; ++index)
 		{
 			outVariables[index] = std::move(mQueue[currentIndex]);
 			mHead = ((currentIndex + 0b1) & mIndexMask);
@@ -126,15 +140,15 @@ public:
 		return true;
 	}
 
-	bool Dequeue(std::vector<VariableType> outVariables)
+	bool Dequeue(std::vector<VariableType>& outVariables)
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
 
-		const uint32 curUsed = GetUsedSize();
-		uint32 currentIndex = mHead;
+		const int32 curUsed = GetUsedSize();
+		int32 currentIndex = mHead;
 
 		outVariables.resize(curUsed);
-		for (uint32 index = 0; index < curUsed; ++index)
+		for (int32 index = 0; index < curUsed; ++index)
 		{
 			outVariables[index] = std::move(mQueue[currentIndex]);
 			mHead = ((currentIndex + 0b1) & mIndexMask);
@@ -143,33 +157,12 @@ public:
 
 		return true;
 	}
-
-	//bool DequeueAll(VariableType outVariables[], uint32& outNumber)
-	//{
-	//	SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
-
-	//	const uint32 usedSize = GetUsedSize();
-	//	outVariables = new VariableType[usedSize]();
-
-	//	const uint32 currentIndex = mHead;
-	//	uint32 index = 0;
-
-	//	while (mHead != mTail)
-	//	{
-	//		const uint32 nextIndex = currentIndex + index++;
-	//		//outVariables[index++] = std::move(mQueue[nextIndex]);
-	//		mHead = ((nextIndex + 0b1) & mIndexMask);
-	//	}
-
-	//	outNumber = index;
-	//	return true;
-	//}
 
 	bool Peek(VariableType& outVariable)
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
 
-		const uint32 currentIndex = mHead;
+		const int32 currentIndex = mHead;
 
 		if (currentIndex != mTail)
 		{
@@ -180,13 +173,30 @@ public:
 		return false;
 	}
 
+	bool Peek(std::vector<VariableType>& outVariables)
+	{
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Write);
+
+		const int32 curUsed = GetUsedSize();
+		int32 currentIndex = mHead;
+
+		outVariables.resize(curUsed);
+		for (int32 index = 0; index < curUsed; ++index)
+		{
+			outVariables[index] = mQueue[currentIndex];
+			currentIndex = ((currentIndex + 0b1) & mIndexMask);
+		}
+
+		return true;
+	}
+
 
 
 	const VariableType* Peek()
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
 
-		const uint32 currentIndex = mHead;
+		const int32 currentIndex = mHead;
 
 		if (currentIndex != mTail)
 		{
@@ -199,20 +209,20 @@ public:
 public:
 	bool IsEmpty()
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
 		return (mHead == mTail);
 	}
 
 	bool IsFull()
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
 		return (((mTail + 0b1) & mIndexMask) == mHead);
 	}
 
-	uint32 GetCount()
+	int32 GetCount()
 	{
-		SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
-		uint32 Count = mTail - mHead;
+		//SRWLockGuard lockGuard(mSRWLock, ESRWLockMode::Read);
+		int32 Count = mTail - mHead;
 
 		if (Count < 0)
 		{
@@ -222,30 +232,35 @@ public:
 		return Count;
 	}
 
-protected:
-	uint32 GetUsedSize()
-	{
-		uint32 Count = mTail - mHead;
-
-		if (Count < 0)
-		{
-			Count += mCapcity;
-		}
-
-		return Count;
-	}
-
-	uint32 GetTotalSize()
+	int32 GetCapcity() const
 	{
 		return mCapcity;
 	}
 
-	uint32 GetFreeSize()
+protected:
+	int32 GetUsedSize()
+	{
+		int32 Count = 0;
+		Count = mTail - mHead;
+		if (Count < 0)
+		{
+			Count += mCapcity;
+		}
+
+		return Count;
+	}
+
+	int32 GetTotalSize()
+	{
+		return mCapcity;
+	}
+
+	int32 GetFreeSize()
 	{
 		return GetTotalSize() - GetUsedSize();
 	}
 
-	uint32 GetDoOnceSize()
+	int32 GetDoOnceSize()
 	{
 		if (mHead > mTail)
 		{
@@ -257,10 +272,10 @@ protected:
 
 private:
 	VariableType* mQueue;
-	SimpleSRWLock	mSRWLock;
-	uint32	mIndexMask;
-	uint32	mCapcity;
-	uint32	mHead;
-	uint32	mTail;
+	//SimpleSRWLock	mSRWLock;
+	int32	mIndexMask;
+	int32	mCapcity;
+	int32	mHead;
+	int32	mTail;
 };
 
