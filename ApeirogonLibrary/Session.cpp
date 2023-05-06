@@ -34,6 +34,8 @@ void Session::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
     case EventType::Send:
         ProcessSend(numOfBytes);
         break;
+    case EventType::Icmp:
+        ProcessIcmp();
     default:
         
         break;
@@ -63,6 +65,8 @@ bool Session::RegisterConnect()
 
     mConnectEvnet.Init();
     mConnectEvnet.owner = shared_from_this();
+
+    mRecvEvent.mRecvBuffer.Clean();
 
 
     SessionManagerPtr sessionManager = mSessionManager.lock();
@@ -101,7 +105,7 @@ void Session::RegisterRecv()
 
     mRecvEvent.Init();
     mRecvEvent.owner = shared_from_this();
-    mRecvEvent.Clean();
+    //mRecvEvent.Clean();
 
     if (false == mSocket->RecvEx(mRecvEvent))
     {
@@ -111,11 +115,30 @@ void Session::RegisterRecv()
 
 void Session::RegisterSend()
 {
-    if (false == IsConnected())
+
+    LONG IsSending = static_cast<LONG>(Default::SESSION_IS_SENDING);
+    IsSending = _InterlockedCompareExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_SENDING), static_cast<LONG>(Default::SESSION_IS_FREE));
+
+    if (IsSending == static_cast<LONG>(Default::SESSION_IS_SENDING))
+    {
         return;
+    }
+
+    if (false == IsConnected())
+    {
+        Disconnect(L"Is not connected");
+        return;
+    }
+
+    if (mSendQueue.IsEmpty())
+    {
+        _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
+        return;
+    }
 
     mSendEvent.Init();
     mSendEvent.owner = shared_from_this();
+    mSendEvent.Clean();
 
     // 보낼 데이터를 sendEvent에 등록
     mSendQueue.Pop(mSendEvent.sendBuffers);
@@ -123,9 +146,46 @@ void Session::RegisterSend()
     if (false == mSocket->SendEx(mSendEvent))
     {
         mSendEvent.owner = nullptr;
-        mSendEvent.sendBuffers.clear();
+        mSendEvent.Clean();
         _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
     }
+    
+}
+
+void Session::RegisterIcmp()
+{
+
+    LONG IsSending = static_cast<LONG>(Default::SESSION_IS_SENDING);
+    IsSending = _InterlockedCompareExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_SENDING), static_cast<LONG>(Default::SESSION_IS_FREE));
+
+    if (IsSending == static_cast<LONG>(Default::SESSION_IS_SENDING))
+    {
+        return;
+    }
+
+    if (false == IsConnected())
+    {
+        Disconnect(L"Is not connected");
+        return;
+    }
+
+    mIcmpEvent.Init();
+    mIcmpEvent.Clean();
+    mIcmpEvent.owner = shared_from_this();
+    mIcmpEvent.mIpAddr = mIpAddr;
+    mIcmpEvent.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+
+    if (false == mSocket->SendIcmp(mIcmpEvent))
+    {
+        mIcmpEvent.owner = nullptr;
+        mIcmpEvent.Clean();
+        _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
+    }
+    else
+    {
+        GetSessionManager()->GetService()->GetIOCPServer()->PostDispatch(0, mIcmpEvent);
+    }
+
 }
 
 void Session::ProcessConnect()
@@ -185,13 +245,9 @@ void Session::ProcessRecv(const uint32 numOfBytes)
         return;
     }
 
-    if (mRecvEvent.mRecvBuffer.GetUsedSize() != numOfBytes)
-    {
-        Disconnect(L"Different used size");
-        return;
-    }
-
-    if (mRecvBuffer.Enqueue(mRecvEvent.mRecvBuffer.GetReadBuffer(), numOfBytes) == false)
+    const uint32 stored = mRecvBuffer.Enqueue(mRecvEvent.mRecvBuffer.GetReadBuffer(), numOfBytes);
+    mRecvEvent.mRecvBuffer.MoveFront(stored);
+    if (stored == 0)
     {
         Disconnect(L"Free Overflow");
         return;
@@ -212,7 +268,7 @@ void Session::ProcessRecv(const uint32 numOfBytes)
 void Session::ProcessSend(const uint32 numOfBytes)
 {
     mSendEvent.owner = nullptr;
-    mSendEvent.sendBuffers.clear();
+    mSendEvent.Clean();
 
     if (numOfBytes == 0)
     {
@@ -230,6 +286,29 @@ void Session::ProcessSend(const uint32 numOfBytes)
     {
         RegisterSend();
     }
+}
+
+void Session::ProcessIcmp()
+{
+
+    PICMP_ECHO_REPLY echoReply = reinterpret_cast<PICMP_ECHO_REPLY>(mIcmpEvent.mReplyBuffer.GetReadBuffer());
+    if (echoReply->Address != 0 && echoReply->Status == IP_SUCCESS)
+    {        
+        const int64 limitRTT = 50;
+        const int64 avgRTT = mRoundTripTime.GetRoundTripTime();
+        const int64 roundTripTime = echoReply->RoundTripTime;
+
+        if (roundTripTime > avgRTT + limitRTT)
+        {
+            return;
+        }
+
+        mRoundTripTime.AddLatency(roundTripTime);
+        wprintf(L"ADDR = %ld, RTT = %lld\n", echoReply->Address ,echoReply->RoundTripTime);
+    }
+
+    _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
+
 }
 
 void Session::Connect()
@@ -250,17 +329,12 @@ void Session::Disconnect(const WCHAR* cause)
 void Session::Send(SendBufferPtr sendBuffer)
 {
     if (IsConnected() == false)
+    {
+        Disconnect(L"Can't Send");
         return;
-
-    LONG IsSending = static_cast<LONG>(Default::SESSION_IS_SENDING);
-    IsSending = _InterlockedCompareExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_SENDING), static_cast<LONG>(Default::SESSION_IS_FREE));
+    }
 
     mSendQueue.Push(sendBuffer);
-
-    if (IsSending == static_cast<LONG>(Default::SESSION_IS_FREE))
-    {
-        RegisterSend();
-    }
 }
 
 void Session::Recv()
@@ -329,6 +403,13 @@ IPAddressPtr Session::GetIpAddress() const
 RingBuffer& Session::GetRecvBuffer()
 {
     return mRecvBuffer;
+}
+
+const int64 Session::GetRoundTripTime()
+{
+    const int64 avgRTT = mRoundTripTime.GetRoundTripTime();
+    const int64 halfRTT = avgRTT / 2;
+    return halfRTT;
 }
 
 SessionManagerPtr Session::GetSessionManager()

@@ -77,12 +77,11 @@ bool IOCPServer::WorkDispatch(uint32 timeoutMs)
 	return true;
 }
 
-bool IOCPServer::PostDispatch(const uint32 len, const ULONG_PTR key)
+bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent& inEvent)
 {
-	const DWORD numOfBytes = static_cast<DWORD>(len);
-	IocpEvent* iocpEvent = nullptr;
+	ULONG_PTR key = 0;
 
-	bool ret = ::PostQueuedCompletionStatus(mIOCPHandle, numOfBytes, key, iocpEvent);
+	bool ret = ::PostQueuedCompletionStatus(mIOCPHandle, inNumOfBytes, key, &inEvent);
 	if (ret == false)
 	{
 		IOCPServerLog(L"[IOCPServer::PostDispatch()]");
@@ -95,12 +94,12 @@ bool IOCPServer::PostDispatch(const uint32 len, const ULONG_PTR key)
 void IOCPServer::IOCPErrorHandling(IocpEvent* inEvent)
 {
 	int32 code = WSAGetLastError();
-	SessionPtr session = std::static_pointer_cast<Session>(inEvent->owner);
+	//SessionPtr session = std::static_pointer_cast<Session>(inEvent->owner);
 
 	switch (code)
 	{
 	case ERROR_NETNAME_DELETED:
-		session->Disconnect(L"NETNAME_DELETED");
+		//session->Disconnect(L"NETNAME_DELETED");
 		break;
 
 	case WSA_WAIT_TIMEOUT:

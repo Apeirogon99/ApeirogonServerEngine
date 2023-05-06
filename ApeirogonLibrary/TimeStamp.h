@@ -15,8 +15,7 @@ private:
 
 public:
 	APEIROGON_API void		StartTimeStamp();
-	APEIROGON_API int64		GetTimeStamp(int64 inLatency = 0);
-
+	APEIROGON_API int64		GetTimeStamp();
 
 protected:
 	int64					GetEndTime(const ETime inTimeType = ETime::ms);

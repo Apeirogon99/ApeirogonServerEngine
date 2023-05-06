@@ -38,33 +38,36 @@ public:
 	bool RegisterDisconnect();
 	void RegisterRecv();
 	void RegisterSend();
+	void RegisterIcmp();
 
 	void ProcessConnect();
 	void ProcessDisconnect();
 	void ProcessRecv(const uint32 numOfBytes);
 	void ProcessSend(const uint32 numOfBytes);
+	void ProcessIcmp();
 
 public:
-	APEIROGON_API void Connect();
-	APEIROGON_API void Disconnect(const WCHAR* cause);
-	APEIROGON_API void Send(SendBufferPtr message);
-	APEIROGON_API void Recv();
+	APEIROGON_API void				Connect();
+	APEIROGON_API void				Disconnect(const WCHAR* cause);
+	APEIROGON_API void				Send(SendBufferPtr message);
+	APEIROGON_API void				Recv();
 
-	APEIROGON_API virtual void OnConnected() abstract;
-	APEIROGON_API virtual uint32 OnRecv(RingBuffer& inRingBuffer, uint32 inLen) abstract;
-	APEIROGON_API virtual void OnSend(uint32 len) abstract;
-	APEIROGON_API virtual void OnDisconnected() abstract;
+	APEIROGON_API virtual void		OnConnected() abstract;
+	APEIROGON_API virtual uint32	OnRecv(RingBuffer& inRingBuffer, uint32 inLen) abstract;
+	APEIROGON_API virtual void		OnSend(uint32 len) abstract;
+	APEIROGON_API virtual void		OnDisconnected() abstract;
 
-	APEIROGON_API bool IsValid();
+	APEIROGON_API bool				IsValid();
 
-	APEIROGON_API void SessionLog(const WCHAR* log, ...);
+	APEIROGON_API void				SessionLog(const WCHAR* log, ...);
 
 public:
-	bool IsConnected() const;
-	SessionPtr GetSession();
-	WinSocketPtr GetWinSocket() const;
-	IPAddressPtr GetIpAddress() const;
-	RingBuffer& GetRecvBuffer();
+	bool							IsConnected() const;
+	SessionPtr						GetSession();
+	WinSocketPtr					GetWinSocket() const;
+	IPAddressPtr					GetIpAddress() const;
+	RingBuffer&						GetRecvBuffer();
+	APEIROGON_API const int64		GetRoundTripTime();
 	APEIROGON_API SessionManagerPtr GetSessionManager();
 
 private:
@@ -77,10 +80,12 @@ private:
 	DisconnectEvent		mDisconnectEvent;
 	RecvEvent			mRecvEvent;
 	SendEvent			mSendEvent;
+	IcmpEvent			mIcmpEvent;
+	
+	RoundTripTime		mRoundTripTime;
 
 	volatile LONG		mIsSending;
 	SendQueue			mSendQueue;
-	std::queue<BYTE*>	mSendBuffers;
 
 	std::atomic<bool>	mIsConnect;
 };

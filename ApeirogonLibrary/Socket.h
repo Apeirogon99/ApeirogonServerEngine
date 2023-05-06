@@ -43,6 +43,10 @@ public:
 	APEIROGON_API bool				SendEx(SendEvent& sendEvent);
 
 public:
+	//ICMP
+	APEIROGON_API bool				SendIcmp(IcmpEvent& inIcmpEvent);
+
+public:
 	//SOCKET APEIROGON_API OPTIONS
 	APEIROGON_API bool				SetBoradcast(bool bAllowBroadcast);
 	APEIROGON_API bool				SetIpPktInfo();
@@ -60,4 +64,5 @@ protected:
 	ESocketType						mSocketType;
 	EProtocolType					mProtocolType;
 	uint16							mPortNo;
+	Icmp							mIcmp;
 };

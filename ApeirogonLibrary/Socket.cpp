@@ -408,6 +408,17 @@ bool WinSocket::SendEx(SendEvent& sendEvent)
     return true;
 }
 
+bool WinSocket::SendIcmp(IcmpEvent& inIcmpEvent)
+{
+    bool result = mIcmp.SendEcho(inIcmpEvent);
+    if (false == result)
+    {
+        SocketUtils::WinSocketError(L"WinSocket::SendIcmp()");
+    }
+
+    return result;
+}
+
 bool WinSocket::SetBoradcast(bool bAllowBroadcast)
 {
     int Param = bAllowBroadcast ? 1 : 0;
