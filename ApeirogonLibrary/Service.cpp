@@ -8,46 +8,43 @@ Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullpt
 
 Service::~Service()
 {
-	wprintf(L"[Service::~Service()] Close Service %lld\n", mServiceTime.GetTimeStamp());
+	wprintf(L"[Service::~Service()] Close service (Running time : %lld)\n", mServiceTime.GetTimeStamp());
 }
 
-void Service::ProcessNetworkIO()
+int64 Service::GetServiceTimeStamp()
 {
-	
-}
-
-void Service::ProcessDatabaseIO()
-{
-	ADOTask& databaseTask = GetDatabaseManager()->GetTask();
-	if (databaseTask.IsCompletionWork())
-	{
-		ADOItem item;
-		if (true == databaseTask.GetCompeltionWork(item))
-		{
-			PacketSessionPtr& session = item.mSession;
-			ADOCommand& command = item.mADOCommand;
-			ADORecordset& recordset = item.mADORecordset;
-			ADOCallBack& callback = item.mADOCallBack;
-
-			callback(session, command, recordset);
-		}
-	}
-}
-
-void Service::ProcessLogic()
-{
-	//Tick();
+	return mServiceTime.GetTimeStamp();
 }
 
 void Service::ServiceScheudler()
 {
+	TimeStamp	scheudlerTimeStamp(L"Scheudler");
+	const int64 maxProcessTime = 33;
+	int64		processTime = 0;
+	int64		sleepTime = 0;
+
 	while (IsServiceOpen())
 	{
-		ProcessNetworkIO();
-		
-		ProcessDatabaseIO();
+		scheudlerTimeStamp.StartTimeStamp();
+		const int64 serviceTimeStamp = mServiceTime.GetTimeStamp();
 
-		ProcessLogic();
+		mSessionManager->ProcessNetworkTask(serviceTimeStamp);
+		
+		mDatabaseManager->ProcessDatabaseTask();
+
+		Tick();
+
+		processTime = scheudlerTimeStamp.GetTimeStamp();
+		if (processTime > maxProcessTime)
+		{
+			wprintf(L"[Service::ServiceScheudler] Over process time %lld(sec)\n", processTime);
+		}
+		else
+		{
+			sleepTime = maxProcessTime - processTime;
+			//wprintf(L"[Service::ServiceScheudler] Sleep process time %lld(sec)\n", sleepTime);
+			std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
+		}
 	}
 }
 
@@ -67,11 +64,16 @@ bool Service::ServiceOpen()
 		return false;
 	}
 
-	const std::wstring ip = mListener->GetIpAddress()->GetIp();
+	std::wstring ip;
+	if (false == mListener->GetIpAddress()->GetIp(ip))
+	{
+		return false;
+	}
 	const uint16 port = mListener->GetIpAddress()->GetPort();
 	ServiceLog(L"[Service::ServiceOpen()] IP[%ws] Port[%d] service is Open\n", ip.c_str(), port);
 
 	mServiceTime.StartTimeStamp();
+
 	ServiceScheudler();
 
 	return true;
@@ -95,6 +97,12 @@ void Service::ServiceClose()
 
 		mLoggerManager->Shutdown();
 
+		mSessionManager.reset();
+		mDatabaseManager.reset();
+		mListener.reset();
+		mIOCPServer.reset();
+		mThreadManager.reset();
+		mLoggerManager.reset();
 	}
 
 }

@@ -24,11 +24,13 @@ public:
 	APEIROGON_API void					SetPort(const uint16 port);
 
 public:
-	APEIROGON_API std::wstring			GetIp();
+	APEIROGON_API bool					GetIp(std::wstring& outIP);
+	APEIROGON_API bool					GetIp(IN_ADDR& outIP);
+	APEIROGON_API bool					GetIp(IN6_ADDR& outIP);
 	APEIROGON_API uint16				GetPort() const;
 	APEIROGON_API sockaddr_storage		GetSockAddr() const;
-	APEIROGON_API int32				GetAddrSize() const;
-	APEIROGON_API EProtocolType		GetProtocolType() const;
+	APEIROGON_API int32					GetAddrSize() const;
+	APEIROGON_API EProtocolType			GetProtocolType() const;
 
 public:
 	APEIROGON_API void					Clear();

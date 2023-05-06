@@ -10,30 +10,35 @@ public:
 	SessionManager& operator=(const SessionManager& sessionManager) = delete;
 
 public:
-	bool		Prepare(const ServicePtr& service);
-	SessionPtr	CreateSession();
-	bool		InsertSession(const SessionPtr& session);
-	bool		ReleaseSession(const SessionPtr& session);
-	bool		FindSession(const SessionPtr& session);
-	void		BroadCastSession(SendBufferPtr sendBuffer);
-	void		Shutdown();
-
+	bool					Prepare(const ServicePtr& service);
+	SessionPtr				CreateSession();
+	bool					InsertSession(const SessionPtr& session);
+	APEIROGON_API bool		ReleaseSession(const SessionPtr& session);
+	APEIROGON_API bool		FindSession(const SessionPtr& session);
+	APEIROGON_API void		BroadCastSession(SendBufferPtr sendBuffer);
+	void					Shutdown();
 public:
 	
-	uint32		GetSessionCount() const;
-	uint32		GetMaxSessionCount() const;
-	APEIROGON_API ServicePtr GetService() const;
+	uint32						GetSessionCount() const;
+	uint32						GetMaxSessionCount() const;
+	APEIROGON_API int64			GetServiceTimeStamp() const;
+	APEIROGON_API ServicePtr	GetService() const;
+
+public:
+	APEIROGON_API virtual bool	InitNetworkTask() abstract;
+	APEIROGON_API virtual bool	ProcessNetworkTask(const int64 inServiceTimeStamp);
+	void WorkDispatch();
 
 public:
 	APEIROGON_API void SessionManagerLog(const WCHAR* log, ...);
 
 protected:
-	uint32					mSessionCount;
-	uint32					mMaxSessionCount;
-	uint32					mMaxBufferSize;
-	std::set<SessionPtr>	mSessions;
-	SessionFactory			mSessionFactory;
-	ServicePtr				mService;
-	FastSpinLock			mFastSpinLock;
-	std::mutex				mLock;
+	uint32							mSessionCount;
+	uint32							mMaxSessionCount;
+	uint32							mMaxBufferSize;
+	std::set<SessionPtr>			mSessions;
+	SessionFactory					mSessionFactory;
+	ServicePtr						mService;
+	FastSpinLock					mFastSpinLock;
+	std::vector<NetworkQueuePtr>	mNetworkTasks;
 };

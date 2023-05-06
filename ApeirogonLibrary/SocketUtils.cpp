@@ -19,6 +19,14 @@ void SocketUtils::Init()
 		return;
 	}
 
+	HINSTANCE IcmpDll = LoadLibrary(L"ICMP.DLL");
+	if (IcmpDll == NULL)
+	{
+		return;
+	}
+
+
+
 	WinSocketPtr dummySocket = CreateSocket(EProtocolType::IPv4, ESocketType::SOCKTYPE_Streaming);
 
 	BindWindowsFunction(dummySocket, WSAID_CONNECTEX, reinterpret_cast<LPVOID*>(&ConnectEx));
@@ -101,7 +109,7 @@ void SocketUtils::WinSocketError(const WCHAR* function)
 		return;
 	}
 
-	wprintf(L"[%s] ERROR(%d) : %s", function, code, GetSocektError());
+	wprintf(L"[%ws][%ws] ERROR(%d) : %ws", Time::NowTime(true).c_str(), function, code, GetSocektError());
 }
 
 WCHAR* SocketUtils::GetSocektError()
@@ -118,7 +126,7 @@ WCHAR* SocketUtils::GetSocektError()
 	LPWSTR pBuffer = NULL;
 	FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 		NULL, 
-		WSAGetLastError(), 
+		GetLastError(), 
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
 		(LPWSTR)&pBuffer,
 		0, 

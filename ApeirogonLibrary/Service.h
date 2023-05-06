@@ -23,10 +23,8 @@ public:
 	APEIROGON_API void			ServiceClose();
 
 public:
-	APEIROGON_API virtual void	Tick(const float deltaTime) abstract;
-	void						ProcessNetworkIO();
-	void						ProcessDatabaseIO();
-	void						ProcessLogic();
+	APEIROGON_API virtual void	Tick() abstract;
+	APEIROGON_API int64			GetServiceTimeStamp();
 	void						ServiceScheudler();
 
 protected:
@@ -50,6 +48,7 @@ public:
 	IOCPServerPtr				GetIOCPServer() const;
 	ThreadManagerPtr			GetThreadManager() const;
 	LoggerManagerPtr			GetLoggerManager() const;
+
 	APEIROGON_API DatabaseManagerPtr			GetDatabaseManager() const;
 
 protected:

@@ -194,7 +194,7 @@ void IPAddress::SetPort(const uint16 port)
 	}
 }
 
-std::wstring IPAddress::GetIp()
+bool IPAddress::GetIp(std::wstring& outIP)
 {
 	EProtocolType currentType = GetProtocolType();
 
@@ -203,21 +203,47 @@ std::wstring IPAddress::GetIp()
 		WCHAR IPv4AddrBuffer[INET_ADDRSTRLEN];
 		const sockaddr_in* IPv4Addr = reinterpret_cast<const sockaddr_in*>(&mAddr);
 		::InetNtopW(AF_INET, &IPv4Addr->sin_addr, IPv4AddrBuffer, INET_ADDRSTRLEN);
-		return std::wstring(IPv4AddrBuffer);
+		outIP = IPv4AddrBuffer;
+		return true;
 	}
 	else if (currentType == EProtocolType::IPv6)
 	{
 		WCHAR IPv6AddrBuffer[INET6_ADDRSTRLEN];
 		const sockaddr_in6* IPv6Addr = reinterpret_cast<const sockaddr_in6*>(&mAddr);
 		::InetNtopW(AF_INET6, &IPv6Addr->sin6_addr, IPv6AddrBuffer, INET6_ADDRSTRLEN);
-		return std::wstring(IPv6AddrBuffer);
-	}
-	else
-	{
-		//LOG
+		outIP = IPv6AddrBuffer;
+		return true;
 	}
 
-	return std::wstring();
+	return false;
+}
+
+bool IPAddress::GetIp(IN_ADDR& outIP)
+{
+	EProtocolType currentType = GetProtocolType();
+
+	if (currentType == EProtocolType::IPv4)
+	{
+		const sockaddr_in* IPv4Addr = reinterpret_cast<const sockaddr_in*>(&mAddr);
+		outIP = IPv4Addr->sin_addr;
+		return true;
+	}
+
+	return false;
+}
+
+bool IPAddress::GetIp(IN6_ADDR& outIP)
+{
+	EProtocolType currentType = GetProtocolType();
+
+	if (currentType == EProtocolType::IPv4)
+	{
+		const sockaddr_in6* IPv6Addr = reinterpret_cast<const sockaddr_in6*>(&mAddr);
+		outIP = IPv6Addr->sin6_addr;
+		return true;
+	}
+
+	return false;
 }
 
 uint16 IPAddress::GetPort() const
@@ -326,8 +352,11 @@ std::wstring IPAddress::ToString()
 	GetNameInfoW((sockaddr*)&mAddr, GetAddrSize(), host, NI_MAXHOST, serverice, NI_MAXSERV, 0);
 
 	WCHAR info[NI_MAXHOST + NI_MAXSERV];
-	std::wstring ip = GetIp();
-	swprintf_s(info, L"[IP = %ws:%ws][HOST = %ws]", ip.c_str(), serverice, host);
+	std::wstring ip;
+	if (GetIp(ip))
+	{
+		swprintf_s(info, L"[IP = %ws:%ws][HOST = %ws]", ip.c_str(), serverice, host);
+	}
 
 	return std::wstring(info);
 }

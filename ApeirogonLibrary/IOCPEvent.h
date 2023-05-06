@@ -7,7 +7,8 @@ enum class EventType : uint8
 	Accept,
 	//PreRecv,
 	Recv,
-	Send
+	Send,
+	Icmp,
 };
 
 /*--------------
@@ -81,7 +82,30 @@ class SendEvent : public IocpEvent
 {
 public:
 	SendEvent() : IocpEvent(EventType::Send) { }
+	void Clean() { sendBuffers.clear(); }
 
-	//CircularQueue mSendQeue;
+	//CircularQueue<SendBufferPtr> mSendQeue;
 	std::vector<SendBufferPtr> sendBuffers;
+};
+
+class IcmpEvent : public IocpEvent
+{
+	enum
+	{
+		ICMP_MAX_BUFFER		= 0xff,
+		ICMP_MAX_TIMEOUT	= 0x1F4,
+	};
+
+public:
+	IcmpEvent() : IocpEvent(EventType::Icmp), mReplyBuffer(ICMP_MAX_BUFFER), mTimeout(ICMP_MAX_TIMEOUT){ }
+	void Clean() 
+	{ 
+		mReplyBuffer.Clean();
+		mIpAddr.reset();
+	}
+
+public:
+	IPAddressPtr	mIpAddr;
+	RingBuffer		mReplyBuffer;
+	uint32			mTimeout;
 };
