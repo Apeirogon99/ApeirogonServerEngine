@@ -66,8 +66,17 @@ public:
 
 class RecvEvent : public IocpEvent
 {
+	enum
+	{
+		RECV_MAX_BUFFER = 0xffff,
+	};
+
 public:
-	RecvEvent() : IocpEvent(EventType::Recv), mRecvBuffer(0xffff) { Clean(); }
+	RecvEvent() : IocpEvent(EventType::Recv)
+	{
+		Clean(); 
+		mRecvBuffer.InitBuffer(RECV_MAX_BUFFER);
+	}
 	void Clean() { mRecvBuffer.Clean(); }
 	
 public:
@@ -97,7 +106,10 @@ class IcmpEvent : public IocpEvent
 	};
 
 public:
-	IcmpEvent() : IocpEvent(EventType::Icmp), mReplyBuffer(ICMP_MAX_BUFFER), mTimeout(ICMP_MAX_TIMEOUT){ }
+	IcmpEvent() : IocpEvent(EventType::Icmp), mTimeout(ICMP_MAX_TIMEOUT)
+	{ 
+		mReplyBuffer.InitBuffer(ICMP_MAX_BUFFER);
+	}
 	void Clean() 
 	{ 
 		mReplyBuffer.Clean();

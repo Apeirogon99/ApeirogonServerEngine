@@ -3,27 +3,9 @@
 class RingBuffer
 {
 public:
-	APEIROGON_API RingBuffer(const uint32 inCapcity) : mWritePos(0), mReadPos(0)
+	APEIROGON_API RingBuffer() : mWritePos(0), mReadPos(0), mIndexMask(0), mCapcity(0), mBuffer(nullptr)
 	{
-		if (inCapcity > UINT16_MAX)
-		{
-			wprintf(L"[CircularQueue] It's too big to make");
-		}
 
-		int32 newCapcity = 0;
-		if (!((inCapcity & (inCapcity - 1)) == 0))
-		{
-			newCapcity = static_cast<int32>(pow(2, floor(log2(inCapcity)) + 1));
-		}
-		else
-		{
-			newCapcity = static_cast<int32>(inCapcity);
-		}
-
-		mCapcity = newCapcity;
-		mIndexMask = newCapcity - 1;
-		mBuffer = new BYTE[newCapcity]();
-		Clean();
 	}
 
 	APEIROGON_API ~RingBuffer()
@@ -43,6 +25,38 @@ public:
 	RingBuffer& operator=(RingBuffer&&) = delete;
 
 public:
+	APEIROGON_API bool	InitBuffer(const uint32 inCapcity)
+	{
+		if (inCapcity > UINT16_MAX)
+		{
+			wprintf(L"[RingBuffer] It's too big to make\n");
+			return false;
+		}
+
+		if (mBuffer != nullptr)
+		{
+			wprintf(L"[RingBuffer] It's already make\n");
+			return false;
+		}
+
+		int32 newCapcity = 0;
+		if (!((inCapcity & (inCapcity - 1)) == 0))
+		{
+			newCapcity = static_cast<int32>(pow(2, floor(log2(inCapcity)) + 1));
+		}
+		else
+		{
+			newCapcity = static_cast<int32>(inCapcity);
+		}
+
+		mCapcity = newCapcity;
+		mIndexMask = newCapcity - 1;
+		mBuffer = new BYTE[newCapcity]();
+		Clean();
+
+		return (mBuffer != nullptr) ? true : false;
+	}
+
 	APEIROGON_API int32 Enqueue(const BYTE* inData, const int32 inSize)
 	{
 		int32 processSize = 0;

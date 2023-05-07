@@ -69,10 +69,11 @@ bool Icmp::SendEcho(IcmpEvent& inIcmpEvent)
 	
 
 	DWORD result = 0;
-	result = IcmpSendEcho2
+	result = IcmpSendEcho2Ex
 	(
 		mIcmpFile, 
 		inIcmpEvent.hEvent,
+		NULL,
 		NULL,
 		NULL,
 		addr.S_un.S_addr, 
@@ -83,6 +84,8 @@ bool Icmp::SendEcho(IcmpEvent& inIcmpEvent)
 		inIcmpEvent.mReplyBuffer.GetRecvMaxSize(), 
 		inIcmpEvent.mTimeout
 	);
+
+	WaitForSingleObject(inIcmpEvent.hEvent, INFINITE);
 
 	if (result == 0)
 	{

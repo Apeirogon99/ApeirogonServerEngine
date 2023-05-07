@@ -207,6 +207,15 @@
     <ClCompile Include="PriorityQueue.cpp">
       <Filter>Source\Private\Memory</Filter>
     </ClCompile>
+    <ClCompile Include="RoundTripTime.cpp">
+      <Filter>Source\Private\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Icmp.cpp">
+      <Filter>Source\Private\Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="SessionMonitoring.cpp">
+      <Filter>Source\Private\Network</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DefaultSize.h">
@@ -337,6 +346,15 @@
     </ClInclude>
     <ClInclude Include="DefaultMacros.h">
       <Filter>PCH\Public\Default</Filter>
+    </ClInclude>
+    <ClInclude Include="RoundTripTime.h">
+      <Filter>Source\Public\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Icmp.h">
+      <Filter>Source\Public\Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="SessionMonitoring.h">
+      <Filter>Source\Public\Network</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

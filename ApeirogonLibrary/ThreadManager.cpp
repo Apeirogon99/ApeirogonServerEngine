@@ -42,6 +42,8 @@ void ThreadManager::DoWorkThreads(const uint32 inTimeOut)
 	while (mService->IsServiceOpen())
 	{
 		mService->GetIOCPServer()->WorkDispatch(inTimeOut);
+
+		mService->GetSessionManager()->WorkDispatch();
 	}
 }
 

@@ -21,6 +21,7 @@ public:
 	
 	uint32						GetSessionCount() const;
 	uint32						GetMaxSessionCount() const;
+	uint32						GetMaxBufferSize() const;
 	APEIROGON_API int64			GetServiceTimeStamp() const;
 	APEIROGON_API ServicePtr	GetService() const;
 

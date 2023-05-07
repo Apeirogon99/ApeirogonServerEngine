@@ -24,7 +24,8 @@ public:
 
 	void DatabaseLoop();
 
-	APEIROGON_API ADOTask& GetTask();
+	APEIROGON_API void		ProcessDatabaseTask();
+	APEIROGON_API ADOTask&	GetTask();
 
 protected:
 	APEIROGON_API virtual void InitializeDatabase() abstract;

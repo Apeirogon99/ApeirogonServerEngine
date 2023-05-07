@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Session.h"
 
-Session::Session() : mRecvBuffer(0xffff)
+Session::Session()
 {
     mSocket = SocketUtils::CreateSocket(EProtocolType::IPv4, ESocketType::SOCKTYPE_Streaming);
     _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
@@ -183,7 +183,7 @@ void Session::RegisterIcmp()
     }
     else
     {
-        GetSessionManager()->GetService()->GetIOCPServer()->PostDispatch(0, mIcmpEvent);
+        GetSessionManager()->GetService()->GetIOCPServer()->PostDispatch(mIcmpEvent.mReplyBuffer.GetUsedSize(), mIcmpEvent);
     }
 
 }
@@ -298,13 +298,11 @@ void Session::ProcessIcmp()
         const int64 avgRTT = mRoundTripTime.GetRoundTripTime();
         const int64 roundTripTime = echoReply->RoundTripTime;
 
-        if (roundTripTime > avgRTT + limitRTT)
+        if (roundTripTime < avgRTT + limitRTT)
         {
-            return;
+            mRoundTripTime.AddLatency(roundTripTime);
+            wprintf(L"ADDR = %ld, RTT = %lld\n", echoReply->Address, echoReply->RoundTripTime);
         }
-
-        mRoundTripTime.AddLatency(roundTripTime);
-        wprintf(L"ADDR = %ld, RTT = %lld\n", echoReply->Address ,echoReply->RoundTripTime);
     }
 
     _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
@@ -343,9 +341,23 @@ void Session::Recv()
         return;
 }
 
-void Session::SetSessionManager(const SessionManagerRef& sessionManager)
+bool Session::Prepare(const SessionManagerRef& sessionManager)
 {
     mSessionManager = sessionManager;
+
+    uint32 maxBufferSize = mSessionManager.lock()->GetMaxBufferSize();
+    if (false == mRecvBuffer.InitBuffer(maxBufferSize))
+    {
+        return false;
+    }
+
+    SessionRef sessionRef = std::static_pointer_cast<Session>(shared_from_this());
+    if (false == mMonitoring.SetOwnerSession(sessionRef))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 void Session::SetIpAddress(IPAddressPtr& ipAddr)
@@ -403,6 +415,11 @@ IPAddressPtr Session::GetIpAddress() const
 RingBuffer& Session::GetRecvBuffer()
 {
     return mRecvBuffer;
+}
+
+SessionMonitoring& Session::GetMonitoring()
+{
+    return mMonitoring;
 }
 
 const int64 Session::GetRoundTripTime()

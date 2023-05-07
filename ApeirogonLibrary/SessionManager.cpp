@@ -48,7 +48,11 @@ SessionPtr SessionManager::CreateSession()
 	}
 
 	SessionPtr session = mSessionFactory();
-	session->SetSessionManager(weak_from_this());
+	if (false == session->Prepare(weak_from_this()))
+	{
+		SessionManagerLog(L"[SessionManager::CreateSession()] failed to session prepare\n");
+		return nullptr;
+	}
 
 	IOCPServerPtr iocpServer = mService->GetIOCPServer();
 	WinSocketPtr sessionSocket = session->GetWinSocket();
@@ -134,6 +138,11 @@ uint32 SessionManager::GetMaxSessionCount() const
 	return mMaxSessionCount;
 }
 
+uint32 SessionManager::GetMaxBufferSize() const
+{
+	return mMaxBufferSize;
+}
+
 int64 SessionManager::GetServiceTimeStamp() const
 {
 	return mService->GetServiceTimeStamp();
@@ -161,7 +170,7 @@ void SessionManager::WorkDispatch()
 	{
 		curSession->get()->RegisterSend();
 
-		curSession->get()->RegisterIcmp();
+		curSession->get()->GetMonitoring().CheckSession();
 	}
 }
 

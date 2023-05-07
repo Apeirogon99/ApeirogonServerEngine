@@ -29,7 +29,7 @@ public:
 	APEIROGON_API virtual void Dispatch(class IocpEvent* iocpEvent, int32 numOfBytes = 0) override;
 
 public:
-	void SetSessionManager(const SessionManagerRef& service);
+	bool Prepare(const SessionManagerRef& service);
 	void SetIpAddress(IPAddressPtr& ipAddr);
 	void Shutdown();
 
@@ -67,6 +67,7 @@ public:
 	WinSocketPtr					GetWinSocket() const;
 	IPAddressPtr					GetIpAddress() const;
 	RingBuffer&						GetRecvBuffer();
+	SessionMonitoring&				GetMonitoring();
 	APEIROGON_API const int64		GetRoundTripTime();
 	APEIROGON_API SessionManagerPtr GetSessionManager();
 
@@ -81,6 +82,7 @@ private:
 	RecvEvent			mRecvEvent;
 	SendEvent			mSendEvent;
 	IcmpEvent			mIcmpEvent;
+	SessionMonitoring	mMonitoring;
 	
 	RoundTripTime		mRoundTripTime;
 

@@ -33,6 +33,7 @@ using PacketSessionPtr = std::shared_ptr<PacketSession>;
 using IOCPServerPtr = std::shared_ptr<IOCPServer>;
 using IOCPObjectPtr = std::shared_ptr<IocpObject>;
 using SessionPtr = std::shared_ptr<Session>;
+using SessionRef = std::weak_ptr<Session>;
 using ListenerPtr = std::shared_ptr<Listener>;
 using WinSocketPtr = std::shared_ptr<WinSocket>;
 using IPAddressPtr = std::shared_ptr<IPAddress>;

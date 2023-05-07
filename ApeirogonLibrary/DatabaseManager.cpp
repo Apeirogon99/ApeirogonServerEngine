@@ -144,7 +144,7 @@ void DatabaseManager::DatabaseLoop()
 	{
 		mTimeStamp.StartTimeStamp();
 		mADOTask.ProcessAsync();
-		processTime = static_cast<long long>(mTimeStamp.GetTimeStamp(0));
+		processTime = static_cast<long long>(mTimeStamp.GetTimeStamp());
 
 		if (processTime > totalProcessTime)
 		{
@@ -164,6 +164,24 @@ void DatabaseManager::DatabaseLoop()
 		{
 			KeepConnection();
 			keepConnectionTime = 0;
+		}
+	}
+}
+
+void DatabaseManager::ProcessDatabaseTask()
+{
+	ADOTask& databaseTask = GetTask();
+	if (databaseTask.IsCompletionWork())
+	{
+		ADOItem item;
+		if (true == databaseTask.GetCompeltionWork(item))
+		{
+			PacketSessionPtr& session	= item.mSession;
+			ADOCommand& command			= item.mADOCommand;
+			ADORecordset& recordset		= item.mADORecordset;
+			ADOCallBack& callback		= item.mADOCallBack;
+
+			callback(session, command, recordset);
 		}
 	}
 }
