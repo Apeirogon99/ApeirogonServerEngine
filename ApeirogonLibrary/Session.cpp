@@ -294,14 +294,13 @@ void Session::ProcessIcmp()
     PICMP_ECHO_REPLY echoReply = reinterpret_cast<PICMP_ECHO_REPLY>(mIcmpEvent.mReplyBuffer.GetReadBuffer());
     if (echoReply->Address != 0 && echoReply->Status == IP_SUCCESS)
     {        
-        const int64 limitRTT = 50;
-        const int64 avgRTT = mRoundTripTime.GetRoundTripTime();
+        const int64 limitRTT = 40;
         const int64 roundTripTime = echoReply->RoundTripTime;
 
-        if (roundTripTime < avgRTT + limitRTT)
+        if (roundTripTime < limitRTT)
         {
             mRoundTripTime.AddLatency(roundTripTime);
-            wprintf(L"ADDR = %ld, RTT = %lld\n", echoReply->Address, echoReply->RoundTripTime);
+            //wprintf(L"ADDR = %ld, RTT = %lld\n", echoReply->Address, echoReply->RoundTripTime);
         }
     }
 
