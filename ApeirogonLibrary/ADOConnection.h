@@ -22,6 +22,7 @@ public:
 	APEIROGON_API const WCHAR* GetDatabaseName() const;
 	APEIROGON_API ADOConnectionInfo GetConnectionInfo() const;
 	APEIROGON_API void SetConnectionInfo(const ADOConnectionInfo& info);
+	APEIROGON_API _bstr_t GetConnectionString();
 
 protected:
 	void Initlialze();

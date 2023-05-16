@@ -92,7 +92,7 @@ bool SessionManager::ReleaseSession(const SessionPtr& session)
 		return false;
 	}
 
-	SessionManagerLog(L"[SessionManager::ReleaseSession()] (CUR : %ld)\n", --mSessionCount);
+	SessionManagerLog(L"[SessionManager::ReleaseSession()] Success to release session (CUR : %ld)\n", --mSessionCount);
 	
 	return true;
 }

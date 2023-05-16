@@ -35,6 +35,12 @@ bool DatabaseManager::Prepare(const ServicePtr& service)
 		return false;
 	}
 
+	HRESULT hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	if (hResult == S_FALSE)
+	{
+		return false;
+	}
+
 	InitializeDatabase();
 	if (false == StartDatabaseManager())
 	{
@@ -67,6 +73,7 @@ void DatabaseManager::Shutdown()
 		}
 	}
 
+	CoUninitialize();
 	DatabaseLog(L"[DatabaseManager::Shutdown] Database manager successfully shutdown\n");
 	mService.reset();
 }
@@ -127,11 +134,11 @@ void DatabaseManager::PrintConnectionPoolState()
 
 void DatabaseManager::DatabaseLoop()
 {
-	// 프로세스를 실행시키는 시간이 짧을 수 있으니까 일부로 sleep을 사용해 잠시 쉬게 해준다
-	// 기준은 totalProcessTime과 비교하여 만약에 넘는다면 문제가 있는 것이고
-	// 안넘는다면 수행한 processTime에서 빼서 쉬게 한다
-
-	// 만약에 큐에 작업이 존재하지 않는다면 쉬게한다
+	HRESULT hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	if (hResult == S_FALSE)
+	{
+		return;
+	}
 
 	const long long		totalProcessTime = 0x3E8;
 	long long			processTime = 0;
@@ -143,7 +150,9 @@ void DatabaseManager::DatabaseLoop()
 	while (mIsRunning)
 	{
 		mTimeStamp.StartTimeStamp();
+
 		mADOTask.ProcessAsync();
+
 		processTime = static_cast<long long>(mTimeStamp.GetTimeStamp());
 
 		if (processTime > totalProcessTime)
@@ -166,6 +175,8 @@ void DatabaseManager::DatabaseLoop()
 			keepConnectionTime = 0;
 		}
 	}
+
+	CoUninitialize();
 }
 
 void DatabaseManager::ProcessDatabaseTask()
@@ -173,15 +184,12 @@ void DatabaseManager::ProcessDatabaseTask()
 	ADOTask& databaseTask = GetTask();
 	if (databaseTask.IsCompletionWork())
 	{
-		ADOItem item;
+		ADOItemPtr item;
 		if (true == databaseTask.GetCompeltionWork(item))
 		{
-			PacketSessionPtr& session	= item.mSession;
-			ADOCommand& command			= item.mADOCommand;
-			ADORecordset& recordset		= item.mADORecordset;
-			ADOCallBack& callback		= item.mADOCallBack;
+			item->Execute();
 
-			callback(session, command, recordset);
+			item.reset();
 		}
 	}
 }

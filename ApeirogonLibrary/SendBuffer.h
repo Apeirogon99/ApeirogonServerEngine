@@ -12,6 +12,7 @@ public:
 	{
 
 	}
+
 	APEIROGON_API ~SendBuffer()
 	{
 		delete[] mBuffer;

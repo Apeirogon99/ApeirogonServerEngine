@@ -55,6 +55,7 @@ public:
 	APEIROGON_API virtual void		OnConnected() abstract;
 	APEIROGON_API virtual uint32	OnRecv(RingBuffer& inRingBuffer, uint32 inLen) abstract;
 	APEIROGON_API virtual void		OnSend(uint32 len) abstract;
+	APEIROGON_API virtual void		OnIcmp() abstract;
 	APEIROGON_API virtual void		OnDisconnected() abstract;
 
 	APEIROGON_API bool				IsValid();

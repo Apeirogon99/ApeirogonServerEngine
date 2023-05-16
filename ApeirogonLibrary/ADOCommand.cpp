@@ -43,6 +43,8 @@ ADOCommand::ADOCommand(const ADOCommand& inCommand)
 			mParams[param] = inCommand.mParams[param];
 		}
 
+		mConnectionInfo = inCommand.mConnectionInfo;
+
 		Attach(inCommand, true);
 	}
 }
@@ -59,6 +61,8 @@ ADOCommand& ADOCommand::operator=(const ADOCommand& inCommand)
 			mParams[param] = inCommand.mParams[param];
 		}
 
+		mConnectionInfo = inCommand.mConnectionInfo;
+
 		Attach(inCommand, true);
 	}
 
@@ -68,12 +72,6 @@ ADOCommand& ADOCommand::operator=(const ADOCommand& inCommand)
 void ADOCommand::Initlialze()
 {
 	HRESULT hResult = S_FALSE;
-
-	hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	if (FAILED(hResult))
-	{
-		return;
-	}
 
 	// CreateInstance
 	hResult = this->CreateInstance(__uuidof(Command));
@@ -89,7 +87,7 @@ void ADOCommand::Initlialze()
 	}
 
 	VARIANT_BOOL prepared = VARIANT_TRUE;
-	long timeout = 30;
+	long timeout = 0;
 	CommandTypeEnum commandType = CommandTypeEnum::adCmdStoredProc;
 
 	commandInterface->PutPrepared(prepared);
@@ -100,7 +98,6 @@ void ADOCommand::Initlialze()
 void ADOCommand::UnInitlialze()
 {
 
-	CoUninitialize();
 }
 
 HRESULT ADOCommand::PutRefActiveConnection(ADOConnection& connection)
@@ -147,13 +144,14 @@ void ADOCommand::SetStoredProcedure(ADOConnection& connection, const WCHAR* stor
 	}
 
 	//commandInterface->ActiveConnection = connection;
+	mConnectionInfo = connection.GetConnectionInfo();
 	hResult = PutRefActiveConnection(connection);
-	if (FAILED(hResult))
+	if (hResult == S_FALSE)
 	{
 		wprintf(L"[DBCommand::StoredProcCommand] Failed to PutRefActiveConnection\n");
 		return;
 	}
-
+	this->GetInterfacePtr()->GetActiveConnection();
 	commandInterface->PutCommandText(storedProcName);
 }
 
@@ -173,6 +171,7 @@ void ADOCommand::ExecuteStoredProcedure(ADORecordset& recordset, EExcuteReturnTy
 	}
 
 	recordset->PutRefSource(*this);
+	recordset.SetConnectionInfo(mConnectionInfo);
 
 	long executeOptions;
 	switch (type)
@@ -182,11 +181,11 @@ void ADOCommand::ExecuteStoredProcedure(ADORecordset& recordset, EExcuteReturnTy
 		recordset = commandInterface->Execute(NULL, &vtMissing, executeOptions);
 		break;
 	case EExcuteReturnType::Wait_Return:
-		executeOptions = adCmdStoredProc | adAsyncFetchNonBlocking;
+		executeOptions = adCmdStoredProc | adExecuteRecord;
 		recordset = commandInterface->Execute(NULL, &vtMissing, executeOptions);
 		break;
 	case EExcuteReturnType::Async_Return:
-		executeOptions = adCmdStoredProc | adAsyncExecute;
+		executeOptions = adCmdStoredProc | adAsyncFetchNonBlocking;
 		recordset = commandInterface->Execute(NULL, &vtMissing, executeOptions);
 		break;
 	default:
@@ -429,4 +428,63 @@ ADOVariant ADOCommand::GetOutputParam(const WCHAR* name)
 
 	_variant_t variant;
 	return variant;
+}
+
+_variant_t ADOCommand::GetActiveConnetion()
+{
+	auto commandInterface = this->GetInterfacePtr();
+	if (!commandInterface)
+	{
+		return S_FALSE;
+	}
+
+	auto connection = commandInterface->GetActiveConnection();
+	if (!connection)
+	{
+		return _variant_t(NULL);
+	}
+
+	return _variant_t((IDispatch*)connection, true);
+}
+
+ADOVariant ADOCommand::GetActiveConnectionString()
+{
+	auto commandInterface = this->GetInterfacePtr();
+	if (!commandInterface)
+	{
+		wprintf(L"[DBCommand::GetActiveConnection] is not valid commandInterface\n");
+		return NULL;
+	}
+
+	ADOVariant connectionString = mConnectionInfo.ToString();
+
+	return connectionString;
+}
+
+ADOVariant ADOCommand::GetCommandSource()
+{
+	auto commandInterface = this->GetInterfacePtr();
+	if (!commandInterface)
+	{
+		wprintf(L"[DBCommand::GetCommandSource] is not valid commandInterface\n");
+		return NULL;
+	}
+
+	ADOVariant comandSource = commandInterface->GetCommandText().GetBSTR();
+
+	return comandSource;
+}
+
+bool ADOCommand::IsExecuteComplete() const
+{
+	auto commandInterface = this->GetInterfacePtr();
+	if (!commandInterface)
+	{
+		wprintf(L"[DBCommand::IsExecuteComplete] is not valid commandInterface\n");
+		return false;
+	}
+
+	long state = commandInterface->GetState();
+
+	return (state == ObjectStateEnum::adStateClosed) ? true : false;
 }

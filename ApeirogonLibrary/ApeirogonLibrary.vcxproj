@@ -186,6 +186,7 @@
     <ClInclude Include="DefaultTypes.h" />
     <ClInclude Include="FastSpinLock.h" />
     <ClInclude Include="Foward.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Icmp.h" />
     <ClInclude Include="IOCP.h" />
     <ClInclude Include="IOCPEvent.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="EngineAssert.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FastSpinLock.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Icmp.cpp" />
     <ClCompile Include="IOCP.cpp" />
     <ClCompile Include="IOCPEvent.cpp" />

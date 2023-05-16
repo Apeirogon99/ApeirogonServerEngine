@@ -1,56 +1,84 @@
 #include "pch.h"
 #include "ADORecordset.h"
+#include "ADOCommand.h"
 
 ADORecordset::ADORecordset()
 {
 	Initlialze();
-	SetActiveEvent();
+	//SetActiveEvent();
 }
 
 ADORecordset::~ADORecordset()
 {
-	SetDeactiveateEvent();
+	//SetDeactiveateEvent();
 	UnInitlialze();
 }
 
 ADORecordset::ADORecordset(_RecordsetPtr recordset)
 {
 	Initlialze();
-	SetActiveEvent();
+	//SetActiveEvent();
 
 	if (recordset)
+	{
+		mRefCount++;
 		Attach(recordset, true);
+	}
+
 }
 
 ADORecordset& ADORecordset::operator=(_RecordsetPtr recordset)
 {
 	Initlialze();
-	SetActiveEvent();
+	//SetActiveEvent();
 
 	if (recordset)
+	{
+		mRefCount++;
 		Attach(recordset, true);
+	}
 
 	return *this;
 }
 
 ADORecordset::ADORecordset(const ADORecordset& inRecordset)
 {
-	if (inRecordset)
+
+	mRefCount = inRecordset.mRefCount;
+
+	_RecordsetPtr tempRecorset = inRecordset.GetInterfacePtr();
+	if (tempRecorset)
 	{
-		Initlialze();
-		SetActiveEvent();
-		Attach(inRecordset, true);
+		mRefCount++;
+		Attach(tempRecorset, true);
 	}
+
+	mConnectionPointContainer	= inRecordset.mConnectionPointContainer;
+	mConnectionPoint			= inRecordset.mConnectionPoint;
+	mRecordsetEvent				= inRecordset.mRecordsetEvent;
+	mUnknown					= inRecordset.mUnknown;
+	mRstEvt						= inRecordset.mRstEvt;
+	mConnectionInfo = inRecordset.mConnectionInfo;
 }
 
 ADORecordset& ADORecordset::operator=(const ADORecordset& inRecordset)
 {
-	if (inRecordset)
+
+	mRefCount = inRecordset.mRefCount;
+
+	_RecordsetPtr tempRecorset = inRecordset.GetInterfacePtr();
+	if (tempRecorset)
 	{
-		Initlialze();
-		SetActiveEvent();
-		Attach(inRecordset, true);
+		mRefCount++;
+		Attach(tempRecorset, true);
 	}
+
+	mConnectionPointContainer = inRecordset.mConnectionPointContainer;
+	mConnectionPoint = inRecordset.mConnectionPoint;
+	mRecordsetEvent = inRecordset.mRecordsetEvent;
+	mUnknown = inRecordset.mUnknown;
+	mRstEvt = inRecordset.mRstEvt;
+	mConnectionInfo = inRecordset.mConnectionInfo;
 
 	return *this;
 }
@@ -58,12 +86,6 @@ ADORecordset& ADORecordset::operator=(const ADORecordset& inRecordset)
 void ADORecordset::Initlialze()
 {
 	HRESULT hResult = S_FALSE;
-
-	hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	if (FAILED(hResult))
-	{
-		return;
-	}
 
 	// CreateInstance
 	hResult = this->CreateInstance(__uuidof(Recordset));
@@ -79,37 +101,68 @@ void ADORecordset::Initlialze()
 	}
 
 	//DefaultSetting
-	
+	mRefCount = 0;
 }
 
 void ADORecordset::UnInitlialze()
 {
-	Close();
-	CoUninitialize();
+	mRefCount--;
+	//Close();
 }
 
 void ADORecordset::Open()
 {
-	HRESULT					hResult = S_FALSE;
+	HRESULT	hResult = S_FALSE;
 	auto recordsetInterface = this->GetInterfacePtr();
 	if (!recordsetInterface)
 	{
 		return;
 	}
 
-	recordsetInterface->CursorLocation = adUseClient;
-	recordsetInterface->CursorType = adOpenStatic;
-	recordsetInterface->LockType = adLockBatchOptimistic;
+	recordsetInterface->CursorLocation	= adUseClient;
+	recordsetInterface->CursorType		= adOpenStatic;
+	recordsetInterface->LockType		= adLockBatchOptimistic;
 
-	_variant_t		commandText = recordsetInterface->GetSource();
-	_variant_t		activeConnectString = recordsetInterface->GetActiveConnection();
-	CursorTypeEnum	cursorType = CursorTypeEnum::adOpenForwardOnly;
-	LockTypeEnum	lockType = LockTypeEnum::adLockReadOnly;
-	long option = CommandTypeEnum::adCmdStoredProc | ExecuteOptionEnum::adAsyncExecute;
-	hResult = recordsetInterface->Open(commandText, vtMissing, cursorType, lockType, option);
+	ADOVariant		commandText			= recordsetInterface->GetSource();
+	ADOVariant		activeConnection	= recordsetInterface->GetActiveConnection();
+	CursorTypeEnum	cursorType			= CursorTypeEnum::adOpenForwardOnly;
+	LockTypeEnum	lockType			= LockTypeEnum::adLockReadOnly;
+	long			option				= CommandTypeEnum::adCmdText;
+
+	hResult = recordsetInterface->Open("EXEC dbo.load_character_sp", activeConnection.mVar, cursorType, lockType, option);
 }
 
-bool ADORecordset::IsOpen()
+void ADORecordset::Open(class ADOCommand& inCommand, class ADOConnection& inConnection)
+{
+	HRESULT	hResult = S_FALSE;
+	auto recordsetInterface = this->GetInterfacePtr();
+	if (!recordsetInterface)
+	{
+		return;
+	}
+
+	recordsetInterface->CursorLocation	= adUseClient;
+	recordsetInterface->CursorType		= CursorTypeEnum::adOpenForwardOnly;
+	recordsetInterface->LockType		= LockTypeEnum::adLockReadOnly;
+
+	_variant_t		commandText			= inCommand.GetCommandSource().mVar;
+	_variant_t		activeConnection	= inConnection.GetConnectionInfo().ToString();
+	CursorTypeEnum	cursorType			= CursorTypeEnum::adOpenForwardOnly;
+	LockTypeEnum	lockType			= LockTypeEnum::adLockReadOnly;
+	long			option				= CommandTypeEnum::adCmdText;
+	
+	try
+	{
+		hResult = recordsetInterface->Open(commandText, activeConnection, cursorType, lockType, option);
+	}
+	catch (_com_error& error)
+	{
+		const TCHAR* msg = error.ErrorMessage();
+		std::wcout << msg << std::endl;
+	}
+}
+
+bool ADORecordset::IsOpen() const
 {
 	auto recordsetInterface = this->GetInterfacePtr();
 	if (!recordsetInterface)
@@ -119,19 +172,6 @@ bool ADORecordset::IsOpen()
 
 	long state = recordsetInterface->GetState();
 	return (state == ObjectStateEnum::adStateOpen) ? true : false;
-}
-
-bool ADORecordset::IsComplete()
-{
-	auto recordsetInterface = this->GetInterfacePtr();
-	if (!recordsetInterface)
-	{
-		return false;
-	}
-
-	long state = recordsetInterface->GetState();
-
-	return (state == ObjectStateEnum::adStateClosed) ? true : false;
 }
 
 void ADORecordset::Close()
@@ -230,7 +270,7 @@ bool ADORecordset::IsEof()
 	auto recordsetInterface = this->GetInterfacePtr();
 	if (!recordsetInterface)
 	{
-		return S_FALSE;
+		return false;
 	}
 
 	VARIANT_BOOL isEnd = recordsetInterface->GetadoEOF();
@@ -261,13 +301,13 @@ ADOVariant ADORecordset::GetFieldItem(const WCHAR* filedName)
 	return tempParam;
 }
 
+void ADORecordset::SetConnectionInfo(ADOConnectionInfo& inConnectionInfo)
+{
+	mConnectionInfo = inConnectionInfo;
+}
+
 void ADORecordset::SetActiveEvent()
 {
-	if (mIsEvent == true)
-	{
-		return;
-	}
-	mIsEvent = true;
 
 	// Start using the Recordset events  
 	HRESULT hResult;
@@ -302,11 +342,6 @@ void ADORecordset::SetActiveEvent()
 
 void ADORecordset::SetDeactiveateEvent()
 {
-	if (mIsEvent == false)
-	{
-		return;
-	}
-	mIsEvent = false;
 
 	// Stop using the Recordset events  
 	HRESULT hResult;

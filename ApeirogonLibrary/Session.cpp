@@ -228,7 +228,7 @@ void Session::ProcessDisconnect()
 
     if (false == manager->ReleaseSession(GetSession()))
     {
-        SessionLog(L"Session::ProcessDisconnect()");
+        SessionLog(L"Failed to release session");
         return;
     }
 
@@ -300,9 +300,11 @@ void Session::ProcessIcmp()
         if (roundTripTime < limitRTT)
         {
             mRoundTripTime.AddLatency(roundTripTime);
-            //wprintf(L"ADDR = %ld, RTT = %lld\n", echoReply->Address, echoReply->RoundTripTime);
+            wprintf(L"ADDR = %ld, RTT = %lld\n", echoReply->Address, echoReply->RoundTripTime);
         }
     }
+
+    OnIcmp();
 
     _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
 
@@ -318,9 +320,13 @@ void Session::Disconnect(const WCHAR* cause)
     if (mIsConnect.exchange(false) == false)
         return;
 
-    SessionLog(L"[Session::Disconnect()] : %ws\n", cause);
+    SessionLog(L"[Session::Disconnect()] %ws\n", cause);
 
-    RegisterDisconnect();
+    if (false == RegisterDisconnect())
+    {
+        SessionLog(L"[Session::Disconnect()] Failed to disconnect\n");
+    }
+
 }
 
 void Session::Send(SendBufferPtr sendBuffer)

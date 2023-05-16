@@ -4,32 +4,54 @@
 ADOConnection::ADOConnection()
 {
 	Initlialze();
-	SetActiveEvent();
+	//SetActiveEvent();
 }
 
 ADOConnection::~ADOConnection()
 {
-	SetDeactiveateEvent();
+	//SetDeactiveateEvent();
 	UnInitlialze();
 }
 
-ADOConnection::ADOConnection(const ADOConnection& connection)
+ADOConnection::ADOConnection(const ADOConnection& inConnection)
 {
-	if (connection)
+	if (inConnection)
 	{
 		Initlialze();
-		SetActiveEvent();
-		Attach(connection, true);
+		//SetActiveEvent();
+		Attach(inConnection, true);
+
+		mConnectionPointContainer = inConnection.mConnectionPointContainer;
+		mConnectionPoint = inConnection.mConnectionPoint;
+		mConnectionEvent = inConnection.mConnectionEvent;
+		mUnknown = inConnection.mUnknown;
+		mConnEvt = inConnection.mConnEvt;
+
+		if (inConnection.mConnectionInfo.ToString() != nullptr)
+		{
+			mConnectionInfo = inConnection.mConnectionInfo;
+		}
 	}
 }
 
-ADOConnection& ADOConnection::operator=(const ADOConnection& connection)
+ADOConnection& ADOConnection::operator=(const ADOConnection& inConnection)
 {
-	if (connection)
+	if (inConnection)
 	{
 		Initlialze();
-		SetActiveEvent();
-		Attach(connection, true);
+		//SetActiveEvent();
+		Attach(inConnection, true);
+
+		mConnectionPointContainer	= inConnection.mConnectionPointContainer;
+		mConnectionPoint			= inConnection.mConnectionPoint;
+		mConnectionEvent			= inConnection.mConnectionEvent;
+		mUnknown					= inConnection.mUnknown;
+		mConnEvt					= inConnection.mConnEvt;
+
+		if (inConnection.mConnectionInfo.ToString() != nullptr)
+		{
+			mConnectionInfo = inConnection.mConnectionInfo;
+		}
 	}
 
 	return *this;
@@ -110,7 +132,7 @@ void ADOConnection::Close()
 	if (IsOpen())
 	{
 		connectionInterface->Close();
-		connectionInterface->PutConnectionString("");
+		//connectionInterface->PutConnectionString("");
 	}
 }
 
@@ -203,15 +225,20 @@ void ADOConnection::SetConnectionInfo(const ADOConnectionInfo& info)
 	mConnectionInfo = info;
 }
 
+_bstr_t ADOConnection::GetConnectionString()
+{
+	auto connectionInterface = this->GetInterfacePtr();
+	if (!connectionInterface)
+	{
+		return _bstr_t();
+	}
+
+	return connectionInterface->GetConnectionString();
+}
+
 void ADOConnection::Initlialze()
 {
 	HRESULT hResult = S_FALSE;
-
-	hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	if (FAILED(hResult))
-	{
-		return;
-	}
 
 	// CreateInstance
 	hResult = this->CreateInstance(__uuidof(Connection));
@@ -246,6 +273,5 @@ void ADOConnection::Initlialze()
 
 void ADOConnection::UnInitlialze()
 {
-	Close();
-	CoUninitialize();
+	
 }

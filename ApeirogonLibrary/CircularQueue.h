@@ -106,9 +106,8 @@ public:
 
 		if (currentIndex != mTail)
 		{
-			outVariable = mQueue[currentIndex];
+			outVariable = std::move(mQueue[currentIndex]);
 			mHead = ((currentIndex + 0b1) & mIndexMask);
-
 			return true;
 		}
 

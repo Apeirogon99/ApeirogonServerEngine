@@ -1,22 +1,43 @@
 #pragma once
 
-using ADOCallBack = std::function<void(PacketSessionPtr&, ADOCommand&, ADORecordset&)>;
+using ADOCallBack = std::function<void(PacketSessionPtr&, ADOConnection&, ADOCommand&, ADORecordset&)>;
 
 class ADOItem
 {
 public:
-	ADOItem() {}
-	ADOItem(PacketSessionPtr& inSession, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack) : mSession(inSession), mADOCommand(inADOCommand), mADORecordset(inADORecordset), mADOCallBack(inADOCallBack) {}
-	~ADOItem() {}
+	ADOItem()
+	{
 
-	ADOItem(const ADOItem& inWork) : mSession(inWork.mSession), mADOCommand(inWork.mADOCommand), mADORecordset(inWork.mADORecordset), mADOCallBack(inWork.mADOCallBack) {}
-	ADOItem& operator=(const ADOItem& inWork)
+	}
+
+	ADOItem(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
+	{
+		mSession		= inSession;
+		mADOConnection	= inADOConnection;
+		mADOCommand		= inADOCommand;
+		mADORecordset	= inADORecordset;
+		mADOCallBack	= inADOCallBack;
+	}
+	~ADOItem() 
+	{
+		Release();
+	}
+
+	ADOItem(const ADOItem& inWork)
 	{
 		mSession		= inWork.mSession;
+		mADOConnection	= inWork.mADOConnection;
 		mADOCommand		= inWork.mADOCommand;
 		mADORecordset	= inWork.mADORecordset;
 		mADOCallBack	= inWork.mADOCallBack;
-
+	}
+	ADOItem& operator=(const ADOItem& inWork)
+	{
+		mSession		= inWork.mSession;
+		mADOConnection	= inWork.mADOConnection;
+		mADOCommand		= inWork.mADOCommand;
+		mADORecordset	= inWork.mADORecordset;
+		mADOCallBack	= inWork.mADOCallBack;
 		return *this;
 	}
 
@@ -25,7 +46,34 @@ protected:
 	ADOItem& operator=(ADOItem&&) = delete;
 
 public:
+	void Execute()
+	{
+		mADOCallBack(mSession, mADOConnection, mADOCommand, mADORecordset);
+	}
+
+	void Release()
+	{
+		mSession.reset();
+
+		if (mADORecordset.IsOpen())
+		{
+			mADORecordset.Close();
+		}
+		mADORecordset.Release();
+
+		mADOCommand.Release();
+
+		if (mADOConnection.IsOpen())
+		{
+			mADOConnection.Close();
+		}
+		mADOConnection.Release();
+		mADOCallBack = NULL;
+	}
+
+public:
 	PacketSessionPtr	mSession;
+	ADOConnection		mADOConnection;
 	ADOCommand			mADOCommand;
 	ADORecordset		mADORecordset;
 	ADOCallBack			mADOCallBack;
@@ -49,13 +97,14 @@ public:
 
 public:
 	bool IsCompletionWork();
-	bool GetCompeltionWork(ADOItem& outWork);
+	bool GetCompeltionWork(ADOItemPtr& outWork);
 
 public:
-	APEIROGON_API void AddWork(PacketSessionPtr& inSession, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack);
+	APEIROGON_API void AddWork(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack);
 	
 
 private:
-	CircularQueue<ADOItem>	mADOTaskQueue;
-	CircularQueue<ADOItem>	mADOCompletionWorkQueue;
+	FastSpinLock				mLock;
+	CircularQueue<ADOItemPtr>	mADOTaskQueue;
+	CircularQueue<ADOItemPtr>	mADOCompletionWorkQueue;
 };

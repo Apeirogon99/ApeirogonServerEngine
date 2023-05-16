@@ -12,24 +12,19 @@ ADOTask::~ADOTask()
 
 void ADOTask::ProcessAsync()
 {
-	//모든 큐에 있는 비동기 IO작업을 돌면서 끝나있다면 콜백으로 보내준다
-	uint32 workCount = mADOTaskQueue.GetCount();
-	for (uint32 peek = 0; peek < workCount; ++peek)
+
+	FastLockGuard lockGuard(mLock);
+	const ADOItemPtr* PeekItem = mADOTaskQueue.Peek();
+	if (nullptr == PeekItem)
 	{
-		ADOItem work;
-		mADOTaskQueue.Peek(work);
+		return;
+	}
 
-		if (work.mADORecordset.IsComplete())
-		{
-			mADOTaskQueue.Dequeue();
-
-			//PacketSessionPtr&	session = work.mSession;
-			//ADOCommand&		command = work.mADOCommand;
-			//ADORecordset&		recordset = work.mADORecordset;
-			//ADOCallBack&		callback = work.mADOCallBack;
-			//callback(session, command, recordset);
-			mADOCompletionWorkQueue.Enqueue(work);
-		}
+	if (PeekItem->get()->mADOCommand.IsExecuteComplete())
+	{
+		ADOItemPtr dequeueItem;
+		mADOTaskQueue.Dequeue(dequeueItem);
+		mADOCompletionWorkQueue.Enqueue(std::move(dequeueItem));
 	}
 }
 
@@ -38,20 +33,23 @@ bool ADOTask::IsCompletionWork()
 	return mADOCompletionWorkQueue.IsEmpty() == true ? false : true;
 }
 
-bool ADOTask::GetCompeltionWork(ADOItem& outWork)
+bool ADOTask::GetCompeltionWork(ADOItemPtr& outWork)
 {
-	ADOItem tempWork;
+	ADOItemPtr tempWork;
+	FastLockGuard lockGuard(mLock);
 	if (true == mADOCompletionWorkQueue.Dequeue(tempWork))
 	{
-		outWork = tempWork;
+		outWork = std::move(tempWork);
 		return true;
 	}
 	
 	return false;
 }
 
-void ADOTask::AddWork(PacketSessionPtr& inSession, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
+void ADOTask::AddWork(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
 {
-	ADOItem newWork(inSession, inADOCommand, inADORecordset, inADOCallBack);
-	mADOTaskQueue.Enqueue(newWork);
+	FastLockGuard lockGuard(mLock);
+	
+	ADOItemPtr newWork = std::make_shared<ADOItem>(inSession, inADOConnection, inADOCommand, inADORecordset, inADOCallBack);
+	mADOTaskQueue.Enqueue(std::move(newWork));
 }

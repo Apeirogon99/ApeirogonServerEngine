@@ -20,8 +20,8 @@ protected:
 
 public:
 	APEIROGON_API void			Open();
-	APEIROGON_API bool			IsOpen();
-	APEIROGON_API bool			IsComplete();
+	APEIROGON_API void			Open(class ADOCommand& inCommand, class ADOConnection& inConnection);
+	APEIROGON_API bool			IsOpen() const;
 	APEIROGON_API void			Close();
 	APEIROGON_API void			SetAsync();
 
@@ -33,6 +33,7 @@ public:
 	APEIROGON_API bool			IsEof();
 	APEIROGON_API ADOVariant	GetFieldItem(const WCHAR* filedName);
 
+	APEIROGON_API void			SetConnectionInfo(ADOConnectionInfo& inConnectionInfo);
 	APEIROGON_API void			SetActiveEvent();
 	APEIROGON_API void			SetDeactiveateEvent();
 
@@ -47,6 +48,9 @@ private:
 	IUnknown*					mUnknown;
 	DWORD						mRstEvt;
 
+	ADOConnectionInfo			mConnectionInfo;
+
+	uint8 mRefCount;
 	bool mIsEvent;
 };
 

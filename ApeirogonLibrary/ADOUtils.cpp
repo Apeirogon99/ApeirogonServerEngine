@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "ADOUtils.h"
 
-ADOConnectionInfo::ADOConnectionInfo()
+ADOConnectionInfo::ADOConnectionInfo() : mType(EDBMSTypes::None)
 {
+	wmemset(mConnectString, 0, 128);
 }
 
 ADOConnectionInfo::ADOConnectionInfo(const WCHAR* provider, const WCHAR* server, const WCHAR* database, const WCHAR* security, const WCHAR* trusted, const WCHAR* id, const WCHAR* password, const EDBMSTypes type) : mType(type)

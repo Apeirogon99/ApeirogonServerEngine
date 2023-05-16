@@ -31,6 +31,11 @@ public:
 	APEIROGON_API ADOVariant	GetParam(const int16 index);
 	APEIROGON_API ADOVariant	GetParam(const WCHAR* name);
 	APEIROGON_API ADOVariant	GetOutputParam(const WCHAR* name);
+	APEIROGON_API _variant_t	GetActiveConnetion();
+	APEIROGON_API ADOVariant	GetActiveConnectionString();
+	APEIROGON_API ADOVariant	GetCommandSource();
+
+	APEIROGON_API bool			IsExecuteComplete() const;
 
 	APEIROGON_API _CommandPtr	GetCommandPtr() { return *this; }
 
@@ -40,7 +45,8 @@ protected:
 	HRESULT PutRefActiveConnection(ADOConnection& connection);
 
 private:
-	const WCHAR*	mParams[100] = { nullptr, };
-	int32			mCurParamsCount = 0;
+	const WCHAR*		mParams[100] = { nullptr, };
+	int32				mCurParamsCount = 0;
+	ADOConnectionInfo	mConnectionInfo;
 };
 

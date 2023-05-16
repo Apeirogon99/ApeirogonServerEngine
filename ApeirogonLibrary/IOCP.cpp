@@ -94,18 +94,23 @@ bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent& inEvent)
 void IOCPServer::IOCPErrorHandling(IocpEvent* inEvent)
 {
 	int32 code = WSAGetLastError();
-	//SessionPtr session = std::static_pointer_cast<Session>(inEvent->owner);
+
+	switch (code)
+	{
+	case WSA_WAIT_TIMEOUT: return;
+	case WSA_IO_PENDING: return;
+	}
+
+	SessionPtr session = std::static_pointer_cast<Session>(inEvent->owner);
 
 	switch (code)
 	{
 	case ERROR_NETNAME_DELETED:
-		//session->Disconnect(L"NETNAME_DELETED");
+		session->Disconnect(L"ERROR_NETNAME_DELETED");
 		break;
 
-	case WSA_WAIT_TIMEOUT:
-		break;
-
-	case WSA_IO_PENDING:
+	case ERROR_NETWORK_ACCESS_DENIED:
+		session->Disconnect(L"ERROR_NETWORK_ACCESS_DENIED");
 		break;
 
 	default:

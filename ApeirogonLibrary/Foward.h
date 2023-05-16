@@ -27,6 +27,7 @@ class LoggerManager;
 
 class NetworkTaskNode;
 class NetworkQueue;
+class ADOItem;
 
 using ServicePtr = std::shared_ptr<Service>;
 using PacketSessionPtr = std::shared_ptr<PacketSession>;
@@ -43,6 +44,7 @@ using DatabaseManagerPtr = std::shared_ptr<DatabaseManager>;
 using NetworkTaskNodePtr = std::shared_ptr<NetworkTaskNode>;
 using NetworkQueuePtr = std::shared_ptr<NetworkQueue>;
 using SendBufferPtr = std::shared_ptr<SendBuffer>;
+using ADOItemPtr = std::shared_ptr<ADOItem>;
 
 using SessionManagerPtr = std::shared_ptr<SessionManager>;
 using SessionManagerRef = std::weak_ptr<SessionManager>;

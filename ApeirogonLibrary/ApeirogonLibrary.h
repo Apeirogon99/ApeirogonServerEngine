@@ -109,6 +109,7 @@
 //		   SERVER			//
 //==========================//
 #include "NetworkTask.h"
+#include "GameObject.h"
 #include "ThreadManager.h"
 #include "IOCPEvent.h"
 #include "IOCP.h"
