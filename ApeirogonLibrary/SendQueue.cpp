@@ -13,6 +13,7 @@ SendQueue::~SendQueue()
 
 void SendQueue::Clear()
 {
+	FastLockGuard lockGuard(mLock);
 	const uint32 count = mSendQueue.GetCount();
 	for (uint32 index = 0; index < count; ++index)
 	{
@@ -33,16 +34,12 @@ void SendQueue::Push(SendBufferPtr& inSendBuffer)
 
 void SendQueue::Pop(SendBufferPtr& OutSendBuffer)
 {
-	SendBufferPtr tempSendBuffer;
-
 	FastLockGuard lockGuard(mLock);
-	if (false == mSendQueue.Dequeue(tempSendBuffer))
+	if (false == mSendQueue.Dequeue(OutSendBuffer))
 	{
 		wprintf(L"[SendQueue::Pop] Pop Error");
 		return;
 	}
-
-	OutSendBuffer = std::move(tempSendBuffer);
 }
 
 void SendQueue::Pop(std::vector<SendBufferPtr>& OutSendBuffers)

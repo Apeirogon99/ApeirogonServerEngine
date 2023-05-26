@@ -7,6 +7,7 @@ public:
 
 public:
 	static std::wstring NowTime(const bool useMs);
+	APEIROGON_API static int64 GetUTCTime();
 
 };
 

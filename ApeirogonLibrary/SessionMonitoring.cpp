@@ -68,7 +68,7 @@ bool SessionMonitoring::CheckPing(EMonitoringResult& outResult)
 {
 	const int64 timeStamp = mMonitoringTimeStamp.GetTimeStamp();
 
-	if (timeStamp < mLastPingCount + static_cast<int64>(Default::MONITOR_MAX_HEARTBEAT))
+	if (timeStamp < mLastPingCount + static_cast<int64>(Default::MONITOR_MAX_SYNC_TIME))
 	{
 		outResult = EMonitoringResult::MR_Not_Enough_Time;
 		return true;
@@ -85,5 +85,6 @@ bool SessionMonitoring::CheckPing(EMonitoringResult& outResult)
 
 	ownerSession->RegisterIcmp();
 
+	outResult = EMonitoringResult::MR_Success;
 	return true;
 }

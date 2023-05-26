@@ -291,18 +291,17 @@ void Session::ProcessSend(const uint32 numOfBytes)
 void Session::ProcessIcmp()
 {
 
-    PICMP_ECHO_REPLY echoReply = reinterpret_cast<PICMP_ECHO_REPLY>(mIcmpEvent.mReplyBuffer.GetReadBuffer());
-    if (echoReply->Address != 0 && echoReply->Status == IP_SUCCESS)
-    {        
-        const int64 limitRTT = 40;
-        const int64 roundTripTime = echoReply->RoundTripTime;
+    //PICMP_ECHO_REPLY echoReply = reinterpret_cast<PICMP_ECHO_REPLY>(mIcmpEvent.mReplyBuffer.GetReadBuffer());
+    //if (echoReply->Address != 0 && echoReply->Status == IP_SUCCESS)
+    //{        
+    //    const int64 limitRTT = 40;
+    //    const int64 roundTripTime = echoReply->RoundTripTime;
 
-        if (roundTripTime < limitRTT)
-        {
-            mRoundTripTime.AddLatency(roundTripTime);
-            wprintf(L"ADDR = %ld, RTT = %lld\n", echoReply->Address, echoReply->RoundTripTime);
-        }
-    }
+    //    if (roundTripTime < limitRTT)
+    //    {
+    //        mRoundTripTime.AddLatency(roundTripTime);
+    //    }
+    //}
 
     OnIcmp();
 
@@ -381,8 +380,11 @@ bool Session::IsValid()
 {
     SessionManagerPtr manager =  mSessionManager.lock();
     SessionPtr session = std::static_pointer_cast<Session>(shared_from_this());
+
     bool valid = manager->FindSession(session);
-    return valid;
+    bool connect = mIsConnect.load();
+
+    return (valid && connect);
 }
 
 void Session::SessionLog(const WCHAR* log , ...)

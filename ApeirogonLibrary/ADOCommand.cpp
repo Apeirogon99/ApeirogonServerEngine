@@ -185,7 +185,7 @@ void ADOCommand::ExecuteStoredProcedure(ADORecordset& recordset, EExcuteReturnTy
 		recordset = commandInterface->Execute(NULL, &vtMissing, executeOptions);
 		break;
 	case EExcuteReturnType::Async_Return:
-		executeOptions = adCmdStoredProc | adAsyncFetchNonBlocking;
+		executeOptions = adCmdStoredProc | adAsyncExecute;
 		recordset = commandInterface->Execute(NULL, &vtMissing, executeOptions);
 		break;
 	default:
@@ -485,6 +485,14 @@ bool ADOCommand::IsExecuteComplete() const
 	}
 
 	long state = commandInterface->GetState();
+	if (state == ObjectStateEnum::adStateClosed)
+	{
+		wprintf(L"[DBCommand::IsExecuteComplete] command is complete\n");
+	}
+	else
+	{
+		wprintf(L"[DBCommand::IsExecuteComplete] command is executing\n");
+	}
 
 	return (state == ObjectStateEnum::adStateClosed) ? true : false;
 }

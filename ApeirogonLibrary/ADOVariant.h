@@ -21,8 +21,24 @@ public:
 	inline ADOVariant(float a)							{ mVar = a; }
 	inline ADOVariant(double a)							{ mVar = a; }
 	inline ADOVariant(const wchar_t* a)					{ mVar = _bstr_t(a); }
-	inline ADOVariant(const char* a)					{ mVar = _bstr_t(a); }
-	inline explicit ADOVariant(const std::string& a)	{ mVar = _bstr_t(a.c_str()); }
+	inline ADOVariant(const char* a)
+	{
+		const char* tempStr = a;
+		int32 tempLen = static_cast<int32>(strlen(tempStr) + 1);
+
+		int32 tempWLen = MultiByteToWideChar(949, 0, tempStr, tempLen, NULL, 0);
+		wchar_t* tempWStr = new wchar_t[tempWLen];
+
+		MultiByteToWideChar(949, 0, tempStr, tempLen, tempWStr, tempWLen);
+
+		mVar = _bstr_t(tempWStr);
+		delete[] tempWStr;
+		tempWStr = nullptr;
+	}
+	inline explicit ADOVariant(const std::string& a)
+	{
+		mVar = _bstr_t(a.c_str());
+	}
 	//inline ADOVariant(UUID a) { mVar = Win32Guid::From(a).ToBracketString().GetString(); }
 	inline ADOVariant(GUID a)
 	{

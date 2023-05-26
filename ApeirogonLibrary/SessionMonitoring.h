@@ -13,7 +13,7 @@ class SessionMonitoring
 {
 	enum class Default
 	{
-		MONITOR_MAX_PING = 0x2710,
+		MONITOR_MAX_SYNC_TIME = 0x3E8,
 		MONITOR_MAX_HEARTBEAT = 0x3E8,
 		MONITOR_IS_CHECK = 1,
 		MONITOR_IS_FREE = 0,

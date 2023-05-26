@@ -26,8 +26,13 @@ public:
 	APEIROGON_API ServicePtr	GetService() const;
 
 public:
-	APEIROGON_API virtual bool	InitNetworkTask() abstract;
+	APEIROGON_API virtual bool	PushNetworkTask() abstract;
+	void InitNetworkTask();
+	void DestroyNetworkTask();
+
 	APEIROGON_API virtual bool	ProcessNetworkTask(const int64 inServiceTimeStamp);
+	APEIROGON_API virtual bool	ProcessSnapShot();
+
 	void WorkDispatch();
 
 public:
@@ -41,5 +46,5 @@ protected:
 	SessionFactory					mSessionFactory;
 	ServicePtr						mService;
 	FastSpinLock					mFastSpinLock;
-	std::vector<NetworkQueuePtr>	mNetworkTasks;
+	std::vector<GameObjectPtr>		mNetworkTasks;
 };

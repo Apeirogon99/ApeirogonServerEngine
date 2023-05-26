@@ -35,3 +35,11 @@ std::wstring Time::NowTime(const bool useMs)
 
 	return curTime;
 }
+
+int64 Time::GetUTCTime()
+{
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+	//std::chrono::utc_clock::time_point now = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::utc_clock::now());
+	std::chrono::milliseconds milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch());
+	return milliseconds.count();
+}

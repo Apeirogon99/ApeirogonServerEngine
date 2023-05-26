@@ -3,7 +3,7 @@
 class DatabaseManager
 {
 public:
-	APEIROGON_API DatabaseManager(const size_t poolSize = 10);
+	APEIROGON_API DatabaseManager(const size_t inThreadPoolSize, const size_t inDatabasePoolSize);
 	APEIROGON_API virtual ~DatabaseManager();
 
 protected:
@@ -19,16 +19,16 @@ public:
 
 public:
 	APEIROGON_API void PushConnectionPool(ADOConnection& inConnection, const ADOConnectionInfo& inConnectioninfo);
-	APEIROGON_API bool StartDatabaseManager();
 	APEIROGON_API void PrintConnectionPoolState();
+	APEIROGON_API DatabaseTaskQueuePtr GetDatabaseTaskQueue();
 
-	void DatabaseLoop();
-
-	APEIROGON_API void		ProcessDatabaseTask();
-	APEIROGON_API ADOTask&	GetTask();
+	void ProcessDatabaseTask(const int64 inServiceTimeStamp);
 
 protected:
 	APEIROGON_API virtual void InitializeDatabase() abstract;
+
+	bool StartDatabaseManager();
+	void DatabaseLoop();
 	void KeepConnection();
 	void DatabaseLog(const WCHAR* log, ...);
 
@@ -43,6 +43,6 @@ private:
 	bool						mIsRunning;
 	TimeStamp					mTimeStamp;
 	std::thread					mDatabaseManagerThread;
-	ADOTask						mADOTask;
+	DatabaseTaskQueuePtr		mDatabaseHandler;
 };
 

@@ -1,20 +1,20 @@
 #pragma once
 
-class NetworkTaskNode
+class TaskNode
 {
 public:
-	APEIROGON_API NetworkTaskNode() : mPriority(0)
+	APEIROGON_API TaskNode() : mPriority(0)
 	{
 
 	}
 	
-	APEIROGON_API ~NetworkTaskNode()
+	APEIROGON_API ~TaskNode()
 	{
 
 	}
 
 public:
-	bool operator<(const NetworkTaskNode& inOtherNode) const
+	bool operator<(const TaskNode& inOtherNode) const
 	{
 		return this->mPriority > inOtherNode.mPriority;
 	}
@@ -48,17 +48,17 @@ private:
 	int64					mPriority;
 };
 
-class NetworkQueue : public std::enable_shared_from_this<NetworkQueue>
+class TaskQueue : public std::enable_shared_from_this<TaskQueue>
 {
 public:
-	APEIROGON_API NetworkQueue() {}
-	APEIROGON_API ~NetworkQueue() {}
+	APEIROGON_API TaskQueue() {}
+	APEIROGON_API ~TaskQueue() {}
 
-	NetworkQueue(NetworkQueue&&) = delete;
-	NetworkQueue(const NetworkQueue&) = delete;
+	TaskQueue(TaskQueue&&) = delete;
+	TaskQueue(const TaskQueue&) = delete;
 
-	NetworkQueue& operator=(NetworkQueue&&) = delete;
-	NetworkQueue& operator=(const NetworkQueue&) = delete;
+	TaskQueue& operator=(TaskQueue&&) = delete;
+	TaskQueue& operator=(const TaskQueue&) = delete;
 
 public:
 
@@ -66,7 +66,7 @@ public:
 	APEIROGON_API bool PushTask(const int64 inPriority, Ret(T::*inMemberFunc)(Args...), Args... inArgs)
 	{
 		std::weak_ptr<T> owner = std::static_pointer_cast<T>(shared_from_this());
-		NetworkTaskNodePtr newTaskNode = std::make_shared<NetworkTaskNode>();
+		TaskNodePtr newTaskNode = std::make_shared<TaskNode>();
 		newTaskNode->Init(inPriority, owner, inMemberFunc, std::forward<Args>(inArgs)...);
 		return mTaskQueue.Enqueue(newTaskNode);
 	}
@@ -76,7 +76,7 @@ public:
 		int32 count = mTaskQueue.Count();
 		for (int32 task = 0; task < count; ++task)
 		{
-			NetworkTaskNodePtr taskNode;
+			TaskNodePtr taskNode;
 			mTaskQueue.Dequeue(taskNode);
 			taskNode.reset();
 		}
@@ -84,10 +84,10 @@ public:
 
 	APEIROGON_API bool Execute(const int64 inServiceTimeStamp)
 	{
-		std::vector<NetworkTaskNodePtr> TaskNodes;
+		std::vector<TaskNodePtr> TaskNodes;
 		while (true)
 		{
-			NetworkTaskNodePtr peekTaskNode;
+			TaskNodePtr peekTaskNode;
 			if (false == mTaskQueue.Peek(peekTaskNode))
 			{
 				break;
@@ -98,7 +98,7 @@ public:
 				break;
 			}
 
-			TaskNodes.emplace_back(peekTaskNode);
+			TaskNodes.emplace_back(std::move(peekTaskNode));
 			mTaskQueue.Dequeue();
 		}
 
@@ -116,6 +116,6 @@ public:
 	}
 
 private:
-	PriorityQueue<NetworkTaskNodePtr> mTaskQueue;
+	PriorityQueue<TaskNodePtr> mTaskQueue;
 };
 

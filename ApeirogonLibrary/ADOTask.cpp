@@ -1,20 +1,19 @@
 #include "pch.h"
 #include "ADOTask.h"
 
-ADOTask::ADOTask() : mADOTaskQueue(0xfff), mADOCompletionWorkQueue(0xfff)
+DatabaseTaskQueue::DatabaseTaskQueue() : mAsyncTaskQueue(0x1000), mDatabaseTaskQueue(0x1000)
 {
 
 }
 
-ADOTask::~ADOTask()
+DatabaseTaskQueue::~DatabaseTaskQueue()
 {
 }
 
-void ADOTask::ProcessAsync()
+void DatabaseTaskQueue::ProcessAsync()
 {
-
 	FastLockGuard lockGuard(mLock);
-	const ADOItemPtr* PeekItem = mADOTaskQueue.Peek();
+	const ADOAsyncTaskPtr* PeekItem = mAsyncTaskQueue.Peek();
 	if (nullptr == PeekItem)
 	{
 		return;
@@ -22,34 +21,29 @@ void ADOTask::ProcessAsync()
 
 	if (PeekItem->get()->mADOCommand.IsExecuteComplete())
 	{
-		ADOItemPtr dequeueItem;
-		mADOTaskQueue.Dequeue(dequeueItem);
-		mADOCompletionWorkQueue.Enqueue(std::move(dequeueItem));
+		ADOAsyncTaskPtr dequeueItem;
+		mAsyncTaskQueue.Dequeue(dequeueItem);
+		mDatabaseTaskQueue.Enqueue(std::move(dequeueItem));
 	}
 }
 
-bool ADOTask::IsCompletionWork()
+bool DatabaseTaskQueue::GetDatabaseTasks(std::vector<ADOAsyncTaskPtr>& inDatabaseTasks)
 {
-	return mADOCompletionWorkQueue.IsEmpty() == true ? false : true;
-}
-
-bool ADOTask::GetCompeltionWork(ADOItemPtr& outWork)
-{
-	ADOItemPtr tempWork;
 	FastLockGuard lockGuard(mLock);
-	if (true == mADOCompletionWorkQueue.Dequeue(tempWork))
+	if (mDatabaseTaskQueue.IsEmpty())
 	{
-		outWork = std::move(tempWork);
-		return true;
+		return false;
 	}
-	
-	return false;
+
+	mDatabaseTaskQueue.Dequeue(inDatabaseTasks);
+	return true;
 }
 
-void ADOTask::AddWork(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
+bool DatabaseTaskQueue::PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
 {
 	FastLockGuard lockGuard(mLock);
-	
-	ADOItemPtr newWork = std::make_shared<ADOItem>(inSession, inADOConnection, inADOCommand, inADORecordset, inADOCallBack);
-	mADOTaskQueue.Enqueue(std::move(newWork));
+	ADOAsyncTaskPtr newItem = std::make_shared<ADOAsyncTask>(inSession, inADOConnection, inADOCommand, inADORecordset, inADOCallBack);
+	const bool result = mAsyncTaskQueue.Enqueue(std::move(newItem));
+
+	return result;
 }

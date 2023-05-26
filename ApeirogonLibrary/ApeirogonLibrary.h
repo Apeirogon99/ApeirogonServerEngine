@@ -69,6 +69,8 @@
 #include "PriorityQueue.h"
 #include "SendQueue.h"
 
+#include "NetworkTask.h"
+
 //==========================//
 //		    TIME			//
 //==========================//
@@ -108,8 +110,6 @@
 //==========================//
 //		   SERVER			//
 //==========================//
-#include "NetworkTask.h"
-#include "GameObject.h"
 #include "ThreadManager.h"
 #include "IOCPEvent.h"
 #include "IOCP.h"
@@ -124,3 +124,8 @@
 //		     SMTP			//
 //==========================//
 #include "SMTP.h"
+
+//==========================//
+//		   Content			//
+//==========================//
+#include "GameObject.h"

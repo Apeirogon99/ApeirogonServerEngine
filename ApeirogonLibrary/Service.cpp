@@ -30,9 +30,9 @@ void Service::ServiceScheudler()
 
 		mSessionManager->ProcessNetworkTask(serviceTimeStamp);
 		
-		mDatabaseManager->ProcessDatabaseTask();
+		mDatabaseManager->ProcessDatabaseTask(serviceTimeStamp);
 
-		Tick();
+		mSessionManager->ProcessSnapShot();
 
 		processTime = scheudlerTimeStamp.GetTimeStamp();
 		if (processTime > maxProcessTime)

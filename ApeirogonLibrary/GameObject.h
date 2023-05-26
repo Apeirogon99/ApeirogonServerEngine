@@ -1,38 +1,59 @@
 #pragma once
-class GameObject : public NetworkQueue
+class GameObject : public TaskQueue
 {
 public:
-	GameObject() : mName(nullptr)
+	APEIROGON_API GameObject(const SessionManagerRef& inSessionManager) : mSessionManger(inSessionManager), mName(nullptr)
 	{
-
+		
 	}
 
-	GameObject(const WCHAR* inName) : mName(inName)
+	APEIROGON_API GameObject(const SessionManagerRef& inSessionManager, const WCHAR* inName) : mSessionManger(inSessionManager), mName(inName)
 	{
-		Initialization();
+		
 	}
 
-	virtual ~GameObject()
+	APEIROGON_API virtual ~GameObject()
 	{
-		Destroy();
+		
 	}
 
 public:
-	virtual void Initialization() abstract;
-	virtual void Destroy() abstract;
+	APEIROGON_API virtual void Initialization() abstract;
+	APEIROGON_API virtual void Destroy() abstract;
+	APEIROGON_API virtual void Tick() abstract;
 
-	void SetGameObjetName(const WCHAR* inName)
+public:
+	APEIROGON_API void SetGameObjetName(const WCHAR* inName)
 	{
 		mName = inName;
 	}
 
 protected:
-	void GameObjectLog(WCHAR* inLog, ...)
+	template <typename... Types>
+	APEIROGON_API void GameObjectLog(const WCHAR* inLog, Types... inArgs)
 	{
-		wprintf(L"[%ws] %ws", mName, inLog);
+		if (mName == nullptr)
+		{
+			mName = L"NULL";
+		}
+
+		SessionManagerPtr sessionManager = mSessionManger.lock();
+		if (sessionManager)
+		{
+			std::wstring tempLog;
+			tempLog.append(L"[GameObject::");
+			tempLog.append(mName);
+			tempLog.append(L"] ");
+			tempLog.append(inLog);
+
+			sessionManager->SessionManagerLog(tempLog.c_str(), inArgs...);
+		}
 	}
 
+	
+
 protected:
-	const WCHAR* mName;
+	SessionManagerRef	mSessionManger;
+	const WCHAR*		mName;
 };
 

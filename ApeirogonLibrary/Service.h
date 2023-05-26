@@ -23,7 +23,6 @@ public:
 	APEIROGON_API void			ServiceClose();
 
 public:
-	APEIROGON_API virtual void	Tick() abstract;
 	APEIROGON_API int64			GetServiceTimeStamp();
 	void						ServiceScheudler();
 

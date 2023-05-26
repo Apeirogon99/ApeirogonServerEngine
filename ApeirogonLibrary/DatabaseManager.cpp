@@ -3,10 +3,10 @@
 
 using namespace std;
 
-DatabaseManager::DatabaseManager(const size_t poolSize) : mIsRunning(true), mPoolSize(poolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mTimeStamp(L"DatabaseManager")
+DatabaseManager::DatabaseManager(const size_t inThreadPoolSize, const size_t inDatabasePoolSize) : mIsRunning(true), mPoolSize(inDatabasePoolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mTimeStamp(L"DatabaseManager")
 {
-	mConnections = new ADOConnection[mPoolSize]();
-	mConnectionInfos = new ADOConnectionInfo[mPoolSize]();
+	mConnections = new ADOConnection[inDatabasePoolSize]();
+	mConnectionInfos = new ADOConnectionInfo[inDatabasePoolSize]();
 }
 
 DatabaseManager::~DatabaseManager()
@@ -37,6 +37,12 @@ bool DatabaseManager::Prepare(const ServicePtr& service)
 
 	HRESULT hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (hResult == S_FALSE)
+	{
+		return false;
+	}
+
+	mDatabaseHandler = std::make_shared<DatabaseTaskQueue>();
+	if (nullptr == mDatabaseHandler)
 	{
 		return false;
 	}
@@ -132,6 +138,11 @@ void DatabaseManager::PrintConnectionPoolState()
 	wprintf(L"}\n");
 }
 
+DatabaseTaskQueuePtr DatabaseManager::GetDatabaseTaskQueue()
+{
+	return mDatabaseHandler;
+}
+
 void DatabaseManager::DatabaseLoop()
 {
 	HRESULT hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -140,7 +151,7 @@ void DatabaseManager::DatabaseLoop()
 		return;
 	}
 
-	const long long		totalProcessTime = 0x3E8;
+	const long long		totalProcessTime = 0x64;
 	long long			processTime = 0;
 	long long			sleepTime = 0;
 
@@ -151,14 +162,14 @@ void DatabaseManager::DatabaseLoop()
 	{
 		mTimeStamp.StartTimeStamp();
 
-		mADOTask.ProcessAsync();
+		mDatabaseHandler->ProcessAsync();
 
 		processTime = static_cast<long long>(mTimeStamp.GetTimeStamp());
 
 		if (processTime > totalProcessTime)
 		{
 			keepConnectionTime = processTime;
-			wprintf(L"[ADOAsync::AsyncLoop] Over process time %lld(sec)\n", processTime);
+			//wprintf(L"[ADOAsync::AsyncLoop] Over process time %lld(sec)\n", processTime);
 		}
 		else
 		{
@@ -179,24 +190,21 @@ void DatabaseManager::DatabaseLoop()
 	CoUninitialize();
 }
 
-void DatabaseManager::ProcessDatabaseTask()
+void DatabaseManager::ProcessDatabaseTask(const int64 inServiceTimeStamp)
 {
-	ADOTask& databaseTask = GetTask();
-	if (databaseTask.IsCompletionWork())
+
+	std::vector<ADOAsyncTaskPtr> completeTask;
+	bool isTask = mDatabaseHandler->GetDatabaseTasks(completeTask);
+	if (false == isTask)
 	{
-		ADOItemPtr item;
-		if (true == databaseTask.GetCompeltionWork(item))
-		{
-			item->Execute();
-
-			item.reset();
-		}
+		return;
 	}
-}
 
-ADOTask& DatabaseManager::GetTask()
-{
-	return mADOTask;
+	for (ADOAsyncTaskPtr& task : completeTask)
+	{
+		task->Execute();
+	}
+
 }
 
 void DatabaseManager::KeepConnection()

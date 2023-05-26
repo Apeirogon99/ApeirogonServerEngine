@@ -1,5 +1,19 @@
 #pragma once
 
+//==========================//
+//		   SOCKET			//
+//==========================//
+class SMTP;
+class WinSocket;
+class IPAddress;
+
+using WinSocketPtr			= std::shared_ptr<WinSocket>;
+using IPAddressPtr			= std::shared_ptr<IPAddress>;
+using SMTPPtr				= std::shared_ptr<SMTP>;
+
+//==========================//
+//		  IOCP EVENT		//
+//==========================//
 class IocpEvent;
 class ConnectEvent;
 class DisconnectEvent;
@@ -7,48 +21,69 @@ class AcceptEvent;
 class RecvEvent;
 class SendEvent;
 
-class SMTP;
 
+//==========================//
+//		   Framework		//
+//==========================//
 class Session;
 class PacketSession;
 class Service;
 class IocpObject;
 class IOCPServer;
 class Listener;
-class WinSocket;
-class IPAddress;
-class DatabaseManager;
 
-class SendBuffer;
+using ServicePtr			= std::shared_ptr<Service>;
+using PacketSessionPtr		= std::shared_ptr<PacketSession>;
+using IOCPServerPtr			= std::shared_ptr<IOCPServer>;
+using IOCPObjectPtr			= std::shared_ptr<IocpObject>;
+using SessionPtr			= std::shared_ptr<Session>;
+using SessionRef			= std::weak_ptr<Session>;
+using ListenerPtr			= std::shared_ptr<Listener>;
 
+using SessionFactory		= std::function<SessionPtr(void)>;
+
+//==========================//
+//		    Manager			//
+//==========================//
 class SessionManager;
 class ThreadManager;
 class LoggerManager;
+class DatabaseManager;
 
-class NetworkTaskNode;
-class NetworkQueue;
-class ADOItem;
+using SessionManagerPtr		= std::shared_ptr<SessionManager>;
+using SessionManagerRef		= std::weak_ptr<SessionManager>;
+using ThreadManagerPtr		= std::shared_ptr<ThreadManager>;
+using LoggerManagerPtr		= std::shared_ptr<LoggerManager>;
+using DatabaseManagerPtr	= std::shared_ptr<DatabaseManager>;
+using DatabaseManagerRef	= std::weak_ptr<DatabaseManager>;
 
-using ServicePtr = std::shared_ptr<Service>;
-using PacketSessionPtr = std::shared_ptr<PacketSession>;
-using IOCPServerPtr = std::shared_ptr<IOCPServer>;
-using IOCPObjectPtr = std::shared_ptr<IocpObject>;
-using SessionPtr = std::shared_ptr<Session>;
-using SessionRef = std::weak_ptr<Session>;
-using ListenerPtr = std::shared_ptr<Listener>;
-using WinSocketPtr = std::shared_ptr<WinSocket>;
-using IPAddressPtr = std::shared_ptr<IPAddress>;
-using SMTPPtr = std::shared_ptr<SMTP>;
-using DatabaseManagerPtr = std::shared_ptr<DatabaseManager>;
+//==========================//
+//		   Memory			//
+//==========================//
+class SendBuffer;
+class TaskNode;
+class TaskQueue;
 
-using NetworkTaskNodePtr = std::shared_ptr<NetworkTaskNode>;
-using NetworkQueuePtr = std::shared_ptr<NetworkQueue>;
-using SendBufferPtr = std::shared_ptr<SendBuffer>;
-using ADOItemPtr = std::shared_ptr<ADOItem>;
+using SendBufferPtr			= std::shared_ptr<SendBuffer>;
+using TaskNodePtr			= std::shared_ptr<TaskNode>;
+using TaskQueuePtr			= std::shared_ptr<TaskQueue>;
 
-using SessionManagerPtr = std::shared_ptr<SessionManager>;
-using SessionManagerRef = std::weak_ptr<SessionManager>;
-using ThreadManagerPtr = std::shared_ptr<ThreadManager>;
-using LoggerManagerPtr = std::shared_ptr<LoggerManager>;
+//==========================//
+//		   DataBase			//
+//==========================//
+class ADOConnection;
+class ADOCommand;
+class ADORecordset;
+class ADOAsyncTask;
+class DatabaseTaskQueue;
 
-using SessionFactory = std::function<SessionPtr(void)>;
+using ADOAsyncTaskPtr		= std::shared_ptr<ADOAsyncTask>;
+using DatabaseTaskQueuePtr	= std::shared_ptr<DatabaseTaskQueue>;
+
+//==========================//
+//		   Network			//
+//==========================//
+class GameObject;
+
+using GameObjectPtr			= std::shared_ptr<GameObject>;
+

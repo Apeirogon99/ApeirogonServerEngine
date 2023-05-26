@@ -29,6 +29,8 @@ bool SessionManager::Prepare(const ServicePtr& service)
 		return false;
 	}
 
+	PushNetworkTask();
+
 	InitNetworkTask();
 
 	SessionManagerLog(L"[SessionManager::Prepare()] InitNetworkTask [TaskQueueSize : %ld]\n", mNetworkTasks.size());
@@ -153,13 +155,34 @@ ServicePtr SessionManager::GetService() const
 	return mService;
 }
 
+void SessionManager::InitNetworkTask()
+{
+	for (GameObjectPtr& gameObject : mNetworkTasks)
+	{
+		gameObject->Initialization();
+	}
+}
+
+void SessionManager::DestroyNetworkTask()
+{
+	for (GameObjectPtr& gameObject : mNetworkTasks)
+	{
+		gameObject->Destroy();
+	}
+}
+
 bool SessionManager::ProcessNetworkTask(const int64 inServiceTimeStamp)
 {
-	for (NetworkQueuePtr& networkQueue : mNetworkTasks)
+	for (GameObjectPtr& gameObject : mNetworkTasks)
 	{
-		networkQueue->Execute(inServiceTimeStamp);
+		gameObject->Execute(inServiceTimeStamp);
 	}
 
+	return true;
+}
+
+bool SessionManager::ProcessSnapShot()
+{
 	return true;
 }
 
@@ -172,6 +195,7 @@ void SessionManager::WorkDispatch()
 
 		curSession->get()->GetMonitoring().CheckSession();
 	}
+
 }
 
 void SessionManager::SessionManagerLog(const WCHAR* log, ...)

@@ -1,16 +1,16 @@
 #pragma once
 
-using ADOCallBack = std::function<void(PacketSessionPtr&, ADOConnection&, ADOCommand&, ADORecordset&)>;
+using ADOCallBack = std::function<bool(PacketSessionPtr&, ADOConnection&, ADOCommand&, ADORecordset&)>;
 
-class ADOItem
+class ADOAsyncTask
 {
 public:
-	ADOItem()
+	ADOAsyncTask()
 	{
 
 	}
 
-	ADOItem(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
+	ADOAsyncTask(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
 	{
 		mSession		= inSession;
 		mADOConnection	= inADOConnection;
@@ -18,12 +18,12 @@ public:
 		mADORecordset	= inADORecordset;
 		mADOCallBack	= inADOCallBack;
 	}
-	~ADOItem() 
+	~ADOAsyncTask()
 	{
 		Release();
 	}
 
-	ADOItem(const ADOItem& inWork)
+	ADOAsyncTask(const ADOAsyncTask& inWork)
 	{
 		mSession		= inWork.mSession;
 		mADOConnection	= inWork.mADOConnection;
@@ -31,7 +31,7 @@ public:
 		mADORecordset	= inWork.mADORecordset;
 		mADOCallBack	= inWork.mADOCallBack;
 	}
-	ADOItem& operator=(const ADOItem& inWork)
+	ADOAsyncTask& operator=(const ADOAsyncTask& inWork)
 	{
 		mSession		= inWork.mSession;
 		mADOConnection	= inWork.mADOConnection;
@@ -42,8 +42,8 @@ public:
 	}
 
 protected:
-	ADOItem(ADOItem&&) = delete;
-	ADOItem& operator=(ADOItem&&) = delete;
+	ADOAsyncTask(ADOAsyncTask&&) = delete;
+	ADOAsyncTask& operator=(ADOAsyncTask&&) = delete;
 
 public:
 	void Execute()
@@ -79,32 +79,29 @@ public:
 	ADOCallBack			mADOCallBack;
 };
 
-class ADOTask
+class DatabaseTaskQueue
 {
 public:
-	APEIROGON_API ADOTask();
-	APEIROGON_API ~ADOTask();
+	APEIROGON_API DatabaseTaskQueue();
+	APEIROGON_API ~DatabaseTaskQueue();
 
 private:
-	ADOTask(ADOTask&&) = delete;
-	ADOTask(const ADOTask&) = delete;
+	DatabaseTaskQueue(DatabaseTaskQueue&&) = delete;
+	DatabaseTaskQueue(const DatabaseTaskQueue&) = delete;
 
-	ADOTask& operator=(ADOTask&&) = delete;
-	ADOTask& operator=(const ADOTask&) = delete;
+	DatabaseTaskQueue& operator=(DatabaseTaskQueue&&) = delete;
+	DatabaseTaskQueue& operator=(const DatabaseTaskQueue&) = delete;
 	
 public:
-	void ProcessAsync();	// 큐에 들어있는 IO들이 종료되었는지 확인
+	void ProcessAsync();
+	bool GetDatabaseTasks(std::vector<ADOAsyncTaskPtr>& inDatabaseTasks);
 
 public:
-	bool IsCompletionWork();
-	bool GetCompeltionWork(ADOItemPtr& outWork);
 
-public:
-	APEIROGON_API void AddWork(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack);
-	
+	APEIROGON_API bool PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack);
 
 private:
-	FastSpinLock				mLock;
-	CircularQueue<ADOItemPtr>	mADOTaskQueue;
-	CircularQueue<ADOItemPtr>	mADOCompletionWorkQueue;
+	FastSpinLock					mLock;
+	CircularQueue<ADOAsyncTaskPtr>	mAsyncTaskQueue;
+	CircularQueue<ADOAsyncTaskPtr>	mDatabaseTaskQueue;
 };
