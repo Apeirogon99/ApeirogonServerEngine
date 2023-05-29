@@ -128,4 +128,5 @@
 //==========================//
 //		   Content			//
 //==========================//
+#include "DataManager.h"
 #include "GameObject.h"

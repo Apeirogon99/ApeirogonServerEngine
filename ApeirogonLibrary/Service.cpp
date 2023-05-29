@@ -87,21 +87,24 @@ void Service::ServiceClose()
 
 		mSessionManager->Shutdown();
 
+		mDataManager->Shutdown();
+
 		mDatabaseManager->Shutdown();
 
 		mListener->Shutdown();
 
-		mIOCPServer->Shutdown();
-
 		mThreadManager->Shutdown();
+
+		mIOCPServer->Shutdown();
 
 		mLoggerManager->Shutdown();
 
 		mSessionManager.reset();
+		mDataManager.reset();
 		mDatabaseManager.reset();
 		mListener.reset();
-		mIOCPServer.reset();
 		mThreadManager.reset();
+		mIOCPServer.reset();
 		mLoggerManager.reset();
 	}
 
@@ -113,6 +116,12 @@ bool Service::Prepare()
 	if (mLoggerManager == nullptr || false == mLoggerManager->Prepare(shared_from_this()))
 	{
 		ServiceLog(L"Service::SetLoggerManager() : failed to prepare for logger manager\n");
+		return false;
+	}
+
+	if (mDataManager == nullptr || false == mDataManager->Prepare(shared_from_this()))
+	{
+		ServiceLog(L"Service::Prepare() : failed to prepare for data manager\n");
 		return false;
 	}
 
@@ -142,7 +151,7 @@ bool Service::Prepare()
 
 	if (mThreadManager == nullptr || false == mThreadManager->Prepare(shared_from_this()))
 	{
-		ServiceLog(L"Service::SetThreadManager() : failed to prepare for thread manager\n");
+		ServiceLog(L"Service::Prepare() : failed to prepare for thread manager\n");
 		return false;
 	}
 
@@ -221,6 +230,18 @@ bool Service::SetDatabaseManager(DatabaseManagerPtr& inDatabase)
 	return true;
 }
 
+bool Service::SetDataManager(DataManagerPtr& inDataManager)
+{
+	mDataManager = std::move(inDataManager);
+	if (nullptr == mDataManager)
+	{
+		ServiceLog(L"Service::SetDatabaseManager() : Invalid data manager\n");
+		return false;
+	}
+
+	return true;
+}
+
 void Service::SetServiceState(const EServiceState state)
 {
 	mServiceState = state;
@@ -259,6 +280,11 @@ ThreadManagerPtr Service::GetThreadManager() const
 LoggerManagerPtr Service::GetLoggerManager() const
 {
 	return mLoggerManager;
+}
+
+DataManagerPtr Service::GetDataManager() const
+{
+	return mDataManager;
 }
 
 DatabaseManagerPtr Service::GetDatabaseManager() const

@@ -88,6 +88,12 @@
     <Filter Include="Source\Public\SMTP">
       <UniqueIdentifier>{a492f0e6-3a27-48d5-b9f4-fa650e289d33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\Data">
+      <UniqueIdentifier>{1a32d80b-a246-400f-a760-ec27b67aab90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Data">
+      <UniqueIdentifier>{cd87a26e-d9b5-4b87-8177-ad0dd6bbea7a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -218,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>Source\Private\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="DataManager.cpp">
+      <Filter>Source\Private\Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -361,6 +370,9 @@
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Source\Public\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="DataManager.h">
+      <Filter>Source\Public\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

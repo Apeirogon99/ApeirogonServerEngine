@@ -180,6 +180,7 @@
     <ClInclude Include="ADOUtils.h" />
     <ClInclude Include="ADOVariant.h" />
     <ClInclude Include="ApeirogonLibrary.h" />
+    <ClInclude Include="DataManager.h" />
     <ClInclude Include="DefaultMacros.h" />
     <ClInclude Include="EngineAssert.h" />
     <ClInclude Include="DefaultSize.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="ADOUtils.cpp" />
     <ClCompile Include="ADOVariant.cpp" />
     <ClCompile Include="ApeirogonLibrary.cpp" />
+    <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="EngineAssert.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FastSpinLock.cpp" />
