@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SessionManager.h"
 
-SessionManager::SessionManager(const SessionFactory& sessionFactory, const uint32 maxSessionCount, const uint32 inBufferSize) :mSessionFactory(sessionFactory), mMaxSessionCount(maxSessionCount), mSessionCount(0), mMaxBufferSize(inBufferSize)
+SessionManager::SessionManager(const SessionFactory& sessionFactory, const uint32 maxSessionCount, const uint32 inBufferSize) :mSessionFactory(sessionFactory), mMaxSessionCount(maxSessionCount), mSessionCount(0), mMaxBufferSize(inBufferSize), mFastSpinLock()
 {
 	
 }
@@ -11,9 +11,9 @@ SessionManager::~SessionManager()
 	//wprintf(L"[SessionManager::~SessionManager()]\n");
 }
 
-bool SessionManager::Prepare(const ServicePtr& service)
+bool SessionManager::Prepare(ServicePtr service)
 {
-	mService = service;
+	this->mService = service;
 	if (nullptr == mService)
 	{
 		return false;
@@ -29,11 +29,6 @@ bool SessionManager::Prepare(const ServicePtr& service)
 		return false;
 	}
 
-	PushNetworkTask();
-
-	InitNetworkTask();
-
-	SessionManagerLog(L"[SessionManager::Prepare()] InitNetworkTask [TaskQueueSize : %ld]\n", mNetworkTasks.size());
 	SessionManagerLog(L"[SessionManager::Prepare()] Set Session [MAX : %ld, BufferSize : %ld]\n", mMaxSessionCount, mMaxBufferSize);
 
 	return true;
@@ -41,6 +36,7 @@ bool SessionManager::Prepare(const ServicePtr& service)
 
 SessionPtr SessionManager::CreateSession()
 {
+
 	FastLockGuard lockGuard(mFastSpinLock);
 
 	if (mSessionFactory == nullptr)
@@ -87,7 +83,7 @@ bool SessionManager::ReleaseSession(const SessionPtr& session)
 {
 	FastLockGuard lockGuard(mFastSpinLock);
 
-	size_t result = mSessions.erase(session);;
+	size_t result = mSessions.erase(session);
 	if (result == 0)
 	{
 		SessionManagerLog(L"[SessionManager::ReleaseSession()] Is not valid session");
@@ -155,32 +151,6 @@ ServicePtr SessionManager::GetService() const
 	return mService;
 }
 
-void SessionManager::InitNetworkTask()
-{
-	for (GameObjectPtr& gameObject : mNetworkTasks)
-	{
-		gameObject->Initialization();
-	}
-}
-
-void SessionManager::DestroyNetworkTask()
-{
-	for (GameObjectPtr& gameObject : mNetworkTasks)
-	{
-		gameObject->Destroy();
-	}
-}
-
-bool SessionManager::ProcessNetworkTask(const int64 inServiceTimeStamp)
-{
-	for (GameObjectPtr& gameObject : mNetworkTasks)
-	{
-		gameObject->Execute(inServiceTimeStamp);
-	}
-
-	return true;
-}
-
 bool SessionManager::ProcessSnapShot()
 {
 	return true;
@@ -188,14 +158,34 @@ bool SessionManager::ProcessSnapShot()
 
 void SessionManager::WorkDispatch()
 {
-	auto curSession = mSessions.begin();
-	for (curSession; curSession != mSessions.end(); curSession++)
+
+	FastLockGuard lockGuard(mFastSpinLock);
+	if (mSessions.empty())
 	{
-		curSession->get()->RegisterSend();
-
-		curSession->get()->GetMonitoring().CheckSession();
+		return;
 	}
+	//wprintf(L"[SessionManager::WorkDispatch()] Start\n");
+	for (auto curSession = mSessions.begin(); curSession != mSessions.end();)
+	{
+		Session* session = curSession->get();
+		if (nullptr == session)
+		{
+			curSession++;
+			continue;
+		}
 
+		if (false == session->HasPending())
+		{
+			curSession++;
+			continue;
+		}
+
+		session->RegisterSend();
+		session->GetMonitoring().CheckSession();
+
+		curSession++;
+	}
+	//wprintf(L"[SessionManager::WorkDispatch()] Done\n");
 }
 
 void SessionManager::SessionManagerLog(const WCHAR* log, ...)

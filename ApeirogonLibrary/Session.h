@@ -64,6 +64,7 @@ public:
 
 public:
 	bool							IsConnected() const;
+	bool							HasPending();
 	SessionPtr						GetSession();
 	WinSocketPtr					GetWinSocket() const;
 	IPAddressPtr					GetIpAddress() const;

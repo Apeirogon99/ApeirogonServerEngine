@@ -5,7 +5,7 @@ template<typename Node>
 class PriorityQueue
 {
 public:
-	PriorityQueue()
+	PriorityQueue() : mFastLock()
 	{
 	}
 	virtual ~PriorityQueue()
@@ -15,14 +15,14 @@ public:
 public:
 	APEIROGON_API bool Enqueue(const Node& inNode)
 	{
-		FastLockGuard lockGuard(mLock);
+		FastLockGuard lockGuard(mFastLock);
 		mNodes.push(inNode);
 		return true;
 	}
 
 	APEIROGON_API bool Dequeue()
 	{
-		FastLockGuard lockGuard(mLock);
+		FastLockGuard lockGuard(mFastLock);
 
 		if (mNodes.empty())
 		{
@@ -35,7 +35,7 @@ public:
 
 	APEIROGON_API bool Dequeue(Node& outNode)
 	{
-		FastLockGuard lockGuard(mLock);
+		FastLockGuard lockGuard(mFastLock);
 
 		if (mNodes.empty())
 		{
@@ -49,7 +49,7 @@ public:
 
 	APEIROGON_API bool DequeueAll(std::vector<Node>& outNodes)
 	{
-		FastLockGuard lockGuard(mLock);
+		FastLockGuard lockGuard(mFastLock);
 
 		if (mNodes.empty())
 		{
@@ -69,7 +69,7 @@ public:
 
 	APEIROGON_API bool Peek(Node& outNode)
 	{
-		FastLockGuard lockGuard(mLock);
+		FastLockGuard lockGuard(mFastLock);
 
 		if (mNodes.empty())
 		{
@@ -82,7 +82,7 @@ public:
 
 	APEIROGON_API void Claer()
 	{
-		FastLockGuard lockGuard(mLock);
+		FastLockGuard lockGuard(mFastLock);
 		while (!mNodes.empty())
 		{
 			mNodes.pop();
@@ -101,6 +101,6 @@ public:
 
 
 private:
-	FastSpinLock				mLock;
+	FastSpinLock				mFastLock;
 	std::priority_queue<Node>	mNodes;
 };

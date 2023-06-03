@@ -11,9 +11,9 @@ Listener::~Listener()
 	wprintf(L"[Listener::~Listener()]\n");
 }
 
-bool Listener::Prepare(const ServicePtr& service)
+bool Listener::Prepare(ServicePtr service)
 {
-	mService = service;
+	this->mService = service;
 	if (nullptr == mService)
 	{
 		return false;

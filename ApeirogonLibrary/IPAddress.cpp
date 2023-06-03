@@ -116,6 +116,58 @@ void IPAddress::SetIp(const WCHAR* ip, const uint16 port, const EProtocolType ty
 	}
 }
 
+void IPAddress::SetIp(const WCHAR* inDns, const uint16 inPort)
+{
+	Clear();
+
+	const WCHAR* nodeName = inDns;
+
+	WCHAR tempPort[6];
+	memset(tempPort, 0, 6);
+	swprintf_s(tempPort, L"%d", inPort);
+	const WCHAR* serviceName = tempPort;
+
+	ADDRINFOW hint = { 0, };
+	hint.ai_socktype = SOCK_STREAM;
+	hint.ai_protocol = IPPROTO_TCP;
+	hint.ai_family = AF_UNSPEC;
+
+	ADDRINFOW* result;
+	int32 infoRet = ::GetAddrInfoW(nodeName, serviceName, &hint, &result);
+	if (infoRet != 0)
+	{
+		wprintf(L"Failed get hoost by name [%ws][%ws]", serviceName, nodeName);
+		FreeAddrInfoW(result);
+		return;
+	}
+
+	WCHAR	ip[16];
+	const WCHAR* error = ::InetNtopW(AF_INET, &result->ai_addr->sa_data[2], ip, 16);
+	if (nullptr == error)
+	{
+		wprintf(L"Failed get hoost by name [%ws][%ws]", serviceName, nodeName);
+		FreeAddrInfoW(result);
+		return;
+	}
+
+	if (result->ai_family == AF_INET)
+	{
+		sockaddr_in* IPv4Addr = reinterpret_cast<sockaddr_in*>(&mAddr);
+		IPv4Addr->sin_family = AF_INET;
+		::InetPtonW(AF_INET, ip, &IPv4Addr->sin_addr);
+		SetPort(inPort);
+	}
+	else if (result->ai_family == AF_INET6)
+	{
+		sockaddr_in6* IPv6Addr = reinterpret_cast<sockaddr_in6*>(&mAddr);
+		IPv6Addr->sin6_family = AF_INET6;
+		::InetPtonW(AF_INET6, ip, &IPv6Addr->sin6_addr);
+		SetPort(inPort);
+	}
+
+	FreeAddrInfoW(result);
+}
+
 void IPAddress::SetAnyAddress()
 {
 	EProtocolType currentType = GetProtocolType();

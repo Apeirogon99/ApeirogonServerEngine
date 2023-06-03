@@ -4,6 +4,7 @@ enum class ELogMode
 {
 	Console,
 	File,
+	Both,
 };
 
 class LogWriter
@@ -16,6 +17,9 @@ public:
 	std::wstring GetLogMessage(const WCHAR* fmt, va_list args);
 
 	virtual void Writer(const WCHAR* fmt, ...) abstract;
+
+public:
+	ELogMode mMode;
 };
 
 class FileWrite : public LogWriter
@@ -57,7 +61,7 @@ public:
 	LoggerManager& operator=(const LoggerManager& loggerManager) = delete;
 
 public:
-	bool		Prepare(const ServicePtr& service);
+	bool		Prepare(ServicePtr service);
 	void		Shutdown();
 
 public:

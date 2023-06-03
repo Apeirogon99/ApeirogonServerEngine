@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ADOTask.h"
 
-DatabaseTaskQueue::DatabaseTaskQueue() : mAsyncTaskQueue(0x1000), mDatabaseTaskQueue(0x1000)
+DatabaseTaskQueue::DatabaseTaskQueue() : mAsyncTaskQueue(0x1000), mDatabaseTaskQueue(0x1000), mFastSpinLock()
 {
 
 }
@@ -12,7 +12,7 @@ DatabaseTaskQueue::~DatabaseTaskQueue()
 
 void DatabaseTaskQueue::ProcessAsync()
 {
-	FastLockGuard lockGuard(mLock);
+	FastLockGuard lockGuard(mFastSpinLock);
 	const ADOAsyncTaskPtr* PeekItem = mAsyncTaskQueue.Peek();
 	if (nullptr == PeekItem)
 	{
@@ -29,7 +29,7 @@ void DatabaseTaskQueue::ProcessAsync()
 
 bool DatabaseTaskQueue::GetDatabaseTasks(std::vector<ADOAsyncTaskPtr>& inDatabaseTasks)
 {
-	FastLockGuard lockGuard(mLock);
+	FastLockGuard lockGuard(mFastSpinLock);
 	if (mDatabaseTaskQueue.IsEmpty())
 	{
 		return false;
@@ -41,7 +41,7 @@ bool DatabaseTaskQueue::GetDatabaseTasks(std::vector<ADOAsyncTaskPtr>& inDatabas
 
 bool DatabaseTaskQueue::PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
 {
-	FastLockGuard lockGuard(mLock);
+	FastLockGuard lockGuard(mFastSpinLock);
 	ADOAsyncTaskPtr newItem = std::make_shared<ADOAsyncTask>(inSession, inADOConnection, inADOCommand, inADORecordset, inADOCallBack);
 	const bool result = mAsyncTaskQueue.Enqueue(std::move(newItem));
 

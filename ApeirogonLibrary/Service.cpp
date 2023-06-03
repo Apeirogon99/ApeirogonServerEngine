@@ -28,11 +28,11 @@ void Service::ServiceScheudler()
 		scheudlerTimeStamp.StartTimeStamp();
 		const int64 serviceTimeStamp = mServiceTime.GetTimeStamp();
 
-		mSessionManager->ProcessNetworkTask(serviceTimeStamp);
+		this->mSessionManager->ProcessNetworkTask(serviceTimeStamp);
 		
-		mDatabaseManager->ProcessDatabaseTask(serviceTimeStamp);
+		this->mDatabaseManager->ProcessDatabaseTask(serviceTimeStamp);
 
-		mSessionManager->ProcessSnapShot();
+		this->mSessionManager->ProcessSnapShot();
 
 		processTime = scheudlerTimeStamp.GetTimeStamp();
 		if (processTime > maxProcessTime)
@@ -112,6 +112,8 @@ void Service::ServiceClose()
 
 bool Service::Prepare()
 {
+	
+	ServicePtr servicePtr = shared_from_this();
 
 	if (mLoggerManager == nullptr || false == mLoggerManager->Prepare(shared_from_this()))
 	{
@@ -154,7 +156,7 @@ bool Service::Prepare()
 		ServiceLog(L"Service::Prepare() : failed to prepare for thread manager\n");
 		return false;
 	}
-
+	
 	return true;
 }
 
@@ -255,6 +257,11 @@ bool Service::IsServiceOpen() const
 EServiceState Service::GetState() const
 {
 	return mServiceState;
+}
+
+ServicePtr Service::GetPtr() const
+{
+	return nullptr;
 }
 
 SessionManagerPtr Service::GetSessionManager() const

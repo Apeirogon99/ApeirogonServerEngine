@@ -9,7 +9,7 @@ public:
 	ThreadManager& operator=(const ThreadManager& threadManager) = delete;
 
 public:
-	bool		Prepare(const ServicePtr& service);
+	bool		Prepare(ServicePtr service);
 	void		Shutdown();
 
 public:

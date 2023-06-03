@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "FastSpinLock.h"
 
-FastSpinLock::FastSpinLock() : destination(static_cast<LONG>(Default::LOCK_IS_FREE))
+FastSpinLock::FastSpinLock()
 {
+	_InterlockedExchange(&destination, static_cast<LONG>(Default::LOCK_IS_FREE));
 }
 
 FastSpinLock::~FastSpinLock()
@@ -11,12 +12,11 @@ FastSpinLock::~FastSpinLock()
 
 void FastSpinLock::Lock()
 {
-	LONG oldCount = static_cast<LONG>(Default::LOCK_IS_TAKEN);
-
+	LONG lockState = static_cast<LONG>(Default::LOCK_IS_TAKEN);
 	while (true)
 	{
-		oldCount = _InterlockedCompareExchange(&destination, static_cast<LONG>(Default::LOCK_IS_TAKEN), static_cast<LONG>(Default::LOCK_IS_FREE));
-		if (oldCount)
+		lockState = _InterlockedCompareExchange(&destination, static_cast<LONG>(Default::LOCK_IS_TAKEN), static_cast<LONG>(Default::LOCK_IS_FREE));
+		if (lockState == static_cast<LONG>(Default::LOCK_IS_TAKEN))
 		{
 			for (DWORD i = 0; i < static_cast<DWORD>(Default::MAX_SPIN_COUNT); ++i)
 			{
@@ -32,15 +32,15 @@ void FastSpinLock::Lock()
 
 void FastSpinLock::UnLock()
 {
-	destination = static_cast<LONG>(Default::LOCK_IS_FREE);
+	_InterlockedExchange(&destination, static_cast<LONG>(Default::LOCK_IS_FREE));
 }
 
-FastLockGuard::FastLockGuard(FastSpinLock& spinLock) : mSpinLock(spinLock)
+FastLockGuard::FastLockGuard(FastSpinLock& spinLock) : mFastSpinLock(spinLock)
 {
-	mSpinLock.Lock();
+	this->mFastSpinLock.Lock();
 }
 
 FastLockGuard::~FastLockGuard()
 {
-	mSpinLock.UnLock();
+	this->mFastSpinLock.UnLock();
 }

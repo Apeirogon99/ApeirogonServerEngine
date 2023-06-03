@@ -26,7 +26,7 @@ private:
 	IOCPServer& operator=(const IOCPServer& iocp) = delete;
 
 public:
-	bool Prepare(const ServicePtr& service);
+	bool Prepare(ServicePtr service);
 	void Shutdown();
 	bool RegisterSocketToIOCP(const WinSocketPtr sock);
 	APEIROGON_API bool WorkDispatch(uint32 timeoutMs = INFINITE);

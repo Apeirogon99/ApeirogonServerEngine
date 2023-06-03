@@ -9,7 +9,7 @@ Session::Session()
 
 Session::~Session()
 {
-    //wprintf(L"[Session::~Session()] : Close session\n");
+    wprintf(L"[Session::~Session()] : Close session\n");
 }
 
 HANDLE Session::GetHandle()
@@ -402,6 +402,15 @@ void Session::SessionLog(const WCHAR* log , ...)
 bool Session::IsConnected() const
 {
     return mIsConnect;
+}
+
+bool Session::HasPending()
+{
+    bool connect    = mIsConnect.load();
+    bool empty      = mSendQueue.IsEmpty();
+    bool send       = mIsSending;
+
+    return (connect && !empty && !send);
 }
 
 SessionPtr Session::GetSession()

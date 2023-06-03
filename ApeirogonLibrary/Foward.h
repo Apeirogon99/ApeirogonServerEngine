@@ -89,3 +89,9 @@ class GameObject;
 
 using GameObjectPtr			= std::shared_ptr<GameObject>;
 
+
+//==========================//
+//		    Sync			//
+//==========================//
+class FastSpinLock;
+class FastLockGuard;

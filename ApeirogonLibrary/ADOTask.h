@@ -101,7 +101,7 @@ public:
 	APEIROGON_API bool PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack);
 
 private:
-	FastSpinLock					mLock;
+	FastSpinLock					mFastSpinLock;
 	CircularQueue<ADOAsyncTaskPtr>	mAsyncTaskQueue;
 	CircularQueue<ADOAsyncTaskPtr>	mDatabaseTaskQueue;
 };

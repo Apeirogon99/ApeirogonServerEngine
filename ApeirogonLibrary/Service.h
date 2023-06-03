@@ -43,6 +43,8 @@ protected:
 public:
 	bool								IsServiceOpen() const;
 	EServiceState						GetState() const;
+
+	ServicePtr							GetPtr() const;
 	SessionManagerPtr					GetSessionManager() const;
 	ListenerPtr							GetListener() const;
 	IOCPServerPtr						GetIOCPServer() const;

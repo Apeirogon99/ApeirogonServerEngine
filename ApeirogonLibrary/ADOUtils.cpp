@@ -3,18 +3,34 @@
 
 ADOConnectionInfo::ADOConnectionInfo() : mType(EDBMSTypes::None)
 {
-	wmemset(mConnectString, 0, 128);
+	wmemset(mConnectString, 0, Default::ConnectionSize);
 }
 
 ADOConnectionInfo::ADOConnectionInfo(const WCHAR* provider, const WCHAR* server, const WCHAR* database, const WCHAR* security, const WCHAR* trusted, const WCHAR* id, const WCHAR* password, const EDBMSTypes type) : mType(type)
 {
-    wmemset(mConnectString, 0, 128);
-    swprintf(mConnectString, 128, L"Provider=%ws;Data Source=%ws;Initial Catalog=%ws;Integrated Security=%ws;Userid=%ws;password=%ws;", provider, server, database, security, id, password);
+    wmemset(mConnectString, 0, Default::ConnectionSize);
+	switch (type)
+	{
+	case EDBMSTypes::None:
+		break;
+	case EDBMSTypes::MSSQL:
+		swprintf(mConnectString, Default::ConnectionSize, L"Provider=%ws;Data Source=%ws;Initial Catalog=%ws;Integrated Security=%ws;Userid=%ws;password=%ws;", provider, server, database, security, id, password);
+		break;
+	case EDBMSTypes::AWS_MSSQL:
+		swprintf(mConnectString, Default::ConnectionSize, L"Provider=%ws;Data Source=%ws;Initial Catalog=%ws;User ID=%ws;Password=%ws;", provider, server, database, id, password);
+		break;
+	case EDBMSTypes::MYSQL:
+		break;
+	case EDBMSTypes::ORACLE:
+		break;
+	default:
+		break;
+	}
 }
 
 ADOConnectionInfo::ADOConnectionInfo(const ADOConnectionInfo& info)
 {
-    wmemset(mConnectString, 0, 128);
+    wmemset(mConnectString, 0, Default::ConnectionSize);
     const WCHAR* connectString = info.ToString();
     const size_t strSize = wcslen(connectString);
     wmemcpy(mConnectString, connectString, strSize);
@@ -24,7 +40,7 @@ ADOConnectionInfo::ADOConnectionInfo(const ADOConnectionInfo& info)
 
 ADOConnectionInfo& ADOConnectionInfo::operator=(const ADOConnectionInfo& info)
 {
-	wmemset(mConnectString, 0, 128);
+	wmemset(mConnectString, 0, Default::ConnectionSize);
 	const WCHAR* connectString = info.ToString();
 	const size_t strSize = wcslen(connectString);
 	wmemcpy(mConnectString, connectString, strSize);
@@ -36,8 +52,8 @@ ADOConnectionInfo& ADOConnectionInfo::operator=(const ADOConnectionInfo& info)
 
 void ADOConnectionInfo::SetInfo(const WCHAR* provider, const WCHAR* server, const WCHAR* database, const WCHAR* security, const WCHAR* trusted, const WCHAR* id, const WCHAR* password)
 {
-	wmemset(mConnectString, 0, 128);
-	swprintf(mConnectString, 128, L"Provider=%ws;Data Source=%ws;Initial Catalog=%ws;Integrated Security=%ws;Userid=%ws;password=%ws;", provider, server, database, security, id, password);
+	wmemset(mConnectString, 0, Default::ConnectionSize);
+	swprintf(mConnectString, Default::ConnectionSize, L"Provider=%ws;Data Source=%ws;Initial Catalog=%ws;Integrated Security=%ws;Userid=%ws;password=%ws;", provider, server, database, security, id, password);
 }
 
 const WCHAR* ADOConnectionInfo::ToString() const

@@ -1,5 +1,13 @@
 #pragma once
 
+#ifdef DLL_DEVELOPMENT
+#define APEIROGON_API __declspec(dllimport)
+#else
+#define APEIROGON_API __declspec(dllexport)
+#endif // DLL_DEVELOPMENT
+
+#define _CRT_SECURE_NO_WARNINGS
+
 //==========================//
 //		   Default			//
 //==========================//
@@ -18,6 +26,7 @@
 #include <stdarg.h>
 #include <ctime>
 #include <sys/timeb.h>
+#include <typeinfo>
 
 //==========================//
 //		     STL			//

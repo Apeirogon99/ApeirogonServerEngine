@@ -19,13 +19,14 @@ protected:
 	DataManager operator=(DataManager&&) = delete;
 
 public:
-	bool Prepare(const ServicePtr& service);
+	bool Prepare(ServicePtr service);
 	void Shutdown();
 
 public:
 	APEIROGON_API virtual bool InitDatas() abstract;
 	APEIROGON_API bool GetData(CSVDatas& outData, uint8 inDataNumber);
 	APEIROGON_API bool GetRow(CSVRow& outRow, uint8 inDataNumber, int32 inRowNumber);
+	APEIROGON_API CSVRow* PeekRow(uint8 inDataNumber, int32 inRowNumber);
 
 protected:
 	APEIROGON_API bool PushData(const WCHAR* inFilePath);

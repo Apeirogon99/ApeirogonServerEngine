@@ -7,7 +7,7 @@ public:
 	APEIROGON_API virtual ~Listener();
 
 public:
-	bool Prepare(const ServicePtr& service);
+	bool Prepare(ServicePtr service);
 	void Shutdown();
 	void CloseSocket();
 

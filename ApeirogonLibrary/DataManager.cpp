@@ -9,12 +9,12 @@ DataManager::DataManager()
 
 DataManager::~DataManager()
 {
-	wprintf(L"[DatabaseManager::~DatabaseManager()]\n");
+	wprintf(L"[DataManager::~DataManager()]\n");
 }
 
-bool DataManager::Prepare(const ServicePtr& service)
+bool DataManager::Prepare(ServicePtr service)
 {
-	mService = service;
+	this->mService = service;
 	if (nullptr == mService)
 	{
 		return false;
@@ -36,6 +36,9 @@ void DataManager::Shutdown()
 	{
 		datas.clear();
 	}
+
+	DataManagerLog(L"[DataManager::Shutdown()] Data manager successfully shutdown\n");
+	mService.reset();
 }
 
 bool DataManager::GetData(CSVDatas& outData, uint8 inDataNumber)
@@ -51,8 +54,6 @@ bool DataManager::GetData(CSVDatas& outData, uint8 inDataNumber)
 
 bool DataManager::GetRow(CSVRow& outRow, uint8 inDataNumber, int32 inRowNumber)
 {
-	inRowNumber += 1;
-
 	if (!(0 <= inDataNumber && inDataNumber < mDatas.size()))
 	{
 		return false;
@@ -65,6 +66,21 @@ bool DataManager::GetRow(CSVRow& outRow, uint8 inDataNumber, int32 inRowNumber)
 	}
 
 	return false;
+}
+
+CSVRow* DataManager::PeekRow(uint8 inDataNumber, int32 inRowNumber)
+{
+	if (!(0 <= inDataNumber && inDataNumber < mDatas.size()))
+	{
+		return nullptr;
+	}
+
+	if (0 <= inRowNumber && inRowNumber < mDatas[inDataNumber].size())
+	{
+		return &mDatas[inDataNumber][inRowNumber];
+	}
+
+	return nullptr;
 }
 
 bool DataManager::PushData(const WCHAR* inFilePath)
@@ -94,12 +110,19 @@ bool DataManager::PushData(const WCHAR* inFilePath)
 			rows.push_back(cell);
 		}
 
-		csvDatas.emplace_back(rows);
+		csvDatas.push_back(rows);
 		rows.clear();
 	}
 
+	this->mDatas.push_back(csvDatas);
+
+	for (CSVRow& row : csvDatas)
+	{
+		row.clear();
+	}
+	csvDatas.clear();
+
 	readStream.close();
-	mDatas.emplace_back(std::move(csvDatas));
 	return true;
 }
 

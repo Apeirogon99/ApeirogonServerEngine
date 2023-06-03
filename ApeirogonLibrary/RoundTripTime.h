@@ -7,7 +7,7 @@ class RoundTripTime
 	};
 
 public:
-	APEIROGON_API RoundTripTime() : mTimeStamps(static_cast<uint32>(Defualt::Capacity)) {}
+	APEIROGON_API RoundTripTime() : mTimeStamps(static_cast<uint32>(Defualt::Capacity)), mFastSpinLock() {}
 	APEIROGON_API ~RoundTripTime() {}
 
 private:
@@ -20,7 +20,7 @@ private:
 public:
 	APEIROGON_API bool AddLatency(const int64 inLatency)
 	{
-		FastLockGuard lockGuard(mLock);
+		FastLockGuard lockGuard(mFastSpinLock);
 
 		if(mTimeStamps.IsFull())
 		{
@@ -39,7 +39,7 @@ public:
 			return false;
 		}
 
-		FastLockGuard lockGuard(mLock);
+		FastLockGuard lockGuard(mFastSpinLock);
 
 		if (mTimeStamps.IsFull())
 		{
@@ -57,7 +57,7 @@ public:
 		std::vector<int64> timestmaps;
 
 		{
-			FastLockGuard lockGuard(mLock);
+			FastLockGuard lockGuard(mFastSpinLock);
 			mTimeStamps.Peek(timestmaps);
 		}
 
@@ -82,7 +82,7 @@ public:
 	}
 
 private:
-	FastSpinLock			mLock;
+	FastSpinLock			mFastSpinLock;
 	CircularQueue<int64>	mTimeStamps;
 };
 

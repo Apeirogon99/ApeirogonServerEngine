@@ -10,9 +10,9 @@ ThreadManager::~ThreadManager()
 	wprintf(L"[ThreadManager::~ThreadManager()]\n");
 }
 
-bool ThreadManager::Prepare(const ServicePtr& service)
+bool ThreadManager::Prepare(ServicePtr service)
 {
-	mService = service;
+	this->mService = service;
 	if (nullptr == mService)
 	{
 		return false;
@@ -44,6 +44,8 @@ void ThreadManager::DoWorkThreads(const uint32 inTimeOut)
 		mService->GetIOCPServer()->WorkDispatch(inTimeOut);
 
 		mService->GetSessionManager()->WorkDispatch();
+
+		mService->GetDatabaseManager()->WorkDispatch();
 	}
 }
 

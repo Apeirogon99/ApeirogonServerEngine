@@ -3,13 +3,14 @@
 
 LoggerManager::LoggerManager(const WCHAR* name, const ELogMode mode) : mName(name), mLogMode(mode)
 {
-	if (mode == ELogMode::File)
+	if (mode == ELogMode::File || mode == ELogMode::Both)
 	{
 		wprintf(L"[LoggerManager::LoggerManager()] Invalid mode, Try to set the mode again");
 	}
 
 	mLogWriter = new ConsoleWriter;
 
+	mLogWriter->mMode = mode;
 }
 
 LoggerManager::LoggerManager(const WCHAR* name, const WCHAR* filePath, const ELogMode mode) : mName(name), mLogMode(mode)
@@ -25,6 +26,8 @@ LoggerManager::LoggerManager(const WCHAR* name, const WCHAR* filePath, const ELo
 	FileWrite* fw = static_cast<FileWrite*>(mLogWriter);
 	fw->Init(filePath, mName);
 
+	mLogWriter->mMode = mode;
+
 }
 
 LoggerManager::~LoggerManager()
@@ -38,9 +41,9 @@ LoggerManager::~LoggerManager()
 	mLogWriter = nullptr;
 }
 
-bool LoggerManager::Prepare(const ServicePtr& service)
+bool LoggerManager::Prepare(ServicePtr service)
 {
-	mService = service;
+	this->mService = service;
 	if (nullptr == mService)
 	{
 		return false;
@@ -129,15 +132,15 @@ void FileWrite::Init(const WCHAR* filePath, const WCHAR* fileName)
 {
 	mFilePath = filePath;
 	mFileName = fileName;
-	
+
+	mFileStream.imbue(std::locale("korean"));
+
 	mFileStream.open(mFilePath, std::ios::out | std::ios::trunc);
 	if (mFileStream.fail())
 	{
 		wprintf(L"[FileWrite::Init()] : failed to file stream open");
 		return;
 	}
-
-	mFileStream.imbue(std::locale("korean"));
 	
 	printf("[FileWrite::Init()] : Start write %ws log - Location(%s)\n", mFileName, mFileStream.getloc()._C_str());
 }
@@ -151,6 +154,12 @@ void FileWrite::Writer(const WCHAR* fmt, ...)
 	va_start(args, fmt);
 	std::wstring messageLog = GetLogMessage(fmt, args);
 	va_end(args);
+
+	if (mMode == ELogMode::Both)
+	{
+		wprintf(L"%ws", messageLog.c_str());
+		fflush(stdout);
+	}
 
 	mFileStream.write(messageLog.c_str(), messageLog.size());
 	mFileStream.flush();
@@ -178,7 +187,7 @@ void ConsoleWriter::Writer(const WCHAR* fmt, ...)
 	va_end(args);
 
 	wprintf(L"%ws", messageLog.c_str());
-
+	messageLog.clear();
 	fflush(stdout);
 }
 

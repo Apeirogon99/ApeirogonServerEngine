@@ -1,15 +1,10 @@
 #pragma once
 
-#ifdef DLL_DEVELOPMENT
-#define APEIROGON_API __declspec(dllimport)
-#else
-#define APEIROGON_API __declspec(dllexport)
-#endif // DLL_DEVELOPMENT
-
 enum class EDBMSTypes
 {
 	None,
 	MSSQL,
+	AWS_MSSQL,
 	MYSQL,
 	ORACLE
 };
@@ -23,6 +18,11 @@ enum class EExcuteReturnType
 
 class ADOConnectionInfo
 {
+	enum Default
+	{
+		ConnectionSize = 0x200,
+	};
+
 public:
 	//Security = SqlClinet, OleDb(SPPI), OracleClinet
 	//Trusted = ODBC
@@ -48,7 +48,7 @@ public:
 	EDBMSTypes mType;
 
 private:
-	WCHAR			mConnectString[128];
+	WCHAR			mConnectString[Default::ConnectionSize];
 };
 
 class ADOUtils

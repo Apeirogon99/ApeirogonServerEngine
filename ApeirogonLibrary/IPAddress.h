@@ -16,6 +16,7 @@ public:
 	APEIROGON_API void					SetIp(const sockaddr_in6& inIPv6Addr);
 	APEIROGON_API void					SetIp(const sockaddr_storage& IpAddr);
 	APEIROGON_API void					SetIp(const WCHAR* ip, const uint16 port, const EProtocolType type);
+	APEIROGON_API void					SetIp(const WCHAR* inDns, const uint16 inPort);
 
 	APEIROGON_API void					SetAnyAddress();
 	APEIROGON_API void					SetBroadcastAddress();

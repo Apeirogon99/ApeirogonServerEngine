@@ -27,9 +27,9 @@ DatabaseManager::~DatabaseManager()
 	wprintf(L"[DatabaseManager::~DatabaseManager()]\n");
 }
 
-bool DatabaseManager::Prepare(const ServicePtr& service)
+bool DatabaseManager::Prepare(ServicePtr service)
 {
-	mService = service;
+	this->mService = service;
 	if (nullptr == mService)
 	{
 		return false;
@@ -207,6 +207,11 @@ void DatabaseManager::ProcessDatabaseTask(const int64 inServiceTimeStamp)
 
 }
 
+void DatabaseManager::WorkDispatch()
+{
+
+}
+
 void DatabaseManager::KeepConnection()
 {
 	if (mUsedSize == 0)
@@ -229,5 +234,16 @@ void DatabaseManager::KeepConnection()
 
 void DatabaseManager::DatabaseLog(const WCHAR* log, ...)
 {
-	mService->GetLoggerManager()->WriteLog(log);
+	if (!mService)
+	{
+		return;
+	}
+
+	LoggerManagerPtr logger = mService->GetLoggerManager();
+	if (!logger)
+	{
+		return;
+	}
+
+	logger.get()->WriteLog(log);
 }

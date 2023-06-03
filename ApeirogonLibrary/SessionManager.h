@@ -10,7 +10,7 @@ public:
 	SessionManager& operator=(const SessionManager& sessionManager) = delete;
 
 public:
-	bool					Prepare(const ServicePtr& service);
+	bool					Prepare(ServicePtr service);
 	SessionPtr				CreateSession();
 	bool					InsertSession(const SessionPtr& session);
 	APEIROGON_API bool		ReleaseSession(const SessionPtr& session);
@@ -26,11 +26,8 @@ public:
 	APEIROGON_API ServicePtr	GetService() const;
 
 public:
-	APEIROGON_API virtual bool	PushNetworkTask() abstract;
-	void InitNetworkTask();
-	void DestroyNetworkTask();
-
-	APEIROGON_API virtual bool	ProcessNetworkTask(const int64 inServiceTimeStamp);
+	//APEIROGON_API virtual bool	PushNetworkTask() abstract;
+	APEIROGON_API virtual bool	ProcessNetworkTask(const int64 inServiceTimeStamp) abstract;
 	APEIROGON_API virtual bool	ProcessSnapShot();
 
 	void WorkDispatch();
@@ -46,5 +43,4 @@ protected:
 	SessionFactory					mSessionFactory;
 	ServicePtr						mService;
 	FastSpinLock					mFastSpinLock;
-	std::vector<GameObjectPtr>		mNetworkTasks;
 };

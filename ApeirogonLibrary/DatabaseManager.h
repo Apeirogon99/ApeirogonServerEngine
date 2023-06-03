@@ -14,7 +14,7 @@ protected:
 	DatabaseManager operator=(DatabaseManager&&) = delete;
 
 public:
-	bool Prepare(const ServicePtr& service);
+	bool Prepare(ServicePtr service);
 	void Shutdown();
 
 public:
@@ -23,6 +23,7 @@ public:
 	APEIROGON_API DatabaseTaskQueuePtr GetDatabaseTaskQueue();
 
 	void ProcessDatabaseTask(const int64 inServiceTimeStamp);
+	void WorkDispatch();
 
 protected:
 	APEIROGON_API virtual void InitializeDatabase() abstract;
