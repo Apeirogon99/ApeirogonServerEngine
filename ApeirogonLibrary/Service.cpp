@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Service.h"
 
-Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mIOCPServer(nullptr), mListener(nullptr), mServiceTime(L"Server")
+Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server")
 {
 	setlocale(LC_ALL, "");
 }
@@ -21,30 +21,24 @@ void Service::ServiceScheudler()
 	TimeStamp	scheudlerTimeStamp(L"Scheudler");
 	const int64 maxProcessTime = 33;
 	int64		processTime = 0;
-	int64		sleepTime = 0;
 
 	while (IsServiceOpen())
 	{
-		scheudlerTimeStamp.StartTimeStamp();
+
 		const int64 serviceTimeStamp = mServiceTime.GetTimeStamp();
 
-		this->mSessionManager->ProcessNetworkTask(serviceTimeStamp);
-		
-		this->mDatabaseManager->ProcessDatabaseTask(serviceTimeStamp);
-
-		this->mSessionManager->ProcessSnapShot();
-
-		processTime = scheudlerTimeStamp.GetTimeStamp();
-		if (processTime > maxProcessTime)
+		while (processTime < serviceTimeStamp + maxProcessTime)
 		{
-			wprintf(L"[Service::ServiceScheudler] Over process time %lld(sec)\n", processTime);
+			scheudlerTimeStamp.StartTimeStamp();
+
+			this->mTaskManager->ProcessTask();
+
+			this->mDatabaseManager->ProcessTask();
 		}
-		else
-		{
-			sleepTime = maxProcessTime - processTime;
-			//wprintf(L"[Service::ServiceScheudler] Sleep process time %lld(sec)\n", sleepTime);
-			std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
-		}
+
+		mSessionManager->WorkDispatch();
+		//mTaskManager->Tick();
+
 	}
 }
 
@@ -244,6 +238,18 @@ bool Service::SetDataManager(DataManagerPtr& inDataManager)
 	return true;
 }
 
+bool Service::SetTaskManager(TaskManagerPtr& inTaskManager)
+{
+	mTaskManager = std::move(inTaskManager);
+	if (nullptr == mTaskManager)
+	{
+		ServiceLog(L"Service::SetTaskManager() : Invalid task manager\n");
+		return false;
+	}
+
+	return true;
+}
+
 void Service::SetServiceState(const EServiceState state)
 {
 	mServiceState = state;
@@ -292,6 +298,11 @@ LoggerManagerPtr Service::GetLoggerManager() const
 DataManagerPtr Service::GetDataManager() const
 {
 	return mDataManager;
+}
+
+TaskManagerPtr Service::GetTaskManager() const
+{
+	return mTaskManager;
 }
 
 DatabaseManagerPtr Service::GetDatabaseManager() const

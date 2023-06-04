@@ -50,6 +50,7 @@ class ThreadManager;
 class LoggerManager;
 class DatabaseManager;
 class DataManager;
+class TaskManager;
 
 using SessionManagerPtr		= std::shared_ptr<SessionManager>;
 using SessionManagerRef		= std::weak_ptr<SessionManager>;
@@ -58,6 +59,7 @@ using LoggerManagerPtr		= std::shared_ptr<LoggerManager>;
 using DatabaseManagerPtr	= std::shared_ptr<DatabaseManager>;
 using DatabaseManagerRef	= std::weak_ptr<DatabaseManager>;
 using DataManagerPtr		= std::shared_ptr<DataManager>;
+using TaskManagerPtr		= std::shared_ptr<TaskManager>;
 
 //==========================//
 //		   Memory			//

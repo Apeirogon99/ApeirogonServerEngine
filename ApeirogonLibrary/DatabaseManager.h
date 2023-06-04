@@ -3,7 +3,7 @@
 class DatabaseManager
 {
 public:
-	APEIROGON_API DatabaseManager(const size_t inThreadPoolSize, const size_t inDatabasePoolSize);
+	APEIROGON_API DatabaseManager(const uint32 inThreadPoolSize, const uint32 inDatabasePoolSize);
 	APEIROGON_API virtual ~DatabaseManager();
 
 protected:
@@ -18,32 +18,31 @@ public:
 	void Shutdown();
 
 public:
+	APEIROGON_API virtual void InitializeDatabase() abstract;
 	APEIROGON_API void PushConnectionPool(ADOConnection& inConnection, const ADOConnectionInfo& inConnectioninfo);
 	APEIROGON_API void PrintConnectionPoolState();
-	APEIROGON_API DatabaseTaskQueuePtr GetDatabaseTaskQueue();
+	APEIROGON_API void KeepConnection();
 
-	void ProcessDatabaseTask(const int64 inServiceTimeStamp);
-	void WorkDispatch();
+	APEIROGON_API bool PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack);
+
+public:
+	void DoWorkThreads();
+	void ProcessTask();
 
 protected:
-	APEIROGON_API virtual void InitializeDatabase() abstract;
-
-	bool StartDatabaseManager();
-	void DatabaseLoop();
-	void KeepConnection();
 	void DatabaseLog(const WCHAR* log, ...);
 
 private:
-	size_t						mPoolSize;
-	size_t						mUsedSize;
+	uint32							mPoolSize;
+	uint32							mUsedSize;
 
-	ServicePtr					mService;
-	ADOConnection*				mConnections;
-	ADOConnectionInfo*			mConnectionInfos;
+	ServicePtr						mService;
+	ADOConnection*					mConnections;
+	ADOConnectionInfo*				mConnectionInfos;
 
-	bool						mIsRunning;
-	TimeStamp					mTimeStamp;
-	std::thread					mDatabaseManagerThread;
-	DatabaseTaskQueuePtr		mDatabaseHandler;
+	FastSpinLock					mFastSpinLock;
+	CircularQueue<ADOAsyncTaskPtr>	mAsyncTaskQueue;
+	CircularQueue<ADOAsyncTaskPtr>	mDatabaseTaskQueue;
+	std::vector<std::thread>		mThreads;
 };
 

@@ -94,6 +94,18 @@
     <Filter Include="Source\Public\Data">
       <UniqueIdentifier>{cd87a26e-d9b5-4b87-8177-ad0dd6bbea7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Private\Task">
+      <UniqueIdentifier>{0fd96c7a-18ea-42b4-b190-e0bc68995f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Task">
+      <UniqueIdentifier>{1ab7424a-7634-4360-aeaf-7a58598e52ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Private\Object">
+      <UniqueIdentifier>{e1863b42-f47d-4bf9-ae18-2d8dd2c52b00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Public\Object">
+      <UniqueIdentifier>{137834b4-ee07-4c45-8de5-78c1a4143665}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -204,9 +216,6 @@
     <ClCompile Include="SRWLockGuard.cpp">
       <Filter>Source\Private\Sync</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkTask.cpp">
-      <Filter>Source\Private\Network</Filter>
-    </ClCompile>
     <ClCompile Include="TimeStamp.cpp">
       <Filter>Source\Private\Time</Filter>
     </ClCompile>
@@ -222,11 +231,17 @@
     <ClCompile Include="SessionMonitoring.cpp">
       <Filter>Source\Private\Network</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source\Private\Network</Filter>
-    </ClCompile>
     <ClCompile Include="DataManager.cpp">
       <Filter>Source\Private\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Task.cpp">
+      <Filter>Source\Private\Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskManager.cpp">
+      <Filter>Source\Private\Task</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source\Private\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -347,9 +362,6 @@
     <ClInclude Include="SRWLockGuard.h">
       <Filter>Source\Public\Sync</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkTask.h">
-      <Filter>Source\Public\Network</Filter>
-    </ClInclude>
     <ClInclude Include="TimeStamp.h">
       <Filter>Source\Public\Time</Filter>
     </ClInclude>
@@ -368,11 +380,17 @@
     <ClInclude Include="SessionMonitoring.h">
       <Filter>Source\Public\Network</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Source\Public\Network</Filter>
-    </ClInclude>
     <ClInclude Include="DataManager.h">
       <Filter>Source\Public\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Task.h">
+      <Filter>Source\Public\Task</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskManager.h">
+      <Filter>Source\Public\Task</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Source\Public\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

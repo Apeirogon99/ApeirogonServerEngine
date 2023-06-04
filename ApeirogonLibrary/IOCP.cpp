@@ -56,7 +56,7 @@ bool IOCPServer::RegisterSocketToIOCP(const WinSocketPtr sock)
 	return true;
 }
 
-bool IOCPServer::WorkDispatch(uint32 timeoutMs)
+bool IOCPServer::WorkDispatch(DWORD timeoutMs)
 {
 	DWORD numOfBytes = 0;
 	ULONG_PTR key = 0;

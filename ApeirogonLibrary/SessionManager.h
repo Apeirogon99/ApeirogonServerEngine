@@ -26,10 +26,6 @@ public:
 	APEIROGON_API ServicePtr	GetService() const;
 
 public:
-	//APEIROGON_API virtual bool	PushNetworkTask() abstract;
-	APEIROGON_API virtual bool	ProcessNetworkTask(const int64 inServiceTimeStamp) abstract;
-	APEIROGON_API virtual bool	ProcessSnapShot();
-
 	void WorkDispatch();
 
 public:

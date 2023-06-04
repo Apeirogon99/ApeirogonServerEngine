@@ -151,11 +151,6 @@ ServicePtr SessionManager::GetService() const
 	return mService;
 }
 
-bool SessionManager::ProcessSnapShot()
-{
-	return true;
-}
-
 void SessionManager::WorkDispatch()
 {
 
@@ -164,7 +159,7 @@ void SessionManager::WorkDispatch()
 	{
 		return;
 	}
-	//wprintf(L"[SessionManager::WorkDispatch()] Start\n");
+
 	for (auto curSession = mSessions.begin(); curSession != mSessions.end();)
 	{
 		Session* session = curSession->get();
@@ -185,7 +180,6 @@ void SessionManager::WorkDispatch()
 
 		curSession++;
 	}
-	//wprintf(L"[SessionManager::WorkDispatch()] Done\n");
 }
 
 void SessionManager::SessionManagerLog(const WCHAR* log, ...)

@@ -29,7 +29,7 @@ public:
 	bool Prepare(ServicePtr service);
 	void Shutdown();
 	bool RegisterSocketToIOCP(const WinSocketPtr sock);
-	APEIROGON_API bool WorkDispatch(uint32 timeoutMs = INFINITE);
+	APEIROGON_API bool WorkDispatch(DWORD timeoutMs = INFINITE);
 	APEIROGON_API bool PostDispatch(const uint32 inNumOfBytes, IocpEvent& inEven);
 
 protected:

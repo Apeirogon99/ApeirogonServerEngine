@@ -78,30 +78,3 @@ public:
 	ADORecordset		mADORecordset;
 	ADOCallBack			mADOCallBack;
 };
-
-class DatabaseTaskQueue
-{
-public:
-	APEIROGON_API DatabaseTaskQueue();
-	APEIROGON_API ~DatabaseTaskQueue();
-
-private:
-	DatabaseTaskQueue(DatabaseTaskQueue&&) = delete;
-	DatabaseTaskQueue(const DatabaseTaskQueue&) = delete;
-
-	DatabaseTaskQueue& operator=(DatabaseTaskQueue&&) = delete;
-	DatabaseTaskQueue& operator=(const DatabaseTaskQueue&) = delete;
-	
-public:
-	void ProcessAsync();
-	bool GetDatabaseTasks(std::vector<ADOAsyncTaskPtr>& inDatabaseTasks);
-
-public:
-
-	APEIROGON_API bool PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack);
-
-private:
-	FastSpinLock					mFastSpinLock;
-	CircularQueue<ADOAsyncTaskPtr>	mAsyncTaskQueue;
-	CircularQueue<ADOAsyncTaskPtr>	mDatabaseTaskQueue;
-};

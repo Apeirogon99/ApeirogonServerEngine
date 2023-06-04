@@ -27,5 +27,6 @@ private:
 	uint32						maxThreadTimeOut;
 	std::vector<std::thread>	mThreads;
 	ServicePtr					mService;
+	TimeStamp					mThreadProcessTime;
 };
 

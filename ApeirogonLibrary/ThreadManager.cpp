@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ThreadManager.h"
 
-ThreadManager::ThreadManager(const uint32 maxThreadCount, const uint32 inMaxThreadTimeOut) : maxThreadCount(maxThreadCount), maxThreadTimeOut(inMaxThreadTimeOut)
+ThreadManager::ThreadManager(const uint32 maxThreadCount, const uint32 inMaxThreadTimeOut) : maxThreadCount(maxThreadCount), maxThreadTimeOut(inMaxThreadTimeOut), mThreadProcessTime(L"ThreadProcess")
 {
 }
 
@@ -37,16 +37,27 @@ void ThreadManager::Shutdown()
 	mService.reset();
 }
 
-void ThreadManager::DoWorkThreads(const uint32 inTimeOut)
+void ThreadManager::DoWorkThreads(const uint32 inMaxProcessTime)
 {
+
+	const int64 maxProcessTime = inMaxProcessTime;
+	int64		processTime = 0;
+
 	while (mService->IsServiceOpen())
 	{
-		mService->GetIOCPServer()->WorkDispatch(inTimeOut);
 
-		mService->GetSessionManager()->WorkDispatch();
+		mThreadProcessTime.StartTimeStamp();
 
-		mService->GetDatabaseManager()->WorkDispatch();
+		while (processTime <= maxProcessTime)
+		{
+			mService->GetIOCPServer()->WorkDispatch(static_cast<DWORD>(maxProcessTime - processTime));
+
+			processTime = mThreadProcessTime.GetTimeStamp();
+		}
+
+		//mService->GetSessionManager()->WorkDispatch();
 	}
+
 }
 
 void ThreadManager::StopWorkThreads()

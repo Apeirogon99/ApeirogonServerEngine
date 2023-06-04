@@ -37,6 +37,7 @@ protected:
 	APEIROGON_API bool					SetLoggerManager(LoggerManagerPtr& loggerManager);
 	APEIROGON_API bool					SetDatabaseManager(DatabaseManagerPtr& inDatabase);
 	APEIROGON_API bool					SetDataManager(DataManagerPtr& inDataManager);
+	APEIROGON_API bool					SetTaskManager(TaskManagerPtr& inTaskManager);
 
 	void								SetServiceState(const EServiceState state);
 
@@ -50,15 +51,16 @@ public:
 	IOCPServerPtr						GetIOCPServer() const;
 	ThreadManagerPtr					GetThreadManager() const;
 	LoggerManagerPtr					GetLoggerManager() const;
-
-	APEIROGON_API DataManagerPtr		GetDataManager() const;
-	APEIROGON_API DatabaseManagerPtr	GetDatabaseManager() const;
+	DatabaseManagerPtr					GetDatabaseManager() const;
+	DataManagerPtr						GetDataManager() const;
+	TaskManagerPtr						GetTaskManager() const;
 
 protected:
 	APEIROGON_API void			ServiceLog(const WCHAR* log, ...);
 
 private:
 	EServiceState				mServiceState;
+
 	SessionManagerPtr			mSessionManager;
 	ListenerPtr					mListener;
 	IOCPServerPtr				mIOCPServer;
@@ -66,5 +68,7 @@ private:
 	LoggerManagerPtr			mLoggerManager;
 	DatabaseManagerPtr			mDatabaseManager;
 	DataManagerPtr				mDataManager;
+	TaskManagerPtr				mTaskManager;
+
 	TimeStamp					mServiceTime;
 };

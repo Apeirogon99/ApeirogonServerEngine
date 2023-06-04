@@ -3,7 +3,7 @@
 
 using namespace std;
 
-DatabaseManager::DatabaseManager(const size_t inThreadPoolSize, const size_t inDatabasePoolSize) : mIsRunning(true), mPoolSize(inDatabasePoolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mTimeStamp(L"DatabaseManager")
+DatabaseManager::DatabaseManager(const uint32 inThreadPoolSize, const uint32 inDatabasePoolSize) : mPoolSize(inDatabasePoolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mAsyncTaskQueue(0x1000), mDatabaseTaskQueue(0x1000), mFastSpinLock()
 {
 	mConnections = new ADOConnection[inDatabasePoolSize]();
 	mConnectionInfos = new ADOConnectionInfo[inDatabasePoolSize]();
@@ -41,20 +41,29 @@ bool DatabaseManager::Prepare(ServicePtr service)
 		return false;
 	}
 
-	mDatabaseHandler = std::make_shared<DatabaseTaskQueue>();
-	if (nullptr == mDatabaseHandler)
-	{
-		return false;
-	}
-
 	InitializeDatabase();
-	if (false == StartDatabaseManager())
+
+	if (mUsedSize == 0)
 	{
 		return false;
 	}
 
-	mDatabaseManagerThread = std::thread(&DatabaseManager::DatabaseLoop, this);
-	DatabaseLog(L"[DatabaseManager::Prepare()] Thread started working\n");
+	for (size_t index = 0; index < mUsedSize; ++index)
+	{
+		ADOConnection& connection = mConnections[index];
+		ADOConnectionInfo& connectionInfo = mConnectionInfos[index];
+		if (!connection.IsOpen())
+		{
+			connection.Open(connectionInfo);
+		}
+	}
+
+	for (uint32 index = 0; index < mPoolSize; ++index)
+	{
+		mThreads.emplace_back(std::thread(&DatabaseManager::DoWorkThreads, this));
+	}
+
+	DatabaseLog(L"[DatabaseManager::Prepare()] %ld Threads started working\n", mPoolSize);
 	PrintConnectionPoolState();
 
 	return true;
@@ -63,12 +72,6 @@ bool DatabaseManager::Prepare(ServicePtr service)
 void DatabaseManager::Shutdown()
 {
 
-	mIsRunning = false;
-
-	if (mDatabaseManagerThread.joinable())
-	{
-		mDatabaseManagerThread.join();
-	}
 
 	for (size_t index = 0; index < mUsedSize; ++index)
 	{
@@ -89,26 +92,6 @@ void DatabaseManager::PushConnectionPool(ADOConnection& inConnection, const ADOC
 	mConnections[mUsedSize] = inConnection;
 	mConnectionInfos[mUsedSize] = inConnectioninfo;
 	mUsedSize++;
-}
-
-bool DatabaseManager::StartDatabaseManager()
-{
-	if (mUsedSize == 0)
-	{
-		return false;
-	}
-	
-	for (size_t index = 0; index < mUsedSize; ++index)
-	{
-		ADOConnection& connection = mConnections[index];
-		ADOConnectionInfo& connectionInfo = mConnectionInfos[index];
-		if (!connection.IsOpen())
-		{
-			connection.Open(connectionInfo);
-		}
-	}
-
-	return true;
 }
 
 void DatabaseManager::PrintConnectionPoolState()
@@ -138,12 +121,7 @@ void DatabaseManager::PrintConnectionPoolState()
 	wprintf(L"}\n");
 }
 
-DatabaseTaskQueuePtr DatabaseManager::GetDatabaseTaskQueue()
-{
-	return mDatabaseHandler;
-}
-
-void DatabaseManager::DatabaseLoop()
+void DatabaseManager::DoWorkThreads()
 {
 	HRESULT hResult = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (hResult == S_FALSE)
@@ -151,64 +129,44 @@ void DatabaseManager::DatabaseLoop()
 		return;
 	}
 
-	const long long		totalProcessTime = 0x64;
-	long long			processTime = 0;
-	long long			sleepTime = 0;
-
-	static long long	keepConnectionTime = 0;
-	const long long		maxConnectionTime = 6000;
-
-	while (mIsRunning)
+	while (mService->IsServiceOpen())
 	{
-		mTimeStamp.StartTimeStamp();
-
-		mDatabaseHandler->ProcessAsync();
-
-		processTime = static_cast<long long>(mTimeStamp.GetTimeStamp());
-
-		if (processTime > totalProcessTime)
+		FastLockGuard lockGuard(mFastSpinLock);
+		const ADOAsyncTaskPtr* PeekItem = mAsyncTaskQueue.Peek();
+		if (nullptr == PeekItem)
 		{
-			keepConnectionTime = processTime;
-			//wprintf(L"[ADOAsync::AsyncLoop] Over process time %lld(sec)\n", processTime);
-		}
-		else
-		{
-			sleepTime = totalProcessTime - processTime;
-			//wprintf(L"[ADOAsync::AsyncLoop] Sleep process time %lld(sec)\n", sleepTime);
-			std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
-
-			keepConnectionTime += (processTime + sleepTime);
+			return;
 		}
 
-		if (keepConnectionTime >= maxConnectionTime)
+		if (PeekItem->get()->mADOCommand.IsExecuteComplete())
 		{
-			KeepConnection();
-			keepConnectionTime = 0;
+			ADOAsyncTaskPtr dequeueItem;
+			mAsyncTaskQueue.Dequeue(dequeueItem);
+			mDatabaseTaskQueue.Enqueue(std::move(dequeueItem));
 		}
 	}
 
 	CoUninitialize();
 }
 
-void DatabaseManager::ProcessDatabaseTask(const int64 inServiceTimeStamp)
+void DatabaseManager::ProcessTask()
 {
 
 	std::vector<ADOAsyncTaskPtr> completeTask;
-	bool isTask = mDatabaseHandler->GetDatabaseTasks(completeTask);
-	if (false == isTask)
 	{
-		return;
+		FastLockGuard lockGuard(mFastSpinLock);
+		if (mDatabaseTaskQueue.IsEmpty())
+		{
+			return;
+		}
+
+		mDatabaseTaskQueue.Dequeue(completeTask);
 	}
 
 	for (ADOAsyncTaskPtr& task : completeTask)
 	{
 		task->Execute();
 	}
-
-}
-
-void DatabaseManager::WorkDispatch()
-{
 
 }
 
@@ -230,6 +188,14 @@ void DatabaseManager::KeepConnection()
 		}
 	}
 
+}
+
+bool DatabaseManager::PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
+{
+	FastLockGuard lockGuard(mFastSpinLock);
+	ADOAsyncTaskPtr newItem = std::make_shared<ADOAsyncTask>(inSession, inADOConnection, inADOCommand, inADORecordset, inADOCallBack);
+	const bool result = mAsyncTaskQueue.Enqueue(std::move(newItem));
+	return result;
 }
 
 void DatabaseManager::DatabaseLog(const WCHAR* log, ...)
