@@ -51,7 +51,7 @@ private:
 class TaskQueue : public std::enable_shared_from_this<TaskQueue>
 {
 public:
-	APEIROGON_API TaskQueue() {}
+	APEIROGON_API TaskQueue() : mFastSpinLock() {}
 	APEIROGON_API ~TaskQueue() {}
 
 	TaskQueue(TaskQueue&&) = delete;
@@ -68,11 +68,16 @@ public:
 		std::weak_ptr<T> owner = std::static_pointer_cast<T>(shared_from_this());
 		TaskNodePtr newTaskNode = std::make_shared<TaskNode>();
 		newTaskNode->Init(inPriority, owner, inMemberFunc, std::forward<Args>(inArgs)...);
-		return mTaskQueue.Enqueue(newTaskNode);
+
+		FastLockGuard lockGaurd(mFastSpinLock);
+		bool result = mTaskQueue.Enqueue(newTaskNode);
+
+		return result;
 	}
 
 	APEIROGON_API void ClearTask()
 	{
+		FastLockGuard lockGaurd(mFastSpinLock);
 		int32 count = mTaskQueue.Count();
 		for (int32 task = 0; task < count; ++task)
 		{
@@ -85,21 +90,24 @@ public:
 	APEIROGON_API bool Execute(const int64 inServiceTimeStamp)
 	{
 		std::vector<TaskNodePtr> TaskNodes;
-		while (true)
 		{
-			TaskNodePtr peekTaskNode;
-			if (false == mTaskQueue.Peek(peekTaskNode))
+			FastLockGuard lockGaurd(mFastSpinLock);
+			while (true)
 			{
-				break;
-			}
+				TaskNodePtr peekTaskNode;
+				if (false == mTaskQueue.Peek(peekTaskNode))
+				{
+					break;
+				}
 
-			if (peekTaskNode->GetPriority() > inServiceTimeStamp)
-			{
-				break;
-			}
+				if (peekTaskNode->GetPriority() > inServiceTimeStamp)
+				{
+					break;
+				}
 
-			TaskNodes.emplace_back(std::move(peekTaskNode));
-			mTaskQueue.Dequeue();
+				TaskNodes.emplace_back(std::move(peekTaskNode));
+				mTaskQueue.Dequeue();
+			}
 		}
 
 		if (TaskNodes.empty())
@@ -116,6 +124,7 @@ public:
 	}
 
 private:
-	PriorityQueue<TaskNodePtr> mTaskQueue;
+	FastSpinLock				mFastSpinLock;
+	PriorityQueue<TaskNodePtr>	mTaskQueue;
 };
 

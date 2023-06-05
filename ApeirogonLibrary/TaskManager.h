@@ -13,18 +13,24 @@ private:
 	TaskManager& operator=(TaskManager&&) = delete;
 
 public:
-	bool					Prepare(ServicePtr service);
-	void					Shutdown();
+	bool Prepare(ServicePtr service);
+	void Shutdown();
 
 public:
-	void ProcessTask();
+	void ProcessTask(const int64 inServiceTimeStamp);
 	void Tick();
 
+public:
+	APEIROGON_API void		   	PushTask(GameObjectPtr& inGameObject);
+	APEIROGON_API void		   	ReleaseTask(GameObjectPtr& inGameObject);
+	APEIROGON_API GameObjectPtr	FindTask(const WCHAR* inObjectName);
+
 protected:
+	void TaskManagerLog(const WCHAR* log, ...);
 
 private:
 	ServicePtr				mService;
 
-	std::vector<TaskQueue>	mTaskQueues;
+	std::unordered_map<const WCHAR*,GameObjectPtr>	mGameObjects;
 };
 

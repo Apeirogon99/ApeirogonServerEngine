@@ -10,15 +10,16 @@ public:
 	SessionManager& operator=(const SessionManager& sessionManager) = delete;
 
 public:
-	bool					Prepare(ServicePtr service);
-	SessionPtr				CreateSession();
-	bool					InsertSession(const SessionPtr& session);
-	APEIROGON_API bool		ReleaseSession(const SessionPtr& session);
-	APEIROGON_API bool		FindSession(const SessionPtr& session);
-	APEIROGON_API void		BroadCastSession(SendBufferPtr sendBuffer);
-	void					Shutdown();
+	bool						Prepare(ServicePtr service);
+	void						Shutdown();
+
+	SessionPtr					CreateSession();
+	bool						InsertSession(const SessionPtr& session);
+	APEIROGON_API bool			ReleaseSession(const SessionPtr& session);
+	APEIROGON_API bool			FindSession(const SessionPtr& session);
+	APEIROGON_API void			BroadCastSession(SendBufferPtr sendBuffer);
+
 public:
-	
 	uint32						GetSessionCount() const;
 	uint32						GetMaxSessionCount() const;
 	uint32						GetMaxBufferSize() const;

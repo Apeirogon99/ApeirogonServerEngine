@@ -154,7 +154,6 @@ ServicePtr SessionManager::GetService() const
 void SessionManager::WorkDispatch()
 {
 
-	FastLockGuard lockGuard(mFastSpinLock);
 	if (mSessions.empty())
 	{
 		return;
@@ -176,7 +175,7 @@ void SessionManager::WorkDispatch()
 		}
 
 		session->RegisterSend();
-		session->GetMonitoring().CheckSession();
+		//session->GetMonitoring().CheckSession();
 
 		curSession++;
 	}

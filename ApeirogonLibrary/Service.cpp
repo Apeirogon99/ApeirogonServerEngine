@@ -25,19 +25,21 @@ void Service::ServiceScheudler()
 	while (IsServiceOpen())
 	{
 
-		const int64 serviceTimeStamp = mServiceTime.GetTimeStamp();
+		const int64 serviceTimeStamp = GetServiceTimeStamp();
+		scheudlerTimeStamp.StartTimeStamp();
 
 		while (processTime < serviceTimeStamp + maxProcessTime)
 		{
-			scheudlerTimeStamp.StartTimeStamp();
-
-			this->mTaskManager->ProcessTask();
+			
+			this->mTaskManager->ProcessTask(serviceTimeStamp);
 
 			this->mDatabaseManager->ProcessTask();
+
+			processTime = scheudlerTimeStamp.GetTimeStamp() + serviceTimeStamp;
 		}
 
-		mSessionManager->WorkDispatch();
 		//mTaskManager->Tick();
+		mSessionManager->WorkDispatch();
 
 	}
 }
@@ -67,6 +69,8 @@ bool Service::ServiceOpen()
 	ServiceLog(L"[Service::ServiceOpen()] IP[%ws] Port[%d] service is Open\n", ip.c_str(), port);
 
 	mServiceTime.StartTimeStamp();
+
+	OnServiceOpen();
 
 	ServiceScheudler();
 
@@ -101,6 +105,8 @@ void Service::ServiceClose()
 		mIOCPServer.reset();
 		mLoggerManager.reset();
 	}
+
+	OnServiceClose();
 
 }
 
@@ -148,6 +154,12 @@ bool Service::Prepare()
 	if (mThreadManager == nullptr || false == mThreadManager->Prepare(shared_from_this()))
 	{
 		ServiceLog(L"Service::Prepare() : failed to prepare for thread manager\n");
+		return false;
+	}
+
+	if (mTaskManager == nullptr || false == mTaskManager->Prepare(shared_from_this()))
+	{
+		ServiceLog(L"Service::Prepare() : failed to prepare for task manager\n");
 		return false;
 	}
 	

@@ -33,8 +33,8 @@ protected:
 	void DatabaseLog(const WCHAR* log, ...);
 
 private:
-	uint32							mPoolSize;
-	uint32							mUsedSize;
+	uint32							mConnectionPoolSize;
+	uint32							mConnectionUsedSize;
 
 	ServicePtr						mService;
 	ADOConnection*					mConnections;
@@ -43,6 +43,8 @@ private:
 	FastSpinLock					mFastSpinLock;
 	CircularQueue<ADOAsyncTaskPtr>	mAsyncTaskQueue;
 	CircularQueue<ADOAsyncTaskPtr>	mDatabaseTaskQueue;
+
+	uint32							mThreadPoolSize;
 	std::vector<std::thread>		mThreads;
 };
 

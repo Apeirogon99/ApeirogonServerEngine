@@ -3,7 +3,7 @@
 
 using namespace std;
 
-DatabaseManager::DatabaseManager(const uint32 inThreadPoolSize, const uint32 inDatabasePoolSize) : mPoolSize(inDatabasePoolSize), mUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mAsyncTaskQueue(0x1000), mDatabaseTaskQueue(0x1000), mFastSpinLock()
+DatabaseManager::DatabaseManager(const uint32 inThreadPoolSize, const uint32 inDatabasePoolSize) : mThreadPoolSize(inThreadPoolSize), mConnectionPoolSize(inDatabasePoolSize), mConnectionUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mAsyncTaskQueue(0x1000), mDatabaseTaskQueue(0x1000), mFastSpinLock()
 {
 	mConnections = new ADOConnection[inDatabasePoolSize]();
 	mConnectionInfos = new ADOConnectionInfo[inDatabasePoolSize]();
@@ -43,12 +43,12 @@ bool DatabaseManager::Prepare(ServicePtr service)
 
 	InitializeDatabase();
 
-	if (mUsedSize == 0)
+	if (mConnectionUsedSize == 0)
 	{
 		return false;
 	}
 
-	for (size_t index = 0; index < mUsedSize; ++index)
+	for (size_t index = 0; index < mConnectionUsedSize; ++index)
 	{
 		ADOConnection& connection = mConnections[index];
 		ADOConnectionInfo& connectionInfo = mConnectionInfos[index];
@@ -58,12 +58,12 @@ bool DatabaseManager::Prepare(ServicePtr service)
 		}
 	}
 
-	for (uint32 index = 0; index < mPoolSize; ++index)
+	for (uint32 index = 0; index < mThreadPoolSize; ++index)
 	{
 		mThreads.emplace_back(std::thread(&DatabaseManager::DoWorkThreads, this));
 	}
 
-	DatabaseLog(L"[DatabaseManager::Prepare()] %ld Threads started working\n", mPoolSize);
+	DatabaseLog(L"[DatabaseManager::Prepare()] %ld Threads started working\n", mThreadPoolSize);
 	PrintConnectionPoolState();
 
 	return true;
@@ -73,7 +73,7 @@ void DatabaseManager::Shutdown()
 {
 
 
-	for (size_t index = 0; index < mUsedSize; ++index)
+	for (size_t index = 0; index < mConnectionUsedSize; ++index)
 	{
 		ADOConnection& connection = mConnections[index];
 		if (connection.IsOpen())
@@ -89,21 +89,21 @@ void DatabaseManager::Shutdown()
 
 void DatabaseManager::PushConnectionPool(ADOConnection& inConnection, const ADOConnectionInfo& inConnectioninfo)
 {
-	mConnections[mUsedSize] = inConnection;
-	mConnectionInfos[mUsedSize] = inConnectioninfo;
-	mUsedSize++;
+	mConnections[mConnectionUsedSize] = inConnection;
+	mConnectionInfos[mConnectionUsedSize] = inConnectioninfo;
+	mConnectionUsedSize++;
 }
 
 void DatabaseManager::PrintConnectionPoolState()
 {
-	if (mUsedSize == 0)
+	if (mConnectionUsedSize == 0)
 	{
 		return;
 	}
 
 	DatabaseLog(L"[Current ConnectionPool States]\n");
 	wprintf(L"{\n");
-	for (size_t index = 0; index < mUsedSize; ++index)
+	for (size_t index = 0; index < mConnectionUsedSize; ++index)
 	{
 		ADOConnection& connection = mConnections[index];
 		ADOConnectionInfo& connectionInfo = mConnectionInfos[index];
@@ -172,12 +172,12 @@ void DatabaseManager::ProcessTask()
 
 void DatabaseManager::KeepConnection()
 {
-	if (mUsedSize == 0)
+	if (mConnectionUsedSize == 0)
 	{
 		return;
 	}
 
-	for (size_t index = 0; index < mUsedSize; ++index)
+	for (size_t index = 0; index < mConnectionUsedSize; ++index)
 	{
 		ADOConnection& connection = mConnections[index];
 		ADOConnectionInfo& connectionInfo = mConnectionInfos[index];

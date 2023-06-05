@@ -22,6 +22,9 @@ public:
 	APEIROGON_API bool					ServiceOpen();
 	APEIROGON_API void					ServiceClose();
 
+	APEIROGON_API virtual void			OnServiceOpen() {};
+	APEIROGON_API virtual void			OnServiceClose() {};
+
 public:
 	APEIROGON_API int64					GetServiceTimeStamp();
 	void								ServiceScheudler();
@@ -51,9 +54,10 @@ public:
 	IOCPServerPtr						GetIOCPServer() const;
 	ThreadManagerPtr					GetThreadManager() const;
 	LoggerManagerPtr					GetLoggerManager() const;
-	DatabaseManagerPtr					GetDatabaseManager() const;
-	DataManagerPtr						GetDataManager() const;
-	TaskManagerPtr						GetTaskManager() const;
+
+	APEIROGON_API DatabaseManagerPtr	GetDatabaseManager() const;
+	APEIROGON_API DataManagerPtr		GetDataManager() const;
+	APEIROGON_API TaskManagerPtr		GetTaskManager() const;
 
 protected:
 	APEIROGON_API void			ServiceLog(const WCHAR* log, ...);
