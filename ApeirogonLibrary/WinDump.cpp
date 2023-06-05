@@ -6,7 +6,7 @@ const WCHAR* WinDump::mDumpPath = L"NONE";
 
 WinDump::WinDump()
 {
-	::SetUnhandledExceptionFilter(ExceptionFilter);
+	//::SetUnhandledExceptionFilter(ExceptionFilter);
 	//wprintf(L"WinDump::WinDump() : set window dump\n");
 }
 
@@ -23,9 +23,10 @@ void WinDump::Init(const WCHAR* inDumpPath)
 
 LONG __stdcall WinDump::ExceptionFilter(_EXCEPTION_POINTERS* execptionPointer)
 {
-	std::wstring dumpFilePath = mDumpPath;
-	dumpFilePath += Time::NowTime(false);
-	dumpFilePath += L".dmp";
+	std::wstring dumpFilePath = L"";
+	dumpFilePath.append(mDumpPath);
+	dumpFilePath.append(Time::NowTime(false));
+	dumpFilePath.append(L".dmp");
 
 	//프로그램 실행의 시작부터 또는 지정된 힙 상태에서 힙에 있는 개체에 대한 정보를 덤프합니다(디버그 버전에만 해당)
 	_CrtMemDumpAllObjectsSince(NULL);
