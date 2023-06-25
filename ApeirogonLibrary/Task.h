@@ -92,6 +92,11 @@ public:
 		std::vector<TaskNodePtr> TaskNodes;
 		{
 			FastLockGuard lockGaurd(mFastSpinLock);
+			if (mTaskQueue.IsEmpty())
+			{
+				return true;
+			}
+
 			while (true)
 			{
 				TaskNodePtr peekTaskNode;

@@ -13,10 +13,11 @@ public:
 	bool						Prepare(ServicePtr service);
 	void						Shutdown();
 
-	SessionPtr					CreateSession();
-	bool						InsertSession(const SessionPtr& session);
+	APEIROGON_API SessionPtr	CreateSession(const ESessionMode& inSessionMode);
+	APEIROGON_API bool			InsertSession(const SessionPtr& session);
 	APEIROGON_API bool			ReleaseSession(const SessionPtr& session);
 	APEIROGON_API bool			FindSession(const SessionPtr& session);
+	APEIROGON_API bool			FindServerSession(SessionPtr& outServerSession);
 	APEIROGON_API void			BroadCastSession(SendBufferPtr sendBuffer);
 
 public:

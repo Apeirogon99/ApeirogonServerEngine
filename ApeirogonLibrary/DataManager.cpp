@@ -3,7 +3,7 @@
 
 using namespace std;
 
-DataManager::DataManager()
+DataManager::DataManager(const int32 inMaxDatas) : mDataCounts(inMaxDatas)
 {
 }
 
@@ -20,6 +20,7 @@ bool DataManager::Prepare(ServicePtr service)
 		return false;
 	}
 
+	mDatas.resize(mDataCounts);
 	if (false == InitDatas())
 	{
 		return false;
@@ -83,8 +84,14 @@ CSVRow* DataManager::PeekRow(uint8 inDataNumber, int32 inRowNumber)
 	return nullptr;
 }
 
-bool DataManager::PushData(const WCHAR* inFilePath)
+bool DataManager::PushData(const WCHAR* inFilePath, const int32 inDataType)
 {
+
+	if (inDataType > mDataCounts)
+	{
+		DataManagerLog(L"[DataManager::PushData] DataType is range out(MAX : %d)(INPUT : %d)\n", mDataCounts, inDataType);
+		return false;
+	}
 
 	DataManagerLog(L"[DataManager::PushData] Load csv file (%ws)\n", inFilePath);
 
@@ -114,13 +121,13 @@ bool DataManager::PushData(const WCHAR* inFilePath)
 		rows.clear();
 	}
 
-	this->mDatas.push_back(csvDatas);
+	this->mDatas[inDataType] = std::move(csvDatas);
 
-	for (CSVRow& row : csvDatas)
-	{
-		row.clear();
-	}
-	csvDatas.clear();
+	//for (CSVRow& row : csvDatas)
+	//{
+	//	row.clear();
+	//}
+	//csvDatas.clear();
 
 	readStream.close();
 	return true;

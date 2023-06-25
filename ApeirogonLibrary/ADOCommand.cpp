@@ -45,6 +45,8 @@ ADOCommand::ADOCommand(const ADOCommand& inCommand)
 
 		mConnectionInfo = inCommand.mConnectionInfo;
 
+		this->mStoredProcName = inCommand.mStoredProcName;
+
 		Attach(inCommand, true);
 	}
 }
@@ -62,6 +64,8 @@ ADOCommand& ADOCommand::operator=(const ADOCommand& inCommand)
 		}
 
 		mConnectionInfo = inCommand.mConnectionInfo;
+
+		this->mStoredProcName = inCommand.mStoredProcName;
 
 		Attach(inCommand, true);
 	}
@@ -136,6 +140,8 @@ void ADOCommand::SetStoredProcedure(ADOConnection& connection, const WCHAR* stor
 {
 	HRESULT hResult = S_FALSE;
 
+	mStoredProcName = storedProcName;
+
 	auto commandInterface = this->GetInterfacePtr();
 	if (!commandInterface)
 	{
@@ -181,7 +187,7 @@ void ADOCommand::ExecuteStoredProcedure(ADORecordset& recordset, EExcuteReturnTy
 		recordset = commandInterface->Execute(NULL, &vtMissing, executeOptions);
 		break;
 	case EExcuteReturnType::Wait_Return:
-		executeOptions = adCmdStoredProc | adExecuteRecord;
+		executeOptions = adCmdStoredProc | adAsyncFetchNonBlocking;
 		recordset = commandInterface->Execute(NULL, &vtMissing, executeOptions);
 		break;
 	case EExcuteReturnType::Async_Return:
@@ -487,11 +493,11 @@ bool ADOCommand::IsExecuteComplete() const
 	long state = commandInterface->GetState();
 	if (state == ObjectStateEnum::adStateClosed)
 	{
-		wprintf(L"[DBCommand::IsExecuteComplete] command is complete\n");
+		wprintf(L"[DBCommand::IsExecuteComplete] %ws command is complete\n", GetStoredProcName());
 	}
 	else
 	{
-		wprintf(L"[DBCommand::IsExecuteComplete] command is executing\n");
+		//wprintf(L"[DBCommand::IsExecuteComplete] %ws command is executing\n", GetStoredProcName());
 	}
 
 	return (state == ObjectStateEnum::adStateClosed) ? true : false;

@@ -38,7 +38,9 @@ void Service::ServiceScheudler()
 			processTime = scheudlerTimeStamp.GetTimeStamp() + serviceTimeStamp;
 		}
 
-		//mTaskManager->Tick();
+		mTaskManager->Tick();
+
+		//TODO: 요청만 하게
 		mSessionManager->WorkDispatch();
 
 	}
@@ -83,25 +85,25 @@ void Service::ServiceClose()
 	{
 		SetServiceState(EServiceState::Close);
 
+		mThreadManager->Shutdown();
+
+		mDatabaseManager->Shutdown();
+
 		mSessionManager->Shutdown();
 
 		mDataManager->Shutdown();
 
-		mDatabaseManager->Shutdown();
-
 		mListener->Shutdown();
-
-		mThreadManager->Shutdown();
 
 		mIOCPServer->Shutdown();
 
 		mLoggerManager->Shutdown();
 
+		mThreadManager.reset();
+		mDatabaseManager.reset();
 		mSessionManager.reset();
 		mDataManager.reset();
-		mDatabaseManager.reset();
 		mListener.reset();
-		mThreadManager.reset();
 		mIOCPServer.reset();
 		mLoggerManager.reset();
 	}

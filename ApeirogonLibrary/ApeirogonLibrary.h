@@ -27,6 +27,8 @@
 #include <ctime>
 #include <sys/timeb.h>
 #include <typeinfo>
+#include <type_traits>
+#include <random>
 
 //==========================//
 //		     STL			//

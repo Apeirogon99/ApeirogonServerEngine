@@ -48,12 +48,12 @@ public:
 	bool								IsServiceOpen() const;
 	EServiceState						GetState() const;
 
-	ServicePtr							GetPtr() const;
-	SessionManagerPtr					GetSessionManager() const;
-	ListenerPtr							GetListener() const;
-	IOCPServerPtr						GetIOCPServer() const;
-	ThreadManagerPtr					GetThreadManager() const;
-	LoggerManagerPtr					GetLoggerManager() const;
+	APEIROGON_API ServicePtr			GetPtr() const;
+	APEIROGON_API SessionManagerPtr		GetSessionManager() const;
+	APEIROGON_API ListenerPtr			GetListener() const;
+	APEIROGON_API IOCPServerPtr			GetIOCPServer() const;
+	APEIROGON_API ThreadManagerPtr		GetThreadManager() const;
+	APEIROGON_API LoggerManagerPtr		GetLoggerManager() const;
 
 	APEIROGON_API DatabaseManagerPtr	GetDatabaseManager() const;
 	APEIROGON_API DataManagerPtr		GetDataManager() const;

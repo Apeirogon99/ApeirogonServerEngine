@@ -29,16 +29,16 @@ public:
 	APEIROGON_API virtual void Dispatch(class IocpEvent* iocpEvent, int32 numOfBytes = 0) override;
 
 public:
-	bool Prepare(const SessionManagerRef& service);
-	void SetIpAddress(IPAddressPtr& ipAddr);
+	bool Prepare(const SessionManagerRef& service, const ESessionMode& inSessionMode);
+	APEIROGON_API void SetIpAddress(IPAddressPtr& ipAddr);
 	void Shutdown();
 
 public:
-	bool RegisterConnect();
-	bool RegisterDisconnect();
-	void RegisterRecv();
-	void RegisterSend();
-	void RegisterIcmp();
+	APEIROGON_API bool RegisterConnect();
+	APEIROGON_API bool RegisterDisconnect();
+	APEIROGON_API void RegisterRecv();
+	APEIROGON_API void RegisterSend();
+	APEIROGON_API void RegisterIcmp();
 
 	void ProcessConnect();
 	void ProcessDisconnect();
@@ -47,33 +47,36 @@ public:
 	void ProcessIcmp();
 
 public:
-	APEIROGON_API void				Connect();
-	APEIROGON_API void				Disconnect(const WCHAR* cause);
-	APEIROGON_API void				Send(SendBufferPtr message);
-	APEIROGON_API void				Recv();
+	APEIROGON_API void					Connect();
+	APEIROGON_API void					Disconnect(const WCHAR* cause);
+	APEIROGON_API void					Send(SendBufferPtr message);
+	APEIROGON_API void					Recv();
 
-	APEIROGON_API virtual void		OnConnected() abstract;
-	APEIROGON_API virtual uint32	OnRecv(RingBuffer& inRingBuffer, uint32 inLen) abstract;
-	APEIROGON_API virtual void		OnSend(uint32 len) abstract;
-	APEIROGON_API virtual void		OnIcmp() abstract;
-	APEIROGON_API virtual void		OnDisconnected() abstract;
+	APEIROGON_API virtual void			OnConnected() abstract;
+	APEIROGON_API virtual uint32		OnRecv(RingBuffer& inRingBuffer, uint32 inLen) abstract;
+	APEIROGON_API virtual void			OnSend(uint32 len) abstract;
+	APEIROGON_API virtual void			OnIcmp() abstract;
+	APEIROGON_API virtual void			OnDisconnected() abstract;
 
-	APEIROGON_API bool				IsValid();
+	APEIROGON_API bool					IsValid();
 
-	APEIROGON_API void				SessionLog(const WCHAR* log, ...);
+	APEIROGON_API void					SessionLog(const WCHAR* log, ...);
 
 public:
-	bool							IsConnected() const;
-	bool							HasPending();
-	SessionPtr						GetSession();
-	WinSocketPtr					GetWinSocket() const;
-	IPAddressPtr					GetIpAddress() const;
-	RingBuffer&						GetRecvBuffer();
-	SessionMonitoring&				GetMonitoring();
-	APEIROGON_API const int64		GetRoundTripTime();
-	APEIROGON_API SessionManagerPtr GetSessionManager();
+	APEIROGON_API const ESessionMode&	GetSessionMode() const;
+	bool								IsConnected() const;
+	bool								HasPending();
+	APEIROGON_API SessionPtr			GetSession();
+	APEIROGON_API WinSocketPtr			GetWinSocket() const;
+	APEIROGON_API IPAddressPtr			GetIpAddress() const;
+	RingBuffer&							GetRecvBuffer();
+	SessionMonitoring&					GetMonitoring();
+	APEIROGON_API const int64			GetRoundTripTime();
+	APEIROGON_API SessionManagerPtr		GetSessionManager();
 
 private:
+	ESessionMode		mSessionMode;
+
 	SessionManagerRef	mSessionManager;
 	WinSocketPtr		mSocket;
 	RingBuffer			mRecvBuffer;

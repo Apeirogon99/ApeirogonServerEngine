@@ -8,7 +8,7 @@ using CSVDatas	= std::vector<CSVRow>;
 class DataManager
 {
 public:
-	APEIROGON_API DataManager();
+	APEIROGON_API DataManager(const int32 inMaxDatas);
 	APEIROGON_API virtual ~DataManager();
 
 protected:
@@ -29,11 +29,12 @@ public:
 	APEIROGON_API CSVRow* PeekRow(uint8 inDataNumber, int32 inRowNumber);
 
 protected:
-	APEIROGON_API bool PushData(const WCHAR* inFilePath);
+	APEIROGON_API bool PushData(const WCHAR* inFilePath, const int32 inDataType);
 	APEIROGON_API void DataManagerLog(const WCHAR* log, ...);
 
 private:
 	ServicePtr				mService;
+	int32					mDataCounts;
 	std::vector<CSVDatas>	mDatas;
 };
 

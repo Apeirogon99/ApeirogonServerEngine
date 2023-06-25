@@ -38,6 +38,7 @@ public:
 	APEIROGON_API bool			IsExecuteComplete() const;
 
 	APEIROGON_API _CommandPtr	GetCommandPtr() { return *this; }
+	APEIROGON_API const WCHAR*	GetStoredProcName() const { return mStoredProcName; }
 
 protected:
 	void Initlialze();
@@ -46,6 +47,7 @@ protected:
 
 private:
 	const WCHAR*		mParams[100] = { nullptr, };
+	const WCHAR*		mStoredProcName = nullptr;
 	int32				mCurParamsCount = 0;
 	ADOConnectionInfo	mConnectionInfo;
 };

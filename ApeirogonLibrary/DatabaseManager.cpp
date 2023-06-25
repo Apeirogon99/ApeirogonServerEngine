@@ -72,13 +72,20 @@ bool DatabaseManager::Prepare(ServicePtr service)
 void DatabaseManager::Shutdown()
 {
 
-
 	for (size_t index = 0; index < mConnectionUsedSize; ++index)
 	{
 		ADOConnection& connection = mConnections[index];
 		if (connection.IsOpen())
 		{
 			connection.Close();
+		}
+	}
+
+	for (uint32 index = 0; index < mThreadPoolSize; ++index)
+	{
+		if (mThreads.at(index).joinable())
+		{
+			mThreads.at(index).join();
 		}
 	}
 
@@ -135,7 +142,7 @@ void DatabaseManager::DoWorkThreads()
 		const ADOAsyncTaskPtr* PeekItem = mAsyncTaskQueue.Peek();
 		if (nullptr == PeekItem)
 		{
-			return;
+			continue;
 		}
 
 		if (PeekItem->get()->mADOCommand.IsExecuteComplete())

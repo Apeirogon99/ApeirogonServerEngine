@@ -1,18 +1,23 @@
 #include "pch.h"
 #include "GameObject.h"
 
-GameObject::GameObject(const WCHAR* inObjectName) : mObjectName(inObjectName)
+GameObject::GameObject(const WCHAR* inObjectName) : mGameObjectName(inObjectName), mGameObjectID(-1)
 {
 }
 
 GameObject::~GameObject()
 {
-	mObjectName = nullptr;
+	mGameObjectName = nullptr;
 }
 
-void GameObject::SetObjectName(const WCHAR* inObjectName)
+void GameObject::SetGameObjectName(const WCHAR* inObjectName)
 {
-	mObjectName = inObjectName;
+	mGameObjectName = inObjectName;
+}
+
+void GameObject::SetGameObjectID(const int64 inObjectID)
+{
+	mGameObjectID = inObjectID;
 }
 
 GameObjectPtr GameObject::GetGameObjectPtr()
@@ -20,7 +25,17 @@ GameObjectPtr GameObject::GetGameObjectPtr()
 	return std::static_pointer_cast<GameObject>(shared_from_this());
 }
 
-const WCHAR* GameObject::GetObjectName() const
+GameObjectRef GameObject::GetGameObjectRef()
 {
-	return mObjectName;
+	return std::static_pointer_cast<GameObject>(shared_from_this());
+}
+
+const WCHAR* GameObject::GetGameObjectName() const
+{
+	return mGameObjectName;
+}
+
+const int64 GameObject::GetGameObjectID() const
+{
+	return mGameObjectID;
 }

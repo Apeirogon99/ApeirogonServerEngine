@@ -101,14 +101,20 @@ void IOCPServer::IOCPErrorHandling(IocpEvent* inEvent)
 	case WSA_IO_PENDING: return;
 	}
 
-	IocpObject* object = inEvent->owner.get();
+	IOCPObjectPtr object = inEvent->owner;
 	if (nullptr == object)
 	{
 		mService->GetLoggerManager()->WriteLog(L"[IOCPServer::IOCPErrorHandling] IocpObject is nullptr");
 		return;
 	}
 
-	SessionPtr session = std::static_pointer_cast<Session>(inEvent->owner);
+	SessionPtr session = std::static_pointer_cast<Session>(object);
+	if (nullptr == session)
+	{
+		mService->GetLoggerManager()->WriteLog(L"[IOCPServer::IOCPErrorHandling] Session is nullptr");
+		return;
+	}
+
 	switch (code)
 	{
 	case ERROR_NETNAME_DELETED:

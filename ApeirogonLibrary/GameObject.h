@@ -1,4 +1,5 @@
 #pragma once
+
 class GameObject : public TaskQueue
 {
 public:
@@ -13,13 +14,18 @@ public:
 	//APEIROGON_API virtual void	Serialization()		abstract;
 
 public:
-	APEIROGON_API void				SetObjectName(const WCHAR* inObjectName);
+	APEIROGON_API void				SetGameObjectName(const WCHAR* inObjectName);
+	APEIROGON_API void				SetGameObjectID(const int64 inObjectNumber);
 
 public:
 	APEIROGON_API GameObjectPtr		GetGameObjectPtr();
-	APEIROGON_API const WCHAR*		GetObjectName() const;
+	APEIROGON_API GameObjectRef		GetGameObjectRef();
+
+	APEIROGON_API const WCHAR*		GetGameObjectName() const;
+	APEIROGON_API const int64		GetGameObjectID() const;
 
 protected:
-	const WCHAR* mObjectName;
+	const WCHAR*	mGameObjectName;
+	int64			mGameObjectID;
 };
 

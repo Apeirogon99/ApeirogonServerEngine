@@ -3,6 +3,7 @@
 
 PacketSession::PacketSession()
 {
+	mTempPacketBuffer = new BYTE[1024]();
 }
 
 PacketSession::~PacketSession()
@@ -30,8 +31,10 @@ uint32 PacketSession::OnRecv(RingBuffer& inRingBuffer, uint32 inLen)
 		if (dataSize < packetSize)
 			break;
 
-		OnRecvPacket(inRingBuffer.GetReadBuffer(), packetSize);
-		inRingBuffer.MoveFront(packetSize);
+		memset(mTempPacketBuffer, 0, 1024);
+		inRingBuffer.Dequeue(mTempPacketBuffer, packetSize);
+
+		OnRecvPacket(mTempPacketBuffer, packetSize);
 
 		processLen += packetSize;
 	}

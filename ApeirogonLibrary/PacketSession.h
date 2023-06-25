@@ -17,4 +17,7 @@ public:
 protected:
 	APEIROGON_API virtual uint32	OnRecv(RingBuffer& inRingBuffer, uint32 inLen) sealed;
 	APEIROGON_API virtual void		OnRecvPacket(BYTE* buffer, const uint32 len) abstract;
+
+private:
+	BYTE* mTempPacketBuffer;
 };

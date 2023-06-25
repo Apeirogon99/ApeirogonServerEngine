@@ -34,7 +34,7 @@ bool SessionManager::Prepare(ServicePtr service)
 	return true;
 }
 
-SessionPtr SessionManager::CreateSession()
+SessionPtr SessionManager::CreateSession(const ESessionMode& inSessionMode)
 {
 
 	FastLockGuard lockGuard(mFastSpinLock);
@@ -46,7 +46,7 @@ SessionPtr SessionManager::CreateSession()
 	}
 
 	SessionPtr session = mSessionFactory();
-	if (false == session->Prepare(weak_from_this()))
+	if (false == session->Prepare(weak_from_this(), inSessionMode))
 	{
 		SessionManagerLog(L"[SessionManager::CreateSession()] failed to session prepare\n");
 		return nullptr;
@@ -100,6 +100,20 @@ bool SessionManager::FindSession(const SessionPtr& session)
 	FastLockGuard lockGuard(mFastSpinLock);
 	auto findSession = mSessions.find(session);
 	return findSession != mSessions.end() ? true : false;
+}
+
+bool SessionManager::FindServerSession(SessionPtr& outServerSession)
+{
+	FastLockGuard lockGuard(mFastSpinLock);
+	for (auto session : mSessions)
+	{
+		if (session->GetSessionMode() == ESessionMode::Server)
+		{
+			outServerSession = session;
+			return true;
+		}
+	}
+	return false;
 }
 
 void SessionManager::BroadCastSession(SendBufferPtr sendBuffer)
@@ -159,25 +173,22 @@ void SessionManager::WorkDispatch()
 		return;
 	}
 
-	for (auto curSession = mSessions.begin(); curSession != mSessions.end();)
+	for (auto curSession = mSessions.begin(); curSession != mSessions.end(); curSession++)
 	{
 		Session* session = curSession->get();
 		if (nullptr == session)
 		{
-			curSession++;
 			continue;
 		}
 
 		if (false == session->HasPending())
 		{
-			curSession++;
 			continue;
 		}
 
 		session->RegisterSend();
-		//session->GetMonitoring().CheckSession();
 
-		curSession++;
+		//session->GetMonitoring().CheckSession();
 	}
 }
 

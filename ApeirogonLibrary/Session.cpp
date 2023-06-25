@@ -345,7 +345,7 @@ void Session::Recv()
         return;
 }
 
-bool Session::Prepare(const SessionManagerRef& sessionManager)
+bool Session::Prepare(const SessionManagerRef& sessionManager, const ESessionMode& inSessionMode)
 {
     mSessionManager = sessionManager;
 
@@ -359,6 +359,17 @@ bool Session::Prepare(const SessionManagerRef& sessionManager)
     if (false == mMonitoring.SetOwnerSession(sessionRef))
     {
         return false;
+    }
+
+    mSessionMode = inSessionMode;
+    if (mSessionMode == ESessionMode::None)
+    {
+        return false;
+    }
+    else if(mSessionMode == ESessionMode::Server)
+    {
+        mIsConnect.store(true);
+        OnConnected();
     }
 
     return true;
@@ -397,6 +408,11 @@ void Session::SessionLog(const WCHAR* log , ...)
 
     manager->SessionManagerLog(log);
     //mService->GetLoggerManager()->WriteLog(log);
+}
+
+const ESessionMode& Session::GetSessionMode() const
+{
+    return mSessionMode;
 }
 
 bool Session::IsConnected() const

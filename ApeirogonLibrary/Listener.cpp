@@ -119,7 +119,7 @@ void Listener::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
 
 void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 {
-	SessionPtr newSession = mService->GetSessionManager()->CreateSession();
+	SessionPtr newSession = mService->GetSessionManager()->CreateSession(ESessionMode::Client);
 
 	acceptEvent->Init();
 	acceptEvent->session = newSession;
