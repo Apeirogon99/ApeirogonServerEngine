@@ -14,7 +14,6 @@ public:
 
 public:
 	void		DoWorkThreads(const uint32 inTimeOut);
-	void		StopWorkThreads();
 
 	static void InitTLS();
 	static void DestroyTLS();

@@ -8,7 +8,9 @@ enum class EventType : uint8
 	//PreRecv,
 	Recv,
 	Send,
+	RegisterSend,
 	Icmp,
+	Exit,
 };
 
 /*--------------
@@ -97,6 +99,12 @@ public:
 	std::vector<SendBufferPtr> sendBuffers;
 };
 
+class RegisterSendEvent : public IocpEvent
+{
+public:
+	RegisterSendEvent() : IocpEvent(EventType::RegisterSend) { }
+};
+
 class IcmpEvent : public IocpEvent
 {
 	enum
@@ -120,4 +128,10 @@ public:
 	IPAddressPtr	mIpAddr;
 	RingBuffer		mReplyBuffer;
 	uint32			mTimeout;
+};
+
+class ExitEvent : public IocpEvent
+{
+public:
+	ExitEvent() : IocpEvent(EventType::Exit) { }
 };

@@ -60,6 +60,7 @@ using DatabaseManagerPtr	= std::shared_ptr<DatabaseManager>;
 using DatabaseManagerRef	= std::weak_ptr<DatabaseManager>;
 using DataManagerPtr		= std::shared_ptr<DataManager>;
 using TaskManagerPtr		= std::shared_ptr<TaskManager>;
+using TaskManagerRef		= std::weak_ptr<TaskManager>;
 
 //==========================//
 //		   Memory			//
@@ -87,10 +88,7 @@ using DatabaseTaskQueuePtr	= std::shared_ptr<DatabaseTaskQueue>;
 //==========================//
 //		   Network			//
 //==========================//
-class GameObject;
 
-using GameObjectPtr			= std::shared_ptr<GameObject>;
-using GameObjectRef			= std::weak_ptr<GameObject>;
 
 //==========================//
 //		    Sync			//

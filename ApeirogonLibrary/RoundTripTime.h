@@ -76,6 +76,13 @@ public:
 		return roundTripTime;
 	}
 
+	APEIROGON_API int64 GetRoundTripTimeHalf()
+	{
+		const int64 avgRTT = GetRoundTripTime();
+		const int64 halfRTT = avgRTT / 2;
+		return halfRTT;
+	}
+
 	APEIROGON_API int32 GetCapcity()
 	{
 		return mTimeStamps.GetCapcity();

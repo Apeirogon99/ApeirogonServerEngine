@@ -26,8 +26,8 @@ public:
 	APEIROGON_API bool PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack);
 
 public:
-	void DoWorkThreads();
-	void ProcessTask();
+	void	DoWorkThreads();
+	int64	ProcessTask();
 
 protected:
 	void DatabaseLog(const WCHAR* log, ...);
@@ -40,11 +40,13 @@ private:
 	ADOConnection*					mConnections;
 	ADOConnectionInfo*				mConnectionInfos;
 
-	FastSpinLock					mFastSpinLock;
+	LockController					mLockController;
 	CircularQueue<ADOAsyncTaskPtr>	mAsyncTaskQueue;
 	CircularQueue<ADOAsyncTaskPtr>	mDatabaseTaskQueue;
 
 	uint32							mThreadPoolSize;
 	std::vector<std::thread>		mThreads;
+
+	TimeStamp						mProcessTimeStamp;
 };
 

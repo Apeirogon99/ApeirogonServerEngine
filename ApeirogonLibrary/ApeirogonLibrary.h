@@ -58,6 +58,8 @@
 #include "DefaultTypes.h"
 #include "DefaultSize.h"
 #include "DefaultMacros.h"
+#include "MathFoward.h"
+#include "GameFrameworkFoward.h"
 
 //==========================//
 //		    sync			//
@@ -68,6 +70,7 @@
 #include <atomic>
 #include "FastSpinLock.h"
 #include "SRWLockGuard.h"
+#include "LockController.h"
 
 //==========================//
 //		    UTILS			//
@@ -122,7 +125,6 @@
 //		    TASK			//
 //==========================//
 #include "Task.h"
-#include "GameObject.h"
 #include "TaskManager.h"
 
 //==========================//
@@ -147,3 +149,13 @@
 //		     SMTP			//
 //==========================//
 #include "SMTP.h"
+
+//==========================//
+//		    Math			//
+//==========================//
+#include "MathLibrary.h"
+
+//==========================//
+//		 GameFrameWork		//
+//==========================//
+#include "GameFrameworkLibrary.h"

@@ -31,7 +31,21 @@ bool ThreadManager::Prepare(ServicePtr service)
 
 void ThreadManager::Shutdown()
 {
-	StopWorkThreads();
+	ExitEvent exitEvent;
+	for (std::thread& thread : mThreads)
+	{
+		mService->GetIOCPServer()->PostDispatch(1, exitEvent);
+	}
+
+	for (std::thread& thread : mThreads)
+	{
+		if (thread.joinable())
+		{
+			//DestroyTLS();
+			thread.join();
+		}
+	}
+	ThreadLog(L"[ThreadManager::WorkThreads()] %ld Threads stop working\n", maxThreadCount);
 
 	ThreadLog(L"[ThreadManager::Shutdown()] Thread manager successfully shutdown\n");
 	mService.reset();
@@ -46,34 +60,20 @@ void ThreadManager::DoWorkThreads(const uint32 inMaxProcessTime)
 	while (mService->IsServiceOpen())
 	{
 
-		mThreadProcessTime.StartTimeStamp();
+		//mThreadProcessTime.StartTimeStamp();
 
-		while (processTime <= maxProcessTime)
-		{
-			mService->GetIOCPServer()->WorkDispatch(static_cast<DWORD>(maxProcessTime - processTime));
+		//while (processTime <= maxProcessTime)
+		//{
 
-			processTime = mThreadProcessTime.GetTimeStamp();
-		}
+		mService->GetIOCPServer()->WorkDispatch(inMaxProcessTime);
+
+		//	processTime = mThreadProcessTime.GetTimeStamp();
+		//}
 
 		//mService->GetSessionManager()->WorkDispatch();
 	}
 
 }
-
-void ThreadManager::StopWorkThreads()
-{
-	for (std::thread& thread : mThreads)
-	{
-		if (thread.joinable())
-		{
-			//DestroyTLS();
-			thread.join();
-		}
-	}
-
-	ThreadLog(L"[ThreadManager::WorkThreads()] %ld Threads stop working\n", maxThreadCount);
-}
-
 
 void ThreadManager::InitTLS()
 {

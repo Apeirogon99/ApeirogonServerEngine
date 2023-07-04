@@ -34,6 +34,9 @@ void Session::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
     case EventType::Send:
         ProcessSend(numOfBytes);
         break;
+    case EventType::RegisterSend:
+        RegisterSend();
+        break;
     case EventType::Icmp:
         ProcessIcmp();
     default:
@@ -278,14 +281,12 @@ void Session::ProcessSend(const uint32 numOfBytes)
 
     OnSend(numOfBytes);
 
-    if (mSendQueue.IsEmpty())
-    {
-        _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
-    }
-    else
+    _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
+    if (false == mSendQueue.IsEmpty())
     {
         RegisterSend();
     }
+
 }
 
 void Session::ProcessIcmp()
@@ -337,6 +338,22 @@ void Session::Send(SendBufferPtr sendBuffer)
     }
 
     mSendQueue.Push(sendBuffer);
+}
+
+void Session::DirectSend(SendBufferPtr message)
+{
+
+    if (false == IsConnected())
+    {
+        Disconnect(L"Is not connected");
+        return;
+    }
+
+    int32 bytesSent = 0;
+    if (false == mSocket->Send(reinterpret_cast<char*>(message->Buffer()), static_cast<LONG>(message->AllocSize()), bytesSent))
+    {
+        SessionLog(L"DirectSend Error\n");
+    }
 }
 
 void Session::Recv()
@@ -454,11 +471,9 @@ SessionMonitoring& Session::GetMonitoring()
     return mMonitoring;
 }
 
-const int64 Session::GetRoundTripTime()
+RoundTripTime& Session::GetRoundTripTime()
 {
-    const int64 avgRTT = mRoundTripTime.GetRoundTripTime();
-    const int64 halfRTT = avgRTT / 2;
-    return halfRTT;
+    return mRoundTripTime;
 }
 
 SessionManagerPtr Session::GetSessionManager()

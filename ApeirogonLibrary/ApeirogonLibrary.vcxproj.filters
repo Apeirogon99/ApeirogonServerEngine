@@ -100,6 +100,57 @@
     <Filter Include="Source\Public\Task">
       <UniqueIdentifier>{1ab7424a-7634-4360-aeaf-7a58598e52ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{c6d10beb-1426-40f8-9d90-7f56e95b4849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math\Public">
+      <UniqueIdentifier>{bf41615d-9511-4d6e-8828-978c0dabc642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math\Private">
+      <UniqueIdentifier>{89d544a5-043d-4646-92af-7403fcdbc8dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math\Utils">
+      <UniqueIdentifier>{c1e33aa0-f182-46c3-a631-125ef9299364}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework">
+      <UniqueIdentifier>{5782568b-340e-4e96-9d6a-cdbd1b031853}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Utils">
+      <UniqueIdentifier>{ee723423-b793-42e1-b5e0-b0db5540c8d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Struct">
+      <UniqueIdentifier>{d2b127a5-5417-44fc-8b3a-7c6af8177f6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Enum">
+      <UniqueIdentifier>{039e3eca-6797-4d8d-abe2-98730c434e96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Component">
+      <UniqueIdentifier>{0e6aad57-4b77-4f86-9961-cdea33082918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Component\Public">
+      <UniqueIdentifier>{a098aad0-3dbc-412a-8025-8237eef47767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Component\Private">
+      <UniqueIdentifier>{59e9d755-2520-41f3-b5e3-1a68d1908722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Framework">
+      <UniqueIdentifier>{6f42f18d-5821-40fb-9f88-ac69cf41cfa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Framework\Private">
+      <UniqueIdentifier>{dcf6effc-10dd-452e-aa77-24461fe9cb72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Framework\Public">
+      <UniqueIdentifier>{7d5696f8-5e77-4b24-a547-b49c01a884f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Remote">
+      <UniqueIdentifier>{1dea52a8-2ab2-4ce7-895a-0ba4e158b85d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Remote\Public">
+      <UniqueIdentifier>{54f849ba-ae84-4c92-84c6-ba32fc9c3ae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameFramework\Remote\Private">
+      <UniqueIdentifier>{d68d9873-d90b-4abf-b69f-91f2c0161f52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -234,8 +285,47 @@
     <ClCompile Include="TaskManager.cpp">
       <Filter>Source\Private\Task</Filter>
     </ClCompile>
+    <ClCompile Include="FVector.cpp">
+      <Filter>Math\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="FRotator.cpp">
+      <Filter>Math\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="LockController.cpp">
+      <Filter>Source\Private\Sync</Filter>
+    </ClCompile>
+    <ClCompile Include="Trace.cpp">
+      <Filter>Math\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Math\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>GameFramework\Framework\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>GameFramework\Framework\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>GameFramework\Framework\Private</Filter>
+    </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Source\Private\Task</Filter>
+      <Filter>GameFramework\Framework\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
+      <Filter>GameFramework\Component\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementComponent.cpp">
+      <Filter>GameFramework\Component\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>GameFramework\Component\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoteClient.cpp">
+      <Filter>GameFramework\Remote\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="RemotePlayer.cpp">
+      <Filter>GameFramework\Remote\Private</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -383,8 +473,65 @@
     <ClInclude Include="TaskManager.h">
       <Filter>Source\Public\Task</Filter>
     </ClInclude>
+    <ClInclude Include="FRotator.h">
+      <Filter>Math\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="FVector.h">
+      <Filter>Math\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="LockController.h">
+      <Filter>Source\Public\Sync</Filter>
+    </ClInclude>
+    <ClInclude Include="Trace.h">
+      <Filter>Math\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="MathFoward.h">
+      <Filter>Math\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="MathLibrary.h">
+      <Filter>Math\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Math\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>GameFramework\Framework\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>GameFramework\Framework\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>GameFramework\Framework\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFrameworkFoward.h">
+      <Filter>GameFramework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GameFrameworkLibrary.h">
+      <Filter>GameFramework\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Source\Public\Task</Filter>
+      <Filter>GameFramework\Framework\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Hit.h">
+      <Filter>GameFramework\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>GameFramework\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionComponent.h">
+      <Filter>GameFramework\Component\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementComponent.h">
+      <Filter>GameFramework\Component\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>GameFramework\Component\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoteClient.h">
+      <Filter>GameFramework\Remote\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="RemotePlayer.h">
+      <Filter>GameFramework\Remote\Public</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

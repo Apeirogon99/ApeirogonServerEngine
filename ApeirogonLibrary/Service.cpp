@@ -19,6 +19,17 @@ int64 Service::GetServiceTimeStamp()
 void Service::ServiceScheudler()
 {
 	TimeStamp	scheudlerTimeStamp(L"Scheudler");
+	TimeStamp	taskTimeStamp(L"Task");
+	TimeStamp	dbTimeStamp(L"DB");
+	TimeStamp	tickTimeStamp(L"Tick");
+	TimeStamp	sendTimeStamp(L"Send");
+
+	int64 totalRunTime;
+	int64 tickRunTime;
+	int64 taskRunTime;
+	int64 dbRunTime;
+	int64 sendRunTime;
+
 	const int64 maxProcessTime = 33;
 	int64		processTime = 0;
 
@@ -28,20 +39,28 @@ void Service::ServiceScheudler()
 		const int64 serviceTimeStamp = GetServiceTimeStamp();
 		scheudlerTimeStamp.StartTimeStamp();
 
+		taskRunTime		= 0;
+		dbRunTime		= 0;
+
 		while (processTime < serviceTimeStamp + maxProcessTime)
 		{
-			
-			this->mTaskManager->ProcessTask(serviceTimeStamp);
 
-			this->mDatabaseManager->ProcessTask();
+			taskRunTime += this->mTaskManager->ProcessTask(serviceTimeStamp);
+
+			dbRunTime += this->mDatabaseManager->ProcessTask();
 
 			processTime = scheudlerTimeStamp.GetTimeStamp() + serviceTimeStamp;
 		}
 
-		mTaskManager->Tick();
+		tickRunTime = mTaskManager->Tick(scheudlerTimeStamp.GetTimeStamp());
 
-		//TODO: 요청만 하게
-		mSessionManager->WorkDispatch();
+		sendRunTime = mSessionManager->WorkDispatch();
+
+		totalRunTime = scheudlerTimeStamp.GetTimeStamp();
+		if (totalRunTime > maxProcessTime)
+		{
+			wprintf(L"Scheudler over run time [TOTAL::%lld] [TICK::%lld] [TASK::%lld] [DB::%lld] [SEND::%lld]\n", totalRunTime, tickRunTime, taskRunTime, dbRunTime, sendRunTime);
+		}
 
 	}
 }

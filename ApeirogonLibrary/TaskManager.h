@@ -19,15 +19,15 @@ public:
 
 public:
 	virtual void Init() abstract;
-	void ProcessTask(const int64 inServiceTimeStamp);
-	void Tick();
+	int64 ProcessTask(const int64 inServiceTimeStamp);
+	int64 Tick(const int64 inTickTime);
 
 public:
-	APEIROGON_API void		   	CreateGameObject(GameObjectPtr inGameObject);
-	APEIROGON_API void		   	DestroyGameObject(GameObjectPtr inGameObject);
+	APEIROGON_API void		   	CreateGameObject(GameObjectPtr& inGameObject);
+	APEIROGON_API void		   	DestroyGameObject(GameObjectPtr& inGameObject);
 
-	APEIROGON_API void		   	PushTask(GameObjectPtr inGameObject);
-	APEIROGON_API void		   	ReleaseTask(GameObjectPtr inGameObject);
+	APEIROGON_API void		   	PushTask(GameObjectPtr& inGameObject);
+	APEIROGON_API void		   	ReleaseTask(GameObjectPtr& inGameObject);
 	APEIROGON_API bool			FindTask(const int64 inGameObjectID, GameObjectPtr& outGameObject);
 	APEIROGON_API bool			FindTask(const WCHAR* inGameObjectName, GameObjectPtr& outGameObject);
 
@@ -36,11 +36,16 @@ public:
 
 protected:
 	const int64 NextGameObjectNumber();
-	void		TaskManagerLog(const WCHAR* log, ...);
+
+public:
+	APEIROGON_API void		TaskManagerLog(const WCHAR* log, ...);
 
 private:
 	ServicePtr									mService;
 	int64										mGameObjectCount;
 	std::unordered_map<int64, GameObjectPtr>	mGameObjects;
+
+	TimeStamp									mTaskProcessTimeStamp;
+	TimeStamp									mTickProcessTimeStamp;
 };
 

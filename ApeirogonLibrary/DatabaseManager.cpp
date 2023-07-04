@@ -3,7 +3,7 @@
 
 using namespace std;
 
-DatabaseManager::DatabaseManager(const uint32 inThreadPoolSize, const uint32 inDatabasePoolSize) : mThreadPoolSize(inThreadPoolSize), mConnectionPoolSize(inDatabasePoolSize), mConnectionUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mAsyncTaskQueue(0x1000), mDatabaseTaskQueue(0x1000), mFastSpinLock()
+DatabaseManager::DatabaseManager(const uint32 inThreadPoolSize, const uint32 inDatabasePoolSize) : mThreadPoolSize(inThreadPoolSize), mConnectionPoolSize(inDatabasePoolSize), mConnectionUsedSize(0), mService(nullptr), mConnections(nullptr), mConnectionInfos(nullptr), mAsyncTaskQueue(0x1000), mDatabaseTaskQueue(0x1000), mLockController(), mProcessTimeStamp(L"DB")
 {
 	mConnections = new ADOConnection[inDatabasePoolSize]();
 	mConnectionInfos = new ADOConnectionInfo[inDatabasePoolSize]();
@@ -81,6 +81,8 @@ void DatabaseManager::Shutdown()
 		}
 	}
 
+	mLockController.NotifyAll();
+
 	for (uint32 index = 0; index < mThreadPoolSize; ++index)
 	{
 		if (mThreads.at(index).joinable())
@@ -138,10 +140,11 @@ void DatabaseManager::DoWorkThreads()
 
 	while (mService->IsServiceOpen())
 	{
-		FastLockGuard lockGuard(mFastSpinLock);
+		LockGuardController lockGuard(mLockController);
 		const ADOAsyncTaskPtr* PeekItem = mAsyncTaskQueue.Peek();
 		if (nullptr == PeekItem)
 		{
+			mLockController.Wait();
 			continue;
 		}
 
@@ -156,15 +159,16 @@ void DatabaseManager::DoWorkThreads()
 	CoUninitialize();
 }
 
-void DatabaseManager::ProcessTask()
+int64 DatabaseManager::ProcessTask()
 {
+	mProcessTimeStamp.StartTimeStamp();
 
 	std::vector<ADOAsyncTaskPtr> completeTask;
 	{
-		FastLockGuard lockGuard(mFastSpinLock);
+		LockGuardController lockGuard(mLockController);
 		if (mDatabaseTaskQueue.IsEmpty())
 		{
-			return;
+			return mProcessTimeStamp.GetTimeStamp();
 		}
 
 		mDatabaseTaskQueue.Dequeue(completeTask);
@@ -175,6 +179,7 @@ void DatabaseManager::ProcessTask()
 		task->Execute();
 	}
 
+	return mProcessTimeStamp.GetTimeStamp();
 }
 
 void DatabaseManager::KeepConnection()
@@ -199,9 +204,15 @@ void DatabaseManager::KeepConnection()
 
 bool DatabaseManager::PushAsyncTaskQueue(PacketSessionPtr& inSession, ADOConnection& inADOConnection, ADOCommand& inADOCommand, ADORecordset& inADORecordset, ADOCallBack& inADOCallBack)
 {
-	FastLockGuard lockGuard(mFastSpinLock);
+	LockGuardController lockGuard(mLockController);
 	ADOAsyncTaskPtr newItem = std::make_shared<ADOAsyncTask>(inSession, inADOConnection, inADOCommand, inADORecordset, inADOCallBack);
 	const bool result = mAsyncTaskQueue.Enqueue(std::move(newItem));
+
+	if (result)
+	{
+		mLockController.NotifyOne();
+	}
+
 	return result;
 }
 

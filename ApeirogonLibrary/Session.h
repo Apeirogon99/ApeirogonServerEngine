@@ -50,6 +50,7 @@ public:
 	APEIROGON_API void					Connect();
 	APEIROGON_API void					Disconnect(const WCHAR* cause);
 	APEIROGON_API void					Send(SendBufferPtr message);
+	APEIROGON_API void					DirectSend(SendBufferPtr message);
 	APEIROGON_API void					Recv();
 
 	APEIROGON_API virtual void			OnConnected() abstract;
@@ -71,7 +72,7 @@ public:
 	APEIROGON_API IPAddressPtr			GetIpAddress() const;
 	RingBuffer&							GetRecvBuffer();
 	SessionMonitoring&					GetMonitoring();
-	APEIROGON_API const int64			GetRoundTripTime();
+	APEIROGON_API RoundTripTime&		GetRoundTripTime();
 	APEIROGON_API SessionManagerPtr		GetSessionManager();
 
 private:

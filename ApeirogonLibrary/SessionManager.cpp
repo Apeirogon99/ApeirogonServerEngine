@@ -1,14 +1,14 @@
 #include "pch.h"
 #include "SessionManager.h"
 
-SessionManager::SessionManager(const SessionFactory& sessionFactory, const uint32 maxSessionCount, const uint32 inBufferSize) :mSessionFactory(sessionFactory), mMaxSessionCount(maxSessionCount), mSessionCount(0), mMaxBufferSize(inBufferSize), mFastSpinLock()
+SessionManager::SessionManager(const SessionFactory& sessionFactory, const uint32 maxSessionCount, const uint32 inBufferSize) :mSessionFactory(sessionFactory), mMaxSessionCount(maxSessionCount), mSessionCount(0), mMaxBufferSize(inBufferSize), mFastSpinLock(), mProcessTimeStamp(L"Dispatch")
 {
 	
 }
 
 SessionManager::~SessionManager()
 {
-	//wprintf(L"[SessionManager::~SessionManager()]\n");
+	wprintf(L"[SessionManager::~SessionManager()]\n");
 }
 
 bool SessionManager::Prepare(ServicePtr service)
@@ -165,17 +165,20 @@ ServicePtr SessionManager::GetService() const
 	return mService;
 }
 
-void SessionManager::WorkDispatch()
+int64 SessionManager::WorkDispatch()
 {
-
+	mProcessTimeStamp.StartTimeStamp();
 	if (mSessions.empty())
 	{
-		return;
+		return mProcessTimeStamp.GetTimeStamp();
 	}
 
+	FastLockGuard lockGuard(mFastSpinLock);
+
+	RegisterSendEvent registerSendEvent;
 	for (auto curSession = mSessions.begin(); curSession != mSessions.end(); curSession++)
 	{
-		Session* session = curSession->get();
+		SessionPtr session = *curSession;
 		if (nullptr == session)
 		{
 			continue;
@@ -186,10 +189,14 @@ void SessionManager::WorkDispatch()
 			continue;
 		}
 
-		session->RegisterSend();
+		registerSendEvent.Init();
+		registerSendEvent.owner = session;
+		mService->GetIOCPServer()->PostDispatch(1, registerSendEvent);
 
 		//session->GetMonitoring().CheckSession();
 	}
+
+	return mProcessTimeStamp.GetTimeStamp();
 }
 
 void SessionManager::SessionManagerLog(const WCHAR* log, ...)

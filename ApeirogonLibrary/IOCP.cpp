@@ -63,21 +63,30 @@ bool IOCPServer::WorkDispatch(DWORD timeoutMs)
 	IocpEvent* iocpEvent = nullptr;
 
 	bool ret = ::GetQueuedCompletionStatus(mIOCPHandle, &numOfBytes, &key, reinterpret_cast<LPOVERLAPPED*>(&iocpEvent), timeoutMs);
-	
-	if(ret == false)
+
+   	if(ret == false)
 	{
-		IOCPServerLog(L"[IOCPServer::WorkDispatch()]");
 		IOCPErrorHandling(iocpEvent);
 		return false;
 	}
 
+	if (iocpEvent->eventType == EventType::Exit)
+	{
+		return true;
+	}
+
 	IOCPObjectPtr iocpObject = iocpEvent->owner;
+	if (nullptr == iocpObject)
+	{
+		IOCPErrorHandling(iocpEvent);
+		return false;
+	}
 	iocpObject->Dispatch(iocpEvent, numOfBytes);
 
 	return true;
 }
 
-bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent& inEvent)
+bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent inEvent)
 {
 	ULONG_PTR key = 0;
 
@@ -93,6 +102,8 @@ bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent& inEvent)
 
 void IOCPServer::IOCPErrorHandling(IocpEvent* inEvent)
 {
+	IOCPServerLog(L"[IOCPServer::WorkDispatch()]");
+
 	int32 code = WSAGetLastError();
 
 	switch (code)
@@ -124,7 +135,9 @@ void IOCPServer::IOCPErrorHandling(IocpEvent* inEvent)
 	case ERROR_NETWORK_ACCESS_DENIED:
 		session->Disconnect(L"ERROR_NETWORK_ACCESS_DENIED");
 		break;
-
+	case ERROR_CONNECTION_ABORTED:
+		session->Disconnect(L"ERROR_CONNECTION_ABORTED");
+		break;
 	default:
 		mService->GetLoggerManager()->WriteLog(L"[IOCPServer::IOCPErrorHandling] Can't Handling Error");
 		break;

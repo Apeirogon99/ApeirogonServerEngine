@@ -28,7 +28,7 @@ public:
 	APEIROGON_API ServicePtr	GetService() const;
 
 public:
-	void WorkDispatch();
+	int64 WorkDispatch();
 
 public:
 	APEIROGON_API void SessionManagerLog(const WCHAR* log, ...);
@@ -41,4 +41,6 @@ protected:
 	SessionFactory					mSessionFactory;
 	ServicePtr						mService;
 	FastSpinLock					mFastSpinLock;
+
+	TimeStamp						mProcessTimeStamp;
 };
