@@ -50,7 +50,7 @@ bool FRotator::operator==(const FRotator& inRotator)
     return mPitch == inRotator.mPitch && mYaw == inRotator.mYaw && mRoll == inRotator.mRoll;
 }
 
-FVector FRotator::Vector()
+FVector FRotator::Vector() const
 {
     const float PitchNoWinding = std::fmod(mPitch, 360.0f);
     const float YawNoWinding = std::fmod(mYaw, 360.0f);
@@ -60,4 +60,9 @@ FVector FRotator::Vector()
     //FMath::SinCos(&SY, &CY, YawNoWinding * (PI / 180.f));
     //FVector vector = FVector(CP * CY, CP * SY, SP);
     return FVector();
+}
+
+FVector FRotator::GetForwardVector() const
+{
+    return this->Vector();
 }

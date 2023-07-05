@@ -26,7 +26,7 @@ public:
 
 public:
 	APEIROGON_API RemotePlayerRef	GetRemotePlayer()			{ return std::static_pointer_cast<RemotePlayer>(shared_from_this()); }
-	APEIROGON_API RemoteClientRef	GetPlayerState()	const	{ return mRemoteClient; }
+	APEIROGON_API RemoteClientRef	GetRemoteClient()	const	{ return mRemoteClient; }
 	APEIROGON_API PlayerViewer&		GetViewers()				{ return mPlayerViewers; }
 
 private:

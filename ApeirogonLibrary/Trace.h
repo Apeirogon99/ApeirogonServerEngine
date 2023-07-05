@@ -1,9 +1,18 @@
 #pragma once
 
-class Trace
+enum class ETraceType
+{
+	Trace_None,
+	Trace_Box,
+	Trace_Capsule,
+	Trace_Sphere,
+	Trace_Frustum,
+};
+
+class APEIROGON_API Trace
 {
 public:
-	Trace(FVector inStart, FVector inEnd, bool inIsIgnore) : mStart(inStart), mEnd(inEnd), mIsIgnore(inIsIgnore) {}
+	Trace(FVector inStart, FVector inEnd, bool inIsIgnore, ETraceType inType) : mStart(inStart), mEnd(inEnd), mIsIgnore(inIsIgnore), mTraceType(inType) {}
 	~Trace() {}
 
 	Trace(const Trace&) = delete;
@@ -16,19 +25,23 @@ public:
 	bool TraceCheack(const Collision& inCollision, Hit& outHit);
 	bool TraceCheack(const std::map<int64, Collision>& inCollisions, std::vector<Hit>& outHits);
 
+public:
+	const ETraceType& GetTraceType() const;
+
 protected:
 	virtual bool HitCheack(const Collision& inCollision, Hit& outHit) abstract;
 
 protected:
-	FVector mStart;
-	FVector mEnd;
-	bool	mIsIgnore;
+	FVector		mStart;
+	FVector		mEnd;
+	bool		mIsIgnore;
+	ETraceType	mTraceType;
 };
 
-class BoxTrace : public Trace
+class APEIROGON_API BoxTrace : public Trace
 {
 public:
-	BoxTrace(FVector inStart, FVector inEnd, bool inIsIgnore, FVector inBoxExtent, FRotator inOrientation) : Trace(inStart, inEnd, inIsIgnore), mExtent(inBoxExtent), mOrientation(inOrientation) {}
+	BoxTrace(FVector inStart, FVector inEnd, bool inIsIgnore, FVector inBoxExtent, FRotator inOrientation) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Box), mExtent(inBoxExtent), mOrientation(inOrientation) {}
 	~BoxTrace() {}
 
 	BoxTrace(const BoxTrace&) = delete;
@@ -46,10 +59,10 @@ private:
 	FRotator	mOrientation;
 };
 
-class CapsuleTrace : public Trace
+class APEIROGON_API CapsuleTrace : public Trace
 {
 public:
-	CapsuleTrace(FVector inStart, FVector inEnd, bool inIsIgnore, const float inRadius, const float inHeight) : Trace(inStart, inEnd, inIsIgnore), mRadius(inRadius), mHeight(inHeight) {}
+	CapsuleTrace(FVector inStart, FVector inEnd, bool inIsIgnore, const float inRadius, const float inHeight) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Capsule), mRadius(inRadius), mHeight(inHeight) {}
 	~CapsuleTrace() {}
 
 	CapsuleTrace(const CapsuleTrace&) = delete;
@@ -66,10 +79,10 @@ private:
 	float mHeight;
 };
 
-class SphereTrace : public Trace
+class APEIROGON_API SphereTrace : public Trace
 {
 public:
-	SphereTrace(FVector inStart, FVector inEnd, bool inIsIgnore, float inRadius) : Trace(inStart, inEnd, inIsIgnore), mRadius(inRadius) {}
+	SphereTrace(FVector inStart, FVector inEnd, bool inIsIgnore, float inRadius) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Sphere), mRadius(inRadius) {}
 	~SphereTrace() {}
 
 	SphereTrace(const SphereTrace&) = delete;
@@ -85,10 +98,10 @@ private:
 	float mRadius;
 };
 
-class FrustumTrace : public Trace
+class APEIROGON_API FrustumTrace : public Trace
 {
 public:
-	FrustumTrace(FVector inStart, FVector inEnd, bool inIsIgnore, float inNearPlane, float inFarPlane, float inHeight) : Trace(inStart, inEnd, inIsIgnore), mNearPlane(inNearPlane), mFarPlane(inFarPlane), mHeight(inHeight) {}
+	FrustumTrace(FVector inStart, FVector inEnd, bool inIsIgnore, float inNearPlane, float inFarPlane, float inHeight) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Frustum), mNearPlane(inNearPlane), mFarPlane(inFarPlane), mHeight(inHeight) {}
 	~FrustumTrace() {}
 
 	FrustumTrace(const FrustumTrace&) = delete;

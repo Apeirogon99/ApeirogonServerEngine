@@ -21,9 +21,9 @@
 //		 GameFramework		//
 //==========================//
 #include "GameObject.h"
-#include "World.h"
 #include "Actor.h"
 #include "Character.h"
+#include "World.h"
 
 //==========================//
 //		    Player			//

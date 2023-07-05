@@ -10,3 +10,18 @@ Character::~Character()
 {
 
 }
+
+MovementComponent& Character::GetMovementComponent()
+{
+	return mMovementComponent;
+}
+
+AnimationComponent& Character::GetAnimationComponent()
+{
+	return mAnimationComponent;
+}
+
+CapsuleCollisionComponent& Character::GetCapsuleCollisionComponent()
+{
+	return mCollisionComponent;
+}

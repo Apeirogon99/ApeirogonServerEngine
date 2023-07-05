@@ -62,8 +62,8 @@ void TaskManager::CreateGameObject(GameObjectPtr& inGameObject)
 {
 	const int64 curGameObjectID = NextGameObjectNumber();
 
-	inGameObject->Initialization();
 	inGameObject->SetTaskManagerRef(weak_from_this());
+	inGameObject->Initialization();
 	inGameObject->SetGameObjectID(curGameObjectID);
 }
 

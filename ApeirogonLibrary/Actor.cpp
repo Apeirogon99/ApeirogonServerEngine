@@ -28,11 +28,6 @@ void Actor::CloseToActor(ActorPtr inCloseActor, float inPossibleVisbleLength)
 	}
 }
 
-void Actor::SetOwner(GameObjectRef inOwner)
-{
-	mOwner = inOwner;
-}
-
 void Actor::SetWorld(WorldRef inWorld)
 {
 	mWorld = inWorld;

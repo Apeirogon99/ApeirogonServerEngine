@@ -20,14 +20,20 @@ protected:
 
 public:
 	APEIROGON_API void				SetRemotePlayer(RemotePlayerPtr inRemotePlayer);
+
+	APEIROGON_API bool				InsertPlayerMonitor(RemotePlayerPtr inRemotePlayer);
+	APEIROGON_API bool				ReleasePlayerMonitor(RemotePlayerPtr inRemotePlayer);
 	APEIROGON_API void				BroadcastPlayerMonitors(SendBufferPtr inSendBuffer);
+
+	APEIROGON_API bool				InsertActorMonitor(ActorPtr inActor);
+	APEIROGON_API bool				ReleaseActorMonitor(ActorPtr inActor);
 
 public:
 	APEIROGON_API RemoteClientRef	GetRemoteClientRef() { return std::static_pointer_cast<RemoteClient>(shared_from_this()); }
 
-	APEIROGON_API RemotePlayerPtr&	GetRemotePlayer()	 { return mRemotePlayer; }
-	APEIROGON_API PlayerMonitors&	GetPlayerMonitors()	 { return mPlayerMonitors; }
-	APEIROGON_API ActorMonitors&	GetActorMonitors()	 { return mActorMonitors; }
+	APEIROGON_API RemotePlayerPtr&		GetRemotePlayer()	 { return mRemotePlayer; }
+	APEIROGON_API const PlayerMonitors&	GetPlayerMonitors()	 { return mPlayerMonitors; }
+	APEIROGON_API const ActorMonitors&	GetActorMonitors()	 { return mActorMonitors; }
 
 private:
 	RemotePlayerPtr		mRemotePlayer;

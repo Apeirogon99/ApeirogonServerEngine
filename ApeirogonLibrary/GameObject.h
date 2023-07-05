@@ -20,6 +20,7 @@ public:
 	//APEIROGON_API virtual void	Serialization()					abstract;
 
 public:
+	APEIROGON_API void				SetOwner(GameObjectRef inOwner);
 	APEIROGON_API void				SetTick(bool inUse = false, const int64 inMaxTimer = INFINITE);
 	APEIROGON_API void				SetTaskManagerRef(TaskManagerRef inTaskManagerRef);
 	APEIROGON_API void				SetGameObjectName(const WCHAR* inObjectName);
@@ -27,6 +28,8 @@ public:
 
 public:
 	APEIROGON_API TaskManagerRef	GetTaskManagerRef();
+
+	APEIROGON_API GameObjectRef		GetOwner();
 	APEIROGON_API GameObjectPtr		GetGameObjectPtr();
 	APEIROGON_API GameObjectRef		GetGameObjectRef();
 
@@ -41,6 +44,8 @@ public:
 
 protected:
 	TaskManagerRef	mTaskManagerRef;
+
+	GameObjectRef	mOwner;
 	const WCHAR*	mGameObjectName;
 	int64			mGameObjectID;
 

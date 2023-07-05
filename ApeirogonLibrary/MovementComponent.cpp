@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MovementComponent.h"
 
-MovementComponent::MovementComponent() : mLastMovementLocation(0)
+MovementComponent::MovementComponent() : mLastMovementTime(0)
 {
 }
 
@@ -9,12 +9,7 @@ MovementComponent::~MovementComponent()
 {
 }
 
-void MovementComponent::SetNewDestination(const Location& inDestinationLocation)
-{
-	mDestinationLocation = inDestinationLocation;
-}
-
-bool MovementComponent::Update(ActorPtr& inOwner, const float inCloseToDestination)
+bool MovementComponent::Update(ActorPtr inOwner, const float inCloseToDestination)
 {
 
 	Location	currentLocation = inOwner->GetLocation();
@@ -28,7 +23,7 @@ bool MovementComponent::Update(ActorPtr& inOwner, const float inCloseToDestinati
 
 	Velocity	currentVelocity		= inOwner->GetVelocity();
 	const int64 currentWorldTime	= inOwner->GetWorld().lock()->GetWorldTime();
-	const float	duration			= static_cast<float>(currentWorldTime - this->mLastMovementLocation) / 1000.0f;
+	const float	duration			= static_cast<float>(currentWorldTime - this->mLastMovementTime) / 1000.0f;
 
 	FVector	direction = destinationLocation - currentLocation;
 	direction.Normalize();
@@ -42,6 +37,40 @@ bool MovementComponent::Update(ActorPtr& inOwner, const float inCloseToDestinati
 
 	inOwner->SetLocation(deadReckoningLocation);
 	inOwner->SetRotation(rotation);
-	this->mLastMovementLocation = currentWorldTime;
+	this->mLastMovementTime = currentWorldTime;
 	return true;
+}
+
+bool MovementComponent::SyncUpdate(const int64 inSyncTime)
+{
+	mCurrentMovementSyncTime += inSyncTime;
+	if (mCurrentMovementSyncTime > mMaxMovementSyncTime)
+	{
+		mCurrentMovementSyncTime = 0;
+		return true;
+	}
+
+	return false;
+}
+
+void MovementComponent::SetSynchronizationTime(const int64 inMovementSyncTime)
+{
+	mMaxMovementSyncTime = inMovementSyncTime;
+	mCurrentMovementSyncTime = 0;
+}
+
+void MovementComponent::SetNewDestination(const Location& inDestinationLocation, const int64 inMovementLastTime)
+{
+	mDestinationLocation = inDestinationLocation;
+	mLastMovementTime = inMovementLastTime;
+}
+
+const Location& MovementComponent::GetDestinationLocation() const
+{
+	return mDestinationLocation;
+}
+
+const int64 MovementComponent::GetLastMovementTime() const
+{
+	return mLastMovementTime;
 }

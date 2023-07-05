@@ -13,11 +13,15 @@ public:
 
 public:
 	APEIROGON_API void			CloseToActor(ActorPtr inCloseActor, float inPossibleVisbleLength);
-	APEIROGON_API virtual void	OnAppearActor(ActorPtr inAppearActor) abstract;
-	APEIROGON_API virtual void	OnDisAppearActor(ActorPtr inDisAppearActor) abstract;
+	APEIROGON_API virtual void	OnAppearActor(ActorPtr inAppearActor) {};
+	APEIROGON_API virtual void	OnDisAppearActor(ActorPtr inDisAppearActor) {};
+
+	APEIROGON_API virtual void	OnHit(ActorPtr inInstigated, const float inDamage, const Location inHitLocation) {};
+	APEIROGON_API virtual void	OnAutoAttackShot(bool inIsRange, ActorPtr inVictim) {};
+	APEIROGON_API virtual void	OnAutoAttackTargeting() {};
+	APEIROGON_API virtual void	OnAutoAttackOver() {};
 
 public:
-	APEIROGON_API void			SetOwner(GameObjectRef inOwner);
 	APEIROGON_API void			SetWorld(WorldRef inWorld);
 
 	APEIROGON_API void			SetTransform(const Transform& inTransform);
@@ -42,7 +46,6 @@ public:
 public:
 	APEIROGON_API ActorPtr			GetActorPtr()			{ return std::static_pointer_cast<Actor>(shared_from_this()); }
 	APEIROGON_API ActorRef			GetActorRef()			{ return std::static_pointer_cast<Actor>(shared_from_this()); }
-	APEIROGON_API GameObjectRef		GetOwner()		const	{ return mOwner; }
 	APEIROGON_API WorldRef			GetWorld()		const	{ return mWorld; }
 
 	APEIROGON_API const Transform&	GetTransform()	const	{ return mTransfrom; }
@@ -52,7 +55,6 @@ public:
 	APEIROGON_API const Velocity&	GetVelocity()	const	{ return mVelocity; }
 
 protected:
-	GameObjectRef	mOwner;
 	WorldRef		mWorld;
 	Transform		mTransfrom;
 	FVector			mVelocity;

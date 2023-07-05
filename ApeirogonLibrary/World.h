@@ -3,37 +3,79 @@
 class World : public GameObject
 {
 public:
-	World(const WCHAR* inName, TaskManagerRef inTaskManager);
-	virtual ~World();
+	APEIROGON_API World(const WCHAR* inName);
+	APEIROGON_API virtual ~World();
 
 protected:
-	virtual void OnInitialization()					abstract;
-	virtual void OnDestroy()						abstract;
-	virtual void OnTick(const int64 inDeltaTime)	abstract;
-	virtual bool IsValid()							abstract;
+	APEIROGON_API virtual void OnInitialization()					abstract;
+	APEIROGON_API virtual void OnDestroy()						abstract;
+	APEIROGON_API virtual void OnTick(const int64 inDeltaTime)	abstract;
+	APEIROGON_API virtual bool IsValid()							abstract;
 
 public:
 
 	template<typename T>
-	ActorPtr		SpawnActor(const Location& inLocation, const Rotation& inRotation, const Scale& inScale);
+	APEIROGON_API ActorPtr			SpawnActor(const Location& inLocation, const Rotation& inRotation, const Scale& inScale);
 
 	template <typename T>
-	bool			FindAllActors(std::vector<ActorPtr>& outActors);
-	bool			FindActor(const int64 inGameObjectID, ActorPtr& outActor);
+	APEIROGON_API bool				FindAllActors(std::vector<ActorPtr>& outActors);
+	APEIROGON_API bool				FindActor(const int64 inGameObjectID, ActorPtr& outActor);
 
-	bool			DestroyAllActor();
-	bool			DestroyActor(const int64 inGameObjectID);
+	APEIROGON_API bool				DestroyAllActor();
+	APEIROGON_API bool				DestroyActor(const int64 inGameObjectID);
 
-	bool			IsValidActor(const int64 inGameObjectID);
+	APEIROGON_API bool				IsValidActor(const int64 inGameObjectID);
 
 public:
-	WorldPtr		GetWorldPtr()		{ return std::static_pointer_cast<World>(shared_from_this()); }
-	WorldRef		GetWorldRef()		{ return std::static_pointer_cast<World>(shared_from_this()); }
-	TaskManagerRef	GetTaksManagerRef() { return mTaskManager; }
-	DataManagerPtr	GetDatas()			{ return mTaskManager.lock()->GetService()->GetDataManager(); }
-	const int64		GetWorldTime()		{ return mTaskManager.lock()->GetService()->GetServiceTimeStamp(); }
+	APEIROGON_API WorldPtr			GetWorldPtr()		{ return std::static_pointer_cast<World>(shared_from_this()); }
+	APEIROGON_API WorldRef			GetWorldRef()		{ return std::static_pointer_cast<World>(shared_from_this()); }
+	APEIROGON_API DataManagerPtr	GetDatas()			{ return GetTaskManagerRef().lock()->GetService()->GetDataManager(); }
+	APEIROGON_API const int64		GetWorldTime()		{ return GetTaskManagerRef().lock()->GetService()->GetServiceTimeStamp(); }
 
 protected:
-	TaskManagerRef						mTaskManager;
+	std::map<int64, RemoteClientPtr>	mWorldPlayers;
 	std::map<int64, ActorPtr>			mWorldActors;
 };
+
+template<typename T>
+inline ActorPtr World::SpawnActor(const Location& inLocation, const Rotation& inRotation, const Scale& inScale)
+{
+	TaskManagerPtr taskManager = GetTaskManagerRef().lock();
+	if (nullptr == taskManager)
+	{
+		return nullptr;
+	}
+
+	ActorPtr actor = std::static_pointer_cast<Actor>(std::make_shared<T>());
+	if (nullptr == actor)
+	{
+		return nullptr;
+	}
+	GameObjectPtr gameObject = actor->GetGameObjectPtr();
+	taskManager->PushTask(gameObject);
+
+	actor->SetWorld(GetWorldRef());
+	actor->SetLocation(inLocation);
+	actor->SetRotation(inRotation);
+	actor->SetScale(inScale);
+
+	const int64 objectID = actor->GetGameObjectID();
+	std::pair<int64, ActorPtr> newObject = std::make_pair(objectID, actor);
+	auto result = mWorldActors.insert(newObject);
+	return actor;
+}
+
+template<typename T>
+inline bool World::FindAllActors(std::vector<ActorPtr>& outActors)
+{
+	for (auto actor : mWorldActors)
+	{
+		std::shared_ptr<T> findActor = std::static_pointer_cast<T>(actor.second);
+		if (nullptr != findActor)
+		{
+			outActors.push_back(findActor);
+		}
+	}
+
+	return outActors.size() != 0;
+}

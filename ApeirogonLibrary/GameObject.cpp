@@ -39,6 +39,11 @@ void GameObject::Tick(const int64 inDeltaTime)
 	}
 }
 
+void GameObject::SetOwner(GameObjectRef inOwner)
+{
+	mOwner = inOwner;
+}
+
 void GameObject::SetTick(bool inUse, const int64 inMaxTimer)
 {
 	mIsTick = inUse;
@@ -64,6 +69,11 @@ void GameObject::SetGameObjectID(const int64 inObjectID)
 TaskManagerRef GameObject::GetTaskManagerRef()
 {
 	return mTaskManagerRef;
+}
+
+GameObjectRef GameObject::GetOwner()
+{
+	return mOwner;
 }
 
 GameObjectPtr GameObject::GetGameObjectPtr()

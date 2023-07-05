@@ -20,12 +20,16 @@ bool Trace::TraceCheack(const std::map<int64, Collision>& inCollisions, std::vec
 		Hit resultHit;
 		if (true == HitCheack(collision->second, resultHit))
 		{
-			resultHit.mObjectID = collision->first;
 			outHits.push_back(resultHit);
 		}
 	}
 
 	return outHits.size() != 0;
+}
+
+const ETraceType& Trace::GetTraceType() const
+{
+	return mTraceType;
 }
 
 bool BoxTrace::HitCheack(const Collision& inCollision, Hit& outHit)
