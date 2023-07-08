@@ -17,11 +17,11 @@ void GameObject::Initialization()
 
 void GameObject::Destroy()
 {
-	mGameObjectName = nullptr;
-	mGameObjectID = INVALID_GAMEOBJECT_ID;
-	mTaskManagerRef.reset();
-	mIsTick = false;
 	OnDestroy();
+	mGameObjectName = nullptr;
+	mGameObjectID	= INVALID_GAMEOBJECT_ID;
+	mTaskManagerRef.reset();
+	SetTick(false, INFINITE);
 }
 
 void GameObject::Tick(const int64 inDeltaTime)

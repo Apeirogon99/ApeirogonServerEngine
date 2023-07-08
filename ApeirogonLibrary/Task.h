@@ -16,13 +16,13 @@ public:
 public:
 	bool operator<(const TaskNode& inOtherNode) const
 	{
-		return this->mPriority > inOtherNode.mPriority;
+		return this->mPriority < inOtherNode.mPriority;
 	}
 
 	template<typename T, typename Ret, typename... Args>
 	void Init(const int64 inPriority, std::weak_ptr<T> inOwner, Ret(T::*inMemberFunc)(Args...), Args&&... inArgs)
 	{
-		mPriority = inPriority;
+		this->mPriority = inPriority;
 		mCallBack = [inOwner, inMemberFunc, inArgs...]()
 		{
 			std::shared_ptr<T> owner = inOwner.lock();
@@ -128,8 +128,24 @@ public:
 		return true;
 	}
 
+	APEIROGON_API const int64 TaskTop()
+	{
+		TaskNodePtr taskNode;
+		if (true == mTaskQueue.Peek(taskNode))
+		{
+			return taskNode->GetPriority();
+		}
+
+		return 0;
+	}
+
+	APEIROGON_API const int32 TaskCount()
+	{
+		return mTaskQueue.Count();
+	}
+
 private:
 	FastSpinLock				mFastSpinLock;
-	PriorityQueue<TaskNodePtr>	mTaskQueue;
+	PriorityQueue				mTaskQueue;
 };
 

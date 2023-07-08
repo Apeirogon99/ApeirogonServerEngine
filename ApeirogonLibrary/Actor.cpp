@@ -50,7 +50,7 @@ void Actor::SetLocation(const Location& inLocation)
 
 void Actor::SetLocation(const float inX, const float inY, const float inZ)
 {
-	mTransfrom.SetLocation(FVector(inX, inY, inZ));
+	mTransfrom.SetLocation(Location(inX, inY, inZ));
 }
 
 void Actor::SetRotation(const Rotation& inRotator)
@@ -60,7 +60,7 @@ void Actor::SetRotation(const Rotation& inRotator)
 
 void Actor::SetRotation(const float inPitch, const float inYaw, const float inRoll)
 {
-	mTransfrom.SetRotation(FRotator(inPitch, inYaw, inRoll));
+	mTransfrom.SetRotation(Rotation(inPitch, inYaw, inRoll));
 }
 
 void Actor::SetScale(const Scale& inScale)
@@ -81,8 +81,14 @@ void Actor::SetVelocity(const FVector& inVelocity)
 void Actor::SetVelocity(const float inX, const float inY, const float inZ)
 {
 	mVelocity.SetX(inX);
-	mVelocity.SetX(inY);
-	mVelocity.SetX(inZ);
+	mVelocity.SetY(inY);
+	mVelocity.SetZ(inZ);
+}
+
+bool Actor::FindPlayerViewer(RemoteClientPtr inRemoteClient)
+{
+	auto result = mPlayerViewers.find(inRemoteClient);
+	return result != mPlayerViewers.end();
 }
 
 bool Actor::InsertPlayerViewer(RemoteClientPtr inRemoteClient)

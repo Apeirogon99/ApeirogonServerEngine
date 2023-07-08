@@ -1,7 +1,11 @@
 #pragma once
 
+class CompareNode {
+public:
+	APEIROGON_API bool operator()(const TaskNodePtr& node1, const TaskNodePtr& node2);
+};
+
 //MIN HEAP
-template<typename Node>
 class PriorityQueue
 {
 public:
@@ -13,7 +17,7 @@ public:
 	}
 
 public:
-	APEIROGON_API bool Enqueue(const Node& inNode)
+	APEIROGON_API bool Enqueue(const TaskNodePtr inNode)
 	{
 		FastLockGuard lockGuard(mFastLock);
 		mNodes.push(inNode);
@@ -33,7 +37,7 @@ public:
 		return true;
 	}
 
-	APEIROGON_API bool Dequeue(Node& outNode)
+	APEIROGON_API bool Dequeue(TaskNodePtr& outNode)
 	{
 		FastLockGuard lockGuard(mFastLock);
 
@@ -47,7 +51,7 @@ public:
 		return true;
 	}
 
-	APEIROGON_API bool DequeueAll(std::vector<Node>& outNodes)
+	APEIROGON_API bool DequeueAll(std::vector<TaskNodePtr>& outNodes)
 	{
 		FastLockGuard lockGuard(mFastLock);
 
@@ -58,7 +62,7 @@ public:
 
 		while (!mNodes.empty())
 		{
-			Node topNode = mNodes.top();
+			TaskNodePtr topNode = mNodes.top();
 			mNodes.pop();
 
 			outNodes.push_back(std::move(topNode));
@@ -67,7 +71,7 @@ public:
 		return true;
 	}
 
-	APEIROGON_API bool Peek(Node& outNode)
+	APEIROGON_API bool Peek(TaskNodePtr& outNode)
 	{
 		FastLockGuard lockGuard(mFastLock);
 
@@ -102,5 +106,5 @@ public:
 
 private:
 	FastSpinLock				mFastLock;
-	std::priority_queue<Node>	mNodes;
+	std::priority_queue<TaskNodePtr, std::vector<TaskNodePtr>, CompareNode> mNodes;
 };

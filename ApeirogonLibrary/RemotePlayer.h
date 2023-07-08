@@ -20,6 +20,7 @@ public:
 public:
 	APEIROGON_API void			SetRemoteClient(RemoteClientRef inRemoteClient);
 
+	APEIROGON_API bool			FindPlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API bool			InsertPlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API bool			ReleasePlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API void			BrodcastPlayerViewers(SendBufferPtr inSendBuffer);

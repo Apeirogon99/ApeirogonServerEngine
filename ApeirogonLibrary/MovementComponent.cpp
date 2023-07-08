@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MovementComponent.h"
 
-MovementComponent::MovementComponent() : mLastMovementTime(0)
+MovementComponent::MovementComponent() : mDestinationLocation(), mLastMovementTime(0), mCurrentMovementSyncTime(0), mMaxMovementSyncTime(0)
 {
 }
 
@@ -12,12 +12,13 @@ MovementComponent::~MovementComponent()
 bool MovementComponent::Update(ActorPtr inOwner, const float inCloseToDestination)
 {
 
-	Location	currentLocation = inOwner->GetLocation();
-	Location	destinationLocation = this->mDestinationLocation;
+	Location currentLocation = inOwner->GetLocation();
+	Location destinationLocation = this->mDestinationLocation;
 
 	const float locationDistance = FVector::Distance2D(currentLocation, destinationLocation);
-	if (locationDistance > inCloseToDestination)
+	if (locationDistance < inCloseToDestination)
 	{
+		inOwner->SetLocation(destinationLocation);
 		return false;
 	}
 

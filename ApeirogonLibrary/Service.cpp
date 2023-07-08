@@ -30,7 +30,7 @@ void Service::ServiceScheudler()
 	int64 dbRunTime;
 	int64 sendRunTime;
 
-	const int64 maxProcessTime = 33;
+	const int64 maxProcessTime = 10;
 	int64		processTime = 0;
 
 	while (IsServiceOpen())
@@ -57,10 +57,11 @@ void Service::ServiceScheudler()
 		sendRunTime = mSessionManager->WorkDispatch();
 
 		totalRunTime = scheudlerTimeStamp.GetTimeStamp();
-		if (totalRunTime > maxProcessTime)
-		{
-			wprintf(L"Scheudler over run time [TOTAL::%lld] [TICK::%lld] [TASK::%lld] [DB::%lld] [SEND::%lld]\n", totalRunTime, tickRunTime, taskRunTime, dbRunTime, sendRunTime);
-		}
+
+		//if (totalRunTime > maxProcessTime)
+		//{
+		//	wprintf(L"Scheudler over run time [TOTAL::%lld] [TICK::%lld] [TASK::%lld] [DB::%lld] [SEND::%lld]\n", totalRunTime, tickRunTime, taskRunTime, dbRunTime, sendRunTime);
+		//}
 
 	}
 }
@@ -110,6 +111,8 @@ void Service::ServiceClose()
 
 		mSessionManager->Shutdown();
 
+		mTaskManager->Shutdown();
+
 		mDataManager->Shutdown();
 
 		mListener->Shutdown();
@@ -121,6 +124,7 @@ void Service::ServiceClose()
 		mThreadManager.reset();
 		mDatabaseManager.reset();
 		mSessionManager.reset();
+		mTaskManager.reset();
 		mDataManager.reset();
 		mListener.reset();
 		mIOCPServer.reset();

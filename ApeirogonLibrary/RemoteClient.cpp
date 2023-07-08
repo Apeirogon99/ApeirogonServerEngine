@@ -14,6 +14,12 @@ void RemoteClient::SetRemotePlayer(RemotePlayerPtr inRemotePlayer)
 	mRemotePlayer = inRemotePlayer;
 }
 
+bool RemoteClient::FindPlayerMonitor(RemotePlayerPtr inRemotePlayer)
+{
+	auto result = mPlayerMonitors.find(inRemotePlayer);
+	return result != mPlayerMonitors.end();
+}
+
 bool RemoteClient::InsertPlayerMonitor(RemotePlayerPtr inRemotePlayer)
 {
 	auto result = mPlayerMonitors.insert(inRemotePlayer);
@@ -36,6 +42,12 @@ void RemoteClient::BroadcastPlayerMonitors(SendBufferPtr inSendBuffer)
 			remoteClient->Send(inSendBuffer);
 		}
 	}
+}
+
+bool RemoteClient::FindActorMonitor(ActorPtr inActor)
+{
+	auto result = mActorMonitors.find(inActor);
+	return result != mActorMonitors.end();
 }
 
 bool RemoteClient::InsertActorMonitor(ActorPtr inActor)

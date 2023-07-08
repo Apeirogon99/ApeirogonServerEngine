@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "TaskManager.h"
 
-TaskManager::TaskManager() : mGameObjectCount(INVALID_GAMEOBJECT_ID), mTaskProcessTimeStamp(L"Task"), mTickProcessTimeStamp(L"Tick")
+TaskManager::TaskManager() : mGameObjectIDCount(INVALID_GAMEOBJECT_ID), mTaskProcessTimeStamp(L"Task"), mTickProcessTimeStamp(L"Tick"), mCurrentTickGameObjectCount(0), mCurrentGameObjectCount(0)
 {
 }
 
@@ -32,10 +32,10 @@ void TaskManager::Shutdown()
 		task.second->ClearTask();
 	}
 
+	TaskManagerLog(L"[TaskManager::Shutdown()] Task manager success shutdown\n");
+
 	mGameObjects.clear();
 	mService.reset();
-
-	TaskManagerLog(L"[TaskManager::Shutdown()] Task manager success shutdown\n");
 }
 
 int64 TaskManager::ProcessTask(const int64 inServiceTimeStamp)
@@ -58,35 +58,43 @@ int64 TaskManager::Tick(const int64 inTickTime)
 	return mTickProcessTimeStamp.GetTimeStamp();
 }
 
-void TaskManager::CreateGameObject(GameObjectPtr& inGameObject)
+void TaskManager::CreateGameObject(GameObjectPtr inGameObject)
 {
 	const int64 curGameObjectID = NextGameObjectNumber();
 
 	inGameObject->SetTaskManagerRef(weak_from_this());
 	inGameObject->Initialization();
 	inGameObject->SetGameObjectID(curGameObjectID);
+
+	mCurrentGameObjectCount++;
 }
 
-void TaskManager::DestroyGameObject(GameObjectPtr& inGameObject)
+void TaskManager::DestroyGameObject(GameObjectPtr inGameObject)
 {
 	inGameObject->Destroy();
 	inGameObject->ClearTask();
+
+	mCurrentGameObjectCount--;
 }
 
-void TaskManager::PushTask(GameObjectPtr& inGameObject)
+void TaskManager::PushTask(GameObjectPtr inGameObject)
 {
 	CreateGameObject(inGameObject);
 
 	const int64 objectID = inGameObject->GetGameObjectID();
 	std::pair<int64, GameObjectPtr> tempTask = std::make_pair(objectID, inGameObject);
 	mGameObjects.insert(tempTask);
+
+	mCurrentTickGameObjectCount++;
 }
 
-void TaskManager::ReleaseTask(GameObjectPtr& inGameObject)
+void TaskManager::ReleaseTask(GameObjectPtr inGameObject)
 {
 	mGameObjects.erase(inGameObject->GetGameObjectID());
 
 	DestroyGameObject(inGameObject);
+
+	mCurrentTickGameObjectCount--;
 }
 
 bool TaskManager::FindTask(const int64 inGameObjectID, GameObjectPtr& outGameObject)
@@ -122,7 +130,7 @@ bool TaskManager::FindTask(const WCHAR* inGameObjectName, GameObjectPtr& outGame
 
 const int64 TaskManager::NextGameObjectNumber()
 {
-	const int64 nextGameObject = ++mGameObjectCount;
+	const int64 nextGameObject = ++mGameObjectIDCount;
 	return nextGameObject;
 }
 

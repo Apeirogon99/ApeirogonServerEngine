@@ -15,7 +15,7 @@ protected:
 public:
 
 	template<typename T>
-	APEIROGON_API ActorPtr			SpawnActor(const Location& inLocation, const Rotation& inRotation, const Scale& inScale);
+	APEIROGON_API ActorPtr			SpawnActor(GameObjectRef inOwner, const Location& inLocation, const Rotation& inRotation, const Scale& inScale);
 
 	template <typename T>
 	APEIROGON_API bool				FindAllActors(std::vector<ActorPtr>& outActors);
@@ -38,7 +38,7 @@ protected:
 };
 
 template<typename T>
-inline ActorPtr World::SpawnActor(const Location& inLocation, const Rotation& inRotation, const Scale& inScale)
+inline ActorPtr World::SpawnActor(GameObjectRef inOwner, const Location& inLocation, const Rotation& inRotation, const Scale& inScale)
 {
 	TaskManagerPtr taskManager = GetTaskManagerRef().lock();
 	if (nullptr == taskManager)
@@ -51,13 +51,14 @@ inline ActorPtr World::SpawnActor(const Location& inLocation, const Rotation& in
 	{
 		return nullptr;
 	}
-	GameObjectPtr gameObject = actor->GetGameObjectPtr();
-	taskManager->PushTask(gameObject);
-
+	actor->SetOwner(inOwner);
 	actor->SetWorld(GetWorldRef());
 	actor->SetLocation(inLocation);
 	actor->SetRotation(inRotation);
 	actor->SetScale(inScale);
+
+	GameObjectPtr gameObject = actor->GetGameObjectPtr();
+	taskManager->PushTask(gameObject);
 
 	const int64 objectID = actor->GetGameObjectID();
 	std::pair<int64, ActorPtr> newObject = std::make_pair(objectID, actor);

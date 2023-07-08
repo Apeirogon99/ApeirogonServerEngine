@@ -21,10 +21,12 @@ protected:
 public:
 	APEIROGON_API void				SetRemotePlayer(RemotePlayerPtr inRemotePlayer);
 
+	APEIROGON_API bool				FindPlayerMonitor(RemotePlayerPtr inRemotePlayer);
 	APEIROGON_API bool				InsertPlayerMonitor(RemotePlayerPtr inRemotePlayer);
 	APEIROGON_API bool				ReleasePlayerMonitor(RemotePlayerPtr inRemotePlayer);
 	APEIROGON_API void				BroadcastPlayerMonitors(SendBufferPtr inSendBuffer);
 
+	APEIROGON_API bool				FindActorMonitor(ActorPtr inActor);
 	APEIROGON_API bool				InsertActorMonitor(ActorPtr inActor);
 	APEIROGON_API bool				ReleaseActorMonitor(ActorPtr inActor);
 

@@ -15,6 +15,12 @@ void RemotePlayer::SetRemoteClient(RemoteClientRef inRemoteClient)
 	mRemoteClient = inRemoteClient;
 }
 
+bool RemotePlayer::FindPlayerViewer(RemoteClientPtr inRemoteClient)
+{
+	auto result = mPlayerViewers.find(inRemoteClient);
+	return result != mPlayerViewers.end();
+}
+
 bool RemotePlayer::InsertPlayerViewer(RemoteClientPtr inRemoteClient)
 {
 	auto result = mPlayerViewers.insert(inRemoteClient);

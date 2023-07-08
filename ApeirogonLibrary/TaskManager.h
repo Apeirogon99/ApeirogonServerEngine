@@ -23,11 +23,11 @@ public:
 	int64 Tick(const int64 inTickTime);
 
 public:
-	APEIROGON_API void		   	CreateGameObject(GameObjectPtr& inGameObject);
-	APEIROGON_API void		   	DestroyGameObject(GameObjectPtr& inGameObject);
+	APEIROGON_API void		   	CreateGameObject(GameObjectPtr inGameObject);
+	APEIROGON_API void		   	DestroyGameObject(GameObjectPtr inGameObject);
 
-	APEIROGON_API void		   	PushTask(GameObjectPtr& inGameObject);
-	APEIROGON_API void		   	ReleaseTask(GameObjectPtr& inGameObject);
+	APEIROGON_API void		   	PushTask(GameObjectPtr inGameObject);
+	APEIROGON_API void		   	ReleaseTask(GameObjectPtr inGameObject);
 	APEIROGON_API bool			FindTask(const int64 inGameObjectID, GameObjectPtr& outGameObject);
 	APEIROGON_API bool			FindTask(const WCHAR* inGameObjectName, GameObjectPtr& outGameObject);
 
@@ -42,7 +42,9 @@ public:
 
 private:
 	ServicePtr									mService;
-	int64										mGameObjectCount;
+	int64										mGameObjectIDCount;
+	int64										mCurrentTickGameObjectCount;
+	int64										mCurrentGameObjectCount;
 	std::unordered_map<int64, GameObjectPtr>	mGameObjects;
 
 	TimeStamp									mTaskProcessTimeStamp;

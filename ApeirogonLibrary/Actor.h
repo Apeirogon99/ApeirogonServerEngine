@@ -17,7 +17,9 @@ public:
 	APEIROGON_API virtual void	OnDisAppearActor(ActorPtr inDisAppearActor) {};
 
 	APEIROGON_API virtual void	OnHit(ActorPtr inInstigated, const float inDamage, const Location inHitLocation) {};
-	APEIROGON_API virtual void	OnAutoAttackShot(bool inIsRange, ActorPtr inVictim) {};
+	APEIROGON_API virtual void	OnDeath() {};
+
+	APEIROGON_API virtual void	OnAutoAttackShot() {};
 	APEIROGON_API virtual void	OnAutoAttackTargeting() {};
 	APEIROGON_API virtual void	OnAutoAttackOver() {};
 
@@ -39,6 +41,8 @@ public:
 	APEIROGON_API void			SetVelocity(const FVector& inVelocity);
 	APEIROGON_API void			SetVelocity(const float inX, const float inY, const float inZ);
 
+
+	APEIROGON_API bool			FindPlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API bool			InsertPlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API bool			ReleasePlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API void			BrodcastPlayerViewers(SendBufferPtr inSendBuffer);
