@@ -1,4 +1,5 @@
 #pragma once
+
 class APEIROGON_API FVector
 {
 public:
@@ -21,6 +22,7 @@ public:
 	bool operator==(const FVector& inVector);
 
 public:
+	bool		Comapre(const FVector& inVector1, const FVector& inVector2, const float inDiff);
 	FRotator	Rotator();
 	float		Length();
 	void		Normalize();
@@ -45,4 +47,3 @@ private:
 	float mY;
 	float mZ;
 };
-

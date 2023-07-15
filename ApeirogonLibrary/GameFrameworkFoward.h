@@ -8,7 +8,10 @@ using Scale		= FVector;
 using Velocity	= FVector;
 
 
-class Hit;
+class CollisionComponent;
+class BoxCollisionComponent;
+class CapsuleCollisionComponent;
+class SphereCollisionComponent;
 
 
 

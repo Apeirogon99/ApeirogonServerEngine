@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MovementComponent.h"
 
-MovementComponent::MovementComponent() : mDestinationLocation(), mLastMovementTime(0), mCurrentMovementSyncTime(0), mMaxMovementSyncTime(0)
+MovementComponent::MovementComponent() : mDestinationLocation(), mOldLocation(), mServerDestinationLocation(), mLastMovementTime(0), mCurrentMovementSyncTime(0), mMaxMovementSyncTime(0)
 {
 }
 
@@ -9,14 +9,29 @@ MovementComponent::~MovementComponent()
 {
 }
 
-bool MovementComponent::Update(ActorPtr inOwner, const float inCloseToDestination)
+void MovementComponent::InitMovement(const Location& inInitLocation, const int64& inMovementMaxSyncTime)
+{
+	mDestinationLocation		= inInitLocation;
+	mServerDestinationLocation	= inInitLocation;
+	mOldLocation				= inInitLocation;
+	mLastMovementTime			= 0;
+	mMaxMovementSyncTime		= inMovementMaxSyncTime;
+	mCurrentMovementSyncTime	= 0;
+}
+
+bool MovementComponent::Update(ActorPtr inOwner, const float& inCloseToDestination)
 {
 
 	Location currentLocation = inOwner->GetLocation();
-	Location destinationLocation = this->mDestinationLocation;
+	Location destinationLocation = this->mServerDestinationLocation;
+
+	if (currentLocation == destinationLocation)
+	{
+		return false;
+	}
 
 	const float locationDistance = FVector::Distance2D(currentLocation, destinationLocation);
-	if (locationDistance < inCloseToDestination)
+	if (locationDistance <= inCloseToDestination)
 	{
 		inOwner->SetLocation(destinationLocation);
 		return false;
@@ -28,42 +43,56 @@ bool MovementComponent::Update(ActorPtr inOwner, const float inCloseToDestinatio
 
 	FVector	direction = destinationLocation - currentLocation;
 	direction.Normalize();
-
-	FRotator rotation = direction.Rotator();
 	FVector velocity = direction * currentVelocity;
 
 	FVector	deadReckoningLocation = currentLocation + (velocity * duration);
 
 	//inOwner->GameObjectLog(L"[Move] (%5.6f:%5.6f:%5.6f)\n", deadReckoningLocation.GetX(), deadReckoningLocation.GetY(), deadReckoningLocation.GetZ());
 
+	this->mOldLocation = currentLocation;
+
 	inOwner->SetLocation(deadReckoningLocation);
-	inOwner->SetRotation(rotation);
 	this->mLastMovementTime = currentWorldTime;
 	return true;
 }
 
-bool MovementComponent::SyncUpdate(const int64 inSyncTime)
+bool MovementComponent::SyncUpdate(ActorPtr inOwner, const int64 inSyncTime)
 {
 	mCurrentMovementSyncTime += inSyncTime;
-	if (mCurrentMovementSyncTime > mMaxMovementSyncTime)
+	if (mCurrentMovementSyncTime <= mMaxMovementSyncTime)
 	{
-		mCurrentMovementSyncTime = 0;
-		return true;
+		return false;
+	}
+	mCurrentMovementSyncTime = 0;
+
+	const float distance = FVector::Distance2D(inOwner->GetLocation(), this->mOldLocation);
+	if (distance <= 0.1f)
+	{
+		return false;
 	}
 
-	return false;
+	mOldLocation = inOwner->GetLocation();
+	return true;
 }
 
-void MovementComponent::SetSynchronizationTime(const int64 inMovementSyncTime)
+void MovementComponent::SetNewDestination(ActorPtr inOwner, const Location& inCurrentLocation, Location& inDestinationLocation, const int64 inMovementLastTime, const float& inCollisionSize)
 {
-	mMaxMovementSyncTime = inMovementSyncTime;
-	mCurrentMovementSyncTime = 0;
+	FVector		direction = inDestinationLocation - inCurrentLocation;
+	FRotator	rotation = direction.Rotator();
+	FVector		foward = rotation.GetForwardVector();
+	FVector		addRadius = foward * inCollisionSize;
+
+	inOwner->SetRotation(rotation);
+	inOwner->SetLocation(inCurrentLocation);
+
+	mServerDestinationLocation	= inDestinationLocation - addRadius;
+	mDestinationLocation		= inDestinationLocation;
+	mLastMovementTime			= inMovementLastTime;
 }
 
-void MovementComponent::SetNewDestination(const Location& inDestinationLocation, const int64 inMovementLastTime)
+const Location& MovementComponent::GetServerDestinationLocation() const
 {
-	mDestinationLocation = inDestinationLocation;
-	mLastMovementTime = inMovementLastTime;
+	return mServerDestinationLocation;
 }
 
 const Location& MovementComponent::GetDestinationLocation() const

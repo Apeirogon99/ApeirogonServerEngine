@@ -20,13 +20,13 @@ public:
 
 
 public:
-	APEIROGON_API MovementComponent&			GetMovementComponent();
-	APEIROGON_API AnimationComponent&			GetAnimationComponent();
-	APEIROGON_API CapsuleCollisionComponent&	GetCapsuleCollisionComponent();
+	APEIROGON_API MovementComponent&		GetMovementComponent();
+	APEIROGON_API AnimationComponent&		GetAnimationComponent();
+	APEIROGON_API BoxCollisionComponent&	GetCapsuleCollisionComponent();
 
 protected:
-	MovementComponent			mMovementComponent;
-	AnimationComponent			mAnimationComponent;
-	CapsuleCollisionComponent	mCollisionComponent;
+	MovementComponent					mMovementComponent;
+	AnimationComponent					mAnimationComponent;
+	BoxCollisionComponent				mCapsuleCollisionComponent;
 };
 

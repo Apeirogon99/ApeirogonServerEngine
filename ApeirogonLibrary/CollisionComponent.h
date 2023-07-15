@@ -12,10 +12,10 @@ public:
 	CollisionComponent& operator=(CollisionComponent&&) noexcept = delete;
 
 public:
-	void SetOwner(ActorRef mOwner) {}
+	void SetOwner(ActorRef inOwner) { mOwner = inOwner; }
 
 public:
-
+	const ActorRef& GetOwner() const { return mOwner; }
 
 protected:
 	ActorRef mOwner;
@@ -32,6 +32,12 @@ public:
 
 	BoxCollisionComponent& operator=(const BoxCollisionComponent&) = delete;
 	BoxCollisionComponent& operator=(BoxCollisionComponent&&) noexcept = delete;
+
+public:
+	APEIROGON_API void SetBoxCollision(const FVector& inBoxExtent);
+
+public:
+	APEIROGON_API BoxCollision& GetBoxCollision();
 
 private:
 	BoxCollision mBoxCollision;
@@ -50,7 +56,10 @@ public:
 	CapsuleCollisionComponent& operator=(CapsuleCollisionComponent&&) noexcept = delete;
 
 public:
-	void SetCapsule(const float inRadius, const float inHeight);
+	APEIROGON_API void SetCapsuleCollision(const float inRadius, const float inHeight);
+
+public:
+	APEIROGON_API const CapsuleCollision& GetCapsuleCollision();
 
 private:
 	CapsuleCollision mCapsuleCollision;
@@ -67,6 +76,12 @@ public:
 
 	SphereCollisionComponent& operator=(const SphereCollisionComponent&) = delete;
 	SphereCollisionComponent& operator=(SphereCollisionComponent&&) noexcept = delete;
+
+public:
+	APEIROGON_API void SetSphereCollisione(const float inRadius);
+
+public:
+	APEIROGON_API const SphereCollision& GetSphereCollision();
 
 private:
 	SphereCollision mSphereCollision;

@@ -26,7 +26,8 @@ public:
 	APEIROGON_API virtual void			OnServiceClose() {};
 
 public:
-	APEIROGON_API int64					GetServiceTimeStamp();
+	APEIROGON_API const int64			GetServiceTimeStamp();
+	APEIROGON_API const int64			GetNextServiceTimeStamp();
 	void								ServiceScheudler();
 
 protected:
@@ -75,4 +76,5 @@ private:
 	TaskManagerPtr				mTaskManager;
 
 	TimeStamp					mServiceTime;
+	int64						mScheudlerProcessTime;
 };

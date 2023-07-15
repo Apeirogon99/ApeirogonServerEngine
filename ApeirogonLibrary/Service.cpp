@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Service.h"
 
-Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server")
+Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(0)
 {
 	setlocale(LC_ALL, "");
 }
@@ -11,9 +11,16 @@ Service::~Service()
 	wprintf(L"[Service::~Service()] Close service (Running time : %lld)\n", mServiceTime.GetTimeStamp());
 }
 
-int64 Service::GetServiceTimeStamp()
+const int64 Service::GetServiceTimeStamp()
 {
 	return mServiceTime.GetTimeStamp();
+}
+
+const int64 Service::GetNextServiceTimeStamp()
+{
+	const int64 currentTime		= mServiceTime.GetTimeStamp();
+	const int64 lessProcessTime = mScheudlerProcessTime - (currentTime % mScheudlerProcessTime);
+	return lessProcessTime;
 }
 
 void Service::ServiceScheudler()
@@ -30,8 +37,8 @@ void Service::ServiceScheudler()
 	int64 dbRunTime;
 	int64 sendRunTime;
 
-	const int64 maxProcessTime = 10;
-	int64		processTime = 0;
+	mScheudlerProcessTime = 10;
+	int64 processTime = 0;
 
 	while (IsServiceOpen())
 	{
@@ -42,7 +49,7 @@ void Service::ServiceScheudler()
 		taskRunTime		= 0;
 		dbRunTime		= 0;
 
-		while (processTime < serviceTimeStamp + maxProcessTime)
+		while (processTime < serviceTimeStamp + mScheudlerProcessTime)
 		{
 
 			taskRunTime += this->mTaskManager->ProcessTask(serviceTimeStamp);

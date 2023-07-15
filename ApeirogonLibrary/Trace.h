@@ -22,14 +22,16 @@ public:
 	Trace& operator=(Trace&&) noexcept = delete;
 
 public:
-	bool TraceCheack(const Collision& inCollision, Hit& outHit);
-	bool TraceCheack(const std::map<int64, Collision>& inCollisions, std::vector<Hit>& outHits);
+	bool HitCollision(Collision& inCollision);
 
 public:
 	const ETraceType& GetTraceType() const;
 
 protected:
-	virtual bool HitCheack(const Collision& inCollision, Hit& outHit) abstract;
+	virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)	abstract;
+	virtual bool CapsuleCollisionTrace(const CapsuleCollision& inCapsuleCollision)	abstract;
+	virtual bool SphereCollisionTrace(const SphereCollision& inSphereCollision)		abstract;
+	virtual bool FrustumCollisionTrace(const FrustumCollision& inFrustumCollision)	abstract;
 
 protected:
 	FVector		mStart;
@@ -41,7 +43,7 @@ protected:
 class APEIROGON_API BoxTrace : public Trace
 {
 public:
-	BoxTrace(FVector inStart, FVector inEnd, bool inIsIgnore, FVector inBoxExtent, FRotator inOrientation) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Box), mExtent(inBoxExtent), mOrientation(inOrientation) {}
+	BoxTrace(FVector inStart, FVector inEnd, bool inIsIgnore, FVector inBoxExtent, FRotator inOrientation);
 	~BoxTrace() {}
 
 	BoxTrace(const BoxTrace&) = delete;
@@ -50,19 +52,20 @@ public:
 	BoxTrace& operator=(const BoxTrace&) = delete;
 	BoxTrace& operator=(BoxTrace&&) noexcept = delete;
 
-protected:
-	virtual bool HitCheack(const Collision& inCollision, Hit& outHit) override;
-	Hit BoxCheack(const BoxCollision& inCollision);
+public:
+	virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)	override;
+	virtual bool CapsuleCollisionTrace(const CapsuleCollision& inCapsuleCollision)	override;
+	virtual bool SphereCollisionTrace(const SphereCollision& inSphereCollision)		override;
+	virtual bool FrustumCollisionTrace(const FrustumCollision& inFrustumCollision)	override;
 
 private:
-	FVector		mExtent;
-	FRotator	mOrientation;
+	BoxCollision mBoxCollision;
 };
 
 class APEIROGON_API CapsuleTrace : public Trace
 {
 public:
-	CapsuleTrace(FVector inStart, FVector inEnd, bool inIsIgnore, const float inRadius, const float inHeight) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Capsule), mRadius(inRadius), mHeight(inHeight) {}
+	CapsuleTrace(FVector inStart, FVector inEnd, bool inIsIgnore, const float inRadius, const float inHeight) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Capsule), mCapsuleCollision(inRadius, inHeight) {}
 	~CapsuleTrace() {}
 
 	CapsuleTrace(const CapsuleTrace&) = delete;
@@ -71,18 +74,20 @@ public:
 	CapsuleTrace& operator=(const CapsuleTrace&) = delete;
 	CapsuleTrace& operator=(CapsuleTrace&&) noexcept = delete;
 
-protected:
-	virtual bool HitCheack(const Collision& inCollision, Hit& outHit) override;
+public:
+	virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)	override {return false;}
+	virtual bool CapsuleCollisionTrace(const CapsuleCollision& inCapsuleCollision)	override {return false;}
+	virtual bool SphereCollisionTrace(const SphereCollision& inSphereCollision)		override {return false;}
+	virtual bool FrustumCollisionTrace(const FrustumCollision& inFrustumCollision)	override {return false;}
 
 private:
-	float mRadius;
-	float mHeight;
+	CapsuleCollision mCapsuleCollision;
 };
 
 class APEIROGON_API SphereTrace : public Trace
 {
 public:
-	SphereTrace(FVector inStart, FVector inEnd, bool inIsIgnore, float inRadius) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Sphere), mRadius(inRadius) {}
+	SphereTrace(FVector inStart, FVector inEnd, bool inIsIgnore, float inRadius) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Sphere), mSphereCollision(inRadius) {}
 	~SphereTrace() {}
 
 	SphereTrace(const SphereTrace&) = delete;
@@ -91,17 +96,20 @@ public:
 	SphereTrace& operator=(const SphereTrace&) = delete;
 	SphereTrace& operator=(SphereTrace&&) noexcept = delete;
 
-protected:
-	virtual bool HitCheack(const Collision& inCollision, Hit& outHit) override;
+public:
+	virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponentn)	override {return false;}
+	virtual bool CapsuleCollisionTrace(const CapsuleCollision& inCapsuleCollision)	override {return false;}
+	virtual bool SphereCollisionTrace(const SphereCollision& inSphereCollision)		override {return false;}
+	virtual bool FrustumCollisionTrace(const FrustumCollision& inFrustumCollision)	override {return false;}
 
 private:
-	float mRadius;
+	SphereCollision mSphereCollision;
 };
 
 class APEIROGON_API FrustumTrace : public Trace
 {
 public:
-	FrustumTrace(FVector inStart, FVector inEnd, bool inIsIgnore, float inNearPlane, float inFarPlane, float inHeight) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Frustum), mNearPlane(inNearPlane), mFarPlane(inFarPlane), mHeight(inHeight) {}
+	FrustumTrace(FVector inStart, FVector inEnd, bool inIsIgnore, float inNearPlane, float inFarPlane, float inHeight) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Frustum), mFrustumCollision(inNearPlane, inFarPlane, inHeight) {}
 	~FrustumTrace() {}
 
 	FrustumTrace(const FrustumTrace&) = delete;
@@ -110,11 +118,12 @@ public:
 	FrustumTrace& operator=(const FrustumTrace&) = delete;
 	FrustumTrace& operator=(FrustumTrace&&) noexcept = delete;
 
-protected:
-	virtual bool HitCheack(const Collision& inCollision, Hit& outHit) override;
+public:
+	virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)	override {return false;}
+	virtual bool CapsuleCollisionTrace(const CapsuleCollision& inCapsuleCollision)	override {return false;}
+	virtual bool SphereCollisionTrace(const SphereCollision& inSphereCollision)		override {return false;}
+	virtual bool FrustumCollisionTrace(const FrustumCollision& inFrustumCollision)	override {return false;}
 
 private:
-	float mNearPlane;
-	float mFarPlane;
-	float mHeight;
+	FrustumCollision mFrustumCollision;
 };

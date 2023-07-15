@@ -55,11 +55,16 @@ FVector FRotator::Vector() const
     const float PitchNoWinding = std::fmod(mPitch, 360.0f);
     const float YawNoWinding = std::fmod(mYaw, 360.0f);
 
-    //float CP, SP, CY, SY;
-    //std::sin(&SP, &CP, PitchNoWinding * (PI / 180.f));
-    //FMath::SinCos(&SY, &CY, YawNoWinding * (PI / 180.f));
-    //FVector vector = FVector(CP * CY, CP * SY, SP);
-    return FVector();
+    float CP, SP, CY, SY;
+
+    SP = std::sin(PitchNoWinding * (PI / 180.f));
+    CP = std::cos(PitchNoWinding * (PI / 180.f));
+
+    SY = std::sin(YawNoWinding * (PI / 180.f));
+    CY = std::cos(YawNoWinding * (PI / 180.f));
+
+    FVector vector = FVector(CP * CY, CP * SY, SP);
+    return vector;
 }
 
 FVector FRotator::GetForwardVector() const

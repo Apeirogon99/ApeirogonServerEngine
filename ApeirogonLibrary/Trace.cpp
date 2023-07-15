@@ -1,30 +1,10 @@
 #include "pch.h"
 #include "Trace.h"
+#include "CollisionComponent.h"
 
-bool Trace::TraceCheack(const Collision& inCollision, Hit& outHit)
+bool Trace::HitCollision(Collision& inCollision)
 {
-	bool result = HitCheack(inCollision, outHit);
-	return result;
-}
-
-bool Trace::TraceCheack(const std::map<int64, Collision>& inCollisions, std::vector<Hit>& outHits)
-{
-	if (inCollisions.size() == 0)
-	{
-		return false;
-	}
-
-	std::map<int64, Collision>::const_iterator collision = inCollisions.begin();
-	for (collision; collision != inCollisions.end(); collision++)
-	{
-		Hit resultHit;
-		if (true == HitCheack(collision->second, resultHit))
-		{
-			outHits.push_back(resultHit);
-		}
-	}
-
-	return outHits.size() != 0;
+	return false;
 }
 
 const ETraceType& Trace::GetTraceType() const
@@ -32,42 +12,57 @@ const ETraceType& Trace::GetTraceType() const
 	return mTraceType;
 }
 
-bool BoxTrace::HitCheack(const Collision& inCollision, Hit& outHit)
+//==========================//
+//		   BoxTrace			//
+//==========================//
+
+BoxTrace::BoxTrace(FVector inStart, FVector inEnd, bool inIsIgnore, FVector inBoxExtent, FRotator inOrientation) : Trace(inStart, inEnd, inIsIgnore, ETraceType::Trace_Box), mBoxCollision(inBoxExtent, inOrientation)
 {
-	const CollisionType& collisionType = inCollision.GetCollisionType();
-	switch (collisionType)
+}
+
+bool BoxTrace::BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)
+{
+	ActorPtr collisionActor = inBoxCollisionComponent.GetOwner().lock();
+	if (nullptr == collisionActor)
 	{
-	case CollisionType::Collision_Box:
-		outHit = BoxCheack(static_cast<const BoxCollision&>(inCollision));
-		break;
-	case CollisionType::Collision_Capsule:
-		break;
-	case CollisionType::Collision_Sphere:
-		break;
-	default:
-		break;
+		return false;
+	}
+	Location currentLocation = collisionActor->GetLocation();
+
+	FVector actorMin;
+	FVector actorMax;
+	inBoxCollisionComponent.GetBoxCollision().MakeAABB(currentLocation, actorMin, actorMax);
+
+	FVector traceMin;
+	FVector traceMax;
+	this->mBoxCollision.MakeAABB(mStart, traceMin, traceMax);
+
+	if (traceMin.GetX() < actorMax.GetX() && traceMax.GetX() > actorMin.GetX() &&
+		traceMin.GetY() < actorMax.GetY() && traceMax.GetY() > actorMin.GetY() &&
+		traceMin.GetZ() < actorMax.GetZ() && traceMax.GetZ() > actorMin.GetZ())
+	{
+		wprintf(L"TRACE\n");
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
-Hit BoxTrace::BoxCheack(const BoxCollision& inCollision)
-{
-	return Hit();
-}
-
-
-bool CapsuleTrace::HitCheack(const Collision& inCollision, Hit& outHit)
+bool BoxTrace::CapsuleCollisionTrace(const CapsuleCollision& inCapsuleCollision)
 {
 	return true;
 }
 
-bool SphereTrace::HitCheack(const Collision& inCollision, Hit& outHit)
+bool BoxTrace::SphereCollisionTrace(const SphereCollision& inSphereCollision)
 {
 	return true;
 }
 
-bool FrustumTrace::HitCheack(const Collision& inCollision, Hit& outHit)
+bool BoxTrace::FrustumCollisionTrace(const FrustumCollision& inFrustumCollision)
 {
 	return true;
 }
+
+//==========================//
+//		 CapsuleTrace		//
+//==========================//

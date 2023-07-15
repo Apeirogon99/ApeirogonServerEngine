@@ -31,6 +31,7 @@ public:
 	APEIROGON_API WorldRef			GetWorldRef()		{ return std::static_pointer_cast<World>(shared_from_this()); }
 	APEIROGON_API DataManagerPtr	GetDatas()			{ return GetTaskManagerRef().lock()->GetService()->GetDataManager(); }
 	APEIROGON_API const int64		GetWorldTime()		{ return GetTaskManagerRef().lock()->GetService()->GetServiceTimeStamp(); }
+	APEIROGON_API const int64		GetNextWorldTime()	{ return GetTaskManagerRef().lock()->GetService()->GetNextServiceTimeStamp(); }
 
 protected:
 	std::map<int64, RemoteClientPtr>	mWorldPlayers;

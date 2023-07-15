@@ -87,16 +87,20 @@ FVector FVector::operator*(float inScale)
 FVector FVector::operator/(float inScale)
 {
 	FVector vector;
-	const float RScale = 1.f / inScale;
-	vector.SetX(this->mX / RScale);
-	vector.SetY(this->mY / RScale);
-	vector.SetZ(this->mZ / RScale);
+	vector.SetX(this->mX / inScale);
+	vector.SetY(this->mY / inScale);
+	vector.SetZ(this->mZ / inScale);
 	return vector;
 }
 
 bool FVector::operator==(const FVector& inVector)
 {
 	return mX == inVector.mX && mY == inVector.mY && mZ == inVector.mZ;
+}
+
+bool FVector::Comapre(const FVector& inVector1, const FVector& inVector2, const float inDiff)
+{
+	return false;
 }
 
 FRotator FVector::Rotator()

@@ -12,19 +12,22 @@ public:
 	MovementComponent& operator=(MovementComponent&&) noexcept = delete;
 
 public:
-	bool Update(ActorPtr inOwner, const float inCloseToDestination);
-	bool SyncUpdate(const int64 inSyncTime);
+	void InitMovement(const Location& inInitLocation, const int64& inMovementMaxSyncTime);
+	bool Update(ActorPtr inOwner, const float& inCloseToDestination);
+	bool SyncUpdate(ActorPtr inOwner, const int64 inSyncTime);
 
 public:
-	void SetSynchronizationTime(const int64 inMovementSyncTime);
-	void SetNewDestination(const Location& inDestinationLocation, const int64 inMovementLastTime);
+	void SetNewDestination(ActorPtr inOwner, const Location& inCurrentLocation, Location& inDestinationLocation, const int64 inMovementLastTime, const float& inCollisionSize);
 
 public:
+	const Location& GetServerDestinationLocation() const;
 	const Location& GetDestinationLocation() const;
 	const int64		GetLastMovementTime() const;
 
 private:
 	Location	mDestinationLocation;
+	Location	mServerDestinationLocation;
+	Location	mOldLocation;
 	int64		mLastMovementTime;
 	int64		mCurrentMovementSyncTime;
 	int64		mMaxMovementSyncTime;
