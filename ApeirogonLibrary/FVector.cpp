@@ -21,7 +21,7 @@ FVector& FVector::operator=(const FVector& inVector)
 	return *this;
 }
 
-FVector FVector::operator+(const FVector& inVector)
+FVector FVector::operator+(const FVector& inVector) const
 {
 	FVector vector;
 	vector.SetX(this->mX + inVector.mX);
@@ -30,7 +30,7 @@ FVector FVector::operator+(const FVector& inVector)
 	return vector;
 }
 
-FVector FVector::operator-(const FVector& inVector)
+FVector FVector::operator-(const FVector& inVector) const
 {
 	FVector vector;
 	vector.SetX(this->mX - inVector.mX);
@@ -39,7 +39,7 @@ FVector FVector::operator-(const FVector& inVector)
 	return vector;
 }
 
-FVector FVector::operator*(const FVector& inVector)
+FVector FVector::operator*(const FVector& inVector) const
 {
 	FVector vector;
 	vector.SetX(this->mX * inVector.mX);
@@ -48,7 +48,7 @@ FVector FVector::operator*(const FVector& inVector)
 	return vector;
 }
 
-FVector FVector::operator/(const FVector& inVector)
+FVector FVector::operator/(const FVector& inVector) const
 {
 	FVector vector;
 	vector.SetX(this->mX / inVector.mX);
@@ -57,7 +57,7 @@ FVector FVector::operator/(const FVector& inVector)
 	return vector;
 }
 
-FVector FVector::operator+(float inBias)
+FVector FVector::operator+(float inBias) const
 {
 	FVector vector;
 	vector.SetX(this->mX + inBias);
@@ -66,7 +66,7 @@ FVector FVector::operator+(float inBias)
 	return vector;
 }
 
-FVector FVector::operator-(float inBias)
+FVector FVector::operator-(float inBias) const
 {
 	FVector vector;
 	vector.SetX(this->mX - inBias);
@@ -75,7 +75,7 @@ FVector FVector::operator-(float inBias)
 	return vector;
 }
 
-FVector FVector::operator*(float inScale)
+FVector FVector::operator*(float inScale) const
 {
 	FVector vector;
 	vector.SetX(this->mX * inScale);
@@ -84,7 +84,7 @@ FVector FVector::operator*(float inScale)
 	return vector;
 }
 
-FVector FVector::operator/(float inScale)
+FVector FVector::operator/(float inScale) const
 {
 	FVector vector;
 	vector.SetX(this->mX / inScale);
@@ -96,6 +96,12 @@ FVector FVector::operator/(float inScale)
 bool FVector::operator==(const FVector& inVector)
 {
 	return mX == inVector.mX && mY == inVector.mY && mZ == inVector.mZ;
+}
+
+std::ostream& operator<<(std::ostream& inOstream, const FVector& inVector)
+{
+	inOstream << "(X = " << inVector.mX << ", Y = " << inVector.mY << ", Z = " << inVector.mZ << ")";
+	return inOstream;
 }
 
 bool FVector::Comapre(const FVector& inVector1, const FVector& inVector2, const float inDiff)
@@ -112,7 +118,7 @@ FRotator FVector::Rotator()
 	return rotator;
 }
 
-float FVector::Length()
+float FVector::Length() const
 {
 	const float x = std::powf(GetX() , 2);
 	const float y = std::powf(GetY() , 2);
@@ -120,12 +126,14 @@ float FVector::Length()
 	return std::sqrtf(x + y + z);
 }
 
-void FVector::Normalize()
+FVector FVector::Normalize() const
 {
+	FVector vector;
 	float length = this->Length();
-	mX /= length;
-	mY /= length;
-	mZ /= length;
+	vector.SetX(this->mX / length);
+	vector.SetY(this->mY / length);
+	vector.SetZ(this->mZ / length);
+	return vector;
 }
 
 float FVector::Distance(const FVector& inVector1, const FVector& inVector2)
@@ -141,4 +149,27 @@ float FVector::Distance2D(const FVector& inVector1, const FVector& inVector2)
 	const float x = std::powf(inVector1.GetX() - inVector2.GetX(), 2);
 	const float y = std::powf(inVector1.GetY() - inVector2.GetY(), 2);
 	return std::sqrtf(x + y);
+}
+
+float FVector::DotProduct(const FVector& inVector1, const FVector& inVector2)
+{
+	return (inVector1.GetX() * inVector2.GetX()) + (inVector1.GetY() * inVector2.GetY()) + (inVector1.GetY() * inVector2.GetY());
+}
+
+FVector FVector::CrossProduct(const FVector& inVector1, const FVector& inVector2)
+{
+	FVector vector;
+	vector.SetX(inVector1.GetY() * inVector2.GetZ() - inVector1.GetZ() * inVector2.GetY());
+	vector.SetX(inVector1.GetZ() * inVector2.GetX() - inVector1.GetX() * inVector2.GetZ());
+	vector.SetX(inVector1.GetX() * inVector2.GetY() - inVector1.GetY() * inVector2.GetX());
+	return vector;
+}
+
+FVector FVector::Projection(const FVector& inVector1, const FVector& inVector2)
+{
+	FVector vector;
+	float dot	 = FVector::DotProduct(inVector1, inVector2);
+	float length = inVector2.Length();
+	vector = inVector2 * (dot / length);
+	return vector;
 }

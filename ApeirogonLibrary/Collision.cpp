@@ -13,10 +13,14 @@ BoxCollision::~BoxCollision()
 {
 }
 
-void BoxCollision::MakeAABB(const FVector& inLocation, FVector& outMin, FVector& outMax)
+void BoxCollision::MakeAABB(const FVector& inCenterLocation, FVector& outMin, FVector& outMax)
 {
-    outMin = FVector(inLocation.GetX() - this->mExtent.GetX(), inLocation.GetY() - this->mExtent.GetY(), inLocation.GetZ() - this->mExtent.GetZ());
-    outMax = FVector(inLocation.GetX() + this->mExtent.GetX(), inLocation.GetY() + this->mExtent.GetY(), inLocation.GetZ() + this->mExtent.GetZ());
+    outMin = FVector(inCenterLocation.GetX() - this->mExtent.GetX(), inCenterLocation.GetY() - this->mExtent.GetY(), inCenterLocation.GetZ() - this->mExtent.GetZ());
+    outMax = FVector(inCenterLocation.GetX() + this->mExtent.GetX(), inCenterLocation.GetY() + this->mExtent.GetY(), inCenterLocation.GetZ() + this->mExtent.GetZ());
+}
+
+void BoxCollision::MakeOBB(const FVector& inCenterLocation, FVector& outMin, FVector& outMax)
+{
 }
 
 bool BoxCollision::BoxCollisionCheck(const BoxCollision& inBoxCollision)
