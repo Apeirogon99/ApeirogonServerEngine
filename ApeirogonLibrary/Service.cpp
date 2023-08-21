@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Service.h"
 
-Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(0)
+Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(10)
 {
 	setlocale(LC_ALL, "");
 }
@@ -20,7 +20,7 @@ const int64 Service::GetNextServiceTimeStamp()
 {
 	const int64 currentTime		= mServiceTime.GetTimeStamp();
 	const int64 lessProcessTime = mScheudlerProcessTime - (currentTime % mScheudlerProcessTime);
-	return lessProcessTime;
+	return currentTime + lessProcessTime;
 }
 
 void Service::ServiceScheudler()
@@ -37,12 +37,9 @@ void Service::ServiceScheudler()
 	int64 dbRunTime;
 	int64 sendRunTime;
 
-	mScheudlerProcessTime = 10;
 	int64 processTime = 0;
-
 	while (IsServiceOpen())
 	{
-
 		const int64 serviceTimeStamp = GetServiceTimeStamp();
 		scheudlerTimeStamp.StartTimeStamp();
 

@@ -16,6 +16,7 @@
 #include "CollisionComponent.h"
 #include "MovementComponent.h"
 #include "AnimationComponent.h"
+#include "ProjectileComponent.h"
 
 //==========================//
 //		 GameFramework		//

@@ -327,6 +327,18 @@
     <ClCompile Include="RemotePlayer.cpp">
       <Filter>GameFramework\Remote\Private</Filter>
     </ClCompile>
+    <ClCompile Include="KDTree.cpp">
+      <Filter>Math\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Math\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileComponent.cpp">
+      <Filter>GameFramework\Component\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>Math\Private</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DefaultSize.h">
@@ -532,6 +544,18 @@
     </ClInclude>
     <ClInclude Include="RemotePlayer.h">
       <Filter>GameFramework\Remote\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="KDTree.h">
+      <Filter>Math\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Math\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileComponent.h">
+      <Filter>GameFramework\Component\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>Math\Private</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

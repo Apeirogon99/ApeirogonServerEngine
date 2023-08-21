@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MovementComponent.h"
 
-MovementComponent::MovementComponent() : mDestinationLocation(), mOldLocation(), mServerDestinationLocation(), mLastMovementTime(0), mCurrentMovementSyncTime(0), mMaxMovementSyncTime(0)
+MovementComponent::MovementComponent() : mDestinationLocation(), mOldLocation(), mServerDestinationLocation(), mLastMovementTime(0), mCurrentMovementSyncTime(0), mMaxMovementSyncTime(0), mIsRestrict(false)
 {
 }
 
@@ -9,12 +9,12 @@ MovementComponent::~MovementComponent()
 {
 }
 
-void MovementComponent::InitMovement(const Location& inInitLocation, const int64& inMovementMaxSyncTime)
+void MovementComponent::InitMovement(const Location& inInitLocation, const int64& inMovementMaxSyncTime, const int64& inWorldTime)
 {
 	mDestinationLocation		= inInitLocation;
 	mServerDestinationLocation	= inInitLocation;
 	mOldLocation				= inInitLocation;
-	mLastMovementTime			= 0;
+	mLastMovementTime			= inWorldTime;
 	mMaxMovementSyncTime		= inMovementMaxSyncTime;
 	mCurrentMovementSyncTime	= 0;
 }
@@ -41,9 +41,10 @@ bool MovementComponent::Update(ActorPtr inOwner, const float& inCloseToDestinati
 	const int64 currentWorldTime	= inOwner->GetWorld().lock()->GetWorldTime();
 	const float	duration			= static_cast<float>(currentWorldTime - this->mLastMovementTime) / 1000.0f;
 
-	FVector	direction = destinationLocation - currentLocation;
-	direction.Normalize();
+	FVector	direction = (destinationLocation - currentLocation).Normalize();
 	FVector velocity = direction * currentVelocity;
+
+	//inOwner->GameObjectLog(L"[Vel] (%5.6f:%5.6f:%5.6f)\n", velocity.GetX(), velocity.GetY(), velocity.GetZ());
 
 	FVector	deadReckoningLocation = currentLocation + (velocity * duration);
 
@@ -75,6 +76,11 @@ bool MovementComponent::SyncUpdate(ActorPtr inOwner, const int64 inSyncTime)
 	return true;
 }
 
+void MovementComponent::SetRestrictMovement(bool inRestrict)
+{
+	mIsRestrict = inRestrict;
+}
+
 void MovementComponent::SetNewDestination(ActorPtr inOwner, const Location& inCurrentLocation, Location& inDestinationLocation, const int64 inMovementLastTime, const float& inCollisionSize)
 {
 	FVector		direction = inDestinationLocation - inCurrentLocation;
@@ -90,6 +96,34 @@ void MovementComponent::SetNewDestination(ActorPtr inOwner, const Location& inCu
 	mLastMovementTime			= inMovementLastTime;
 }
 
+const Location MovementComponent::GetCurrentLocation(ActorPtr inOwner)
+{
+	WorldPtr world = inOwner->GetWorld().lock();
+	if (nullptr == world)
+	{
+		assert(!world);
+	}
+	const int64 worldTime = world->GetWorldTime();
+
+	Location currentLocation		= inOwner->GetLocation();
+	Location destinationLocation	= this->mServerDestinationLocation;
+
+	if (currentLocation == destinationLocation)
+	{
+		return currentLocation;
+	}
+
+	Velocity	currentVelocity		= inOwner->GetVelocity();
+	const float	duration = static_cast<float>(worldTime - this->mLastMovementTime) / 1000.0f;
+
+	FVector	direction = (destinationLocation - currentLocation).Normalize();
+	FVector velocity = direction * currentVelocity;
+
+	FVector	deadReckoningLocation = currentLocation + (velocity * duration);
+
+	return deadReckoningLocation;
+}
+
 const Location& MovementComponent::GetServerDestinationLocation() const
 {
 	return mServerDestinationLocation;
@@ -103,4 +137,9 @@ const Location& MovementComponent::GetDestinationLocation() const
 const int64 MovementComponent::GetLastMovementTime() const
 {
 	return mLastMovementTime;
+}
+
+const bool MovementComponent::GetRestrictMovement() const
+{
+	return mIsRestrict;
 }

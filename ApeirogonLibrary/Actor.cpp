@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Actor.h"
 
-Actor::Actor(const WCHAR* inActorName) : GameObject(inActorName)
+Actor::Actor(const WCHAR* inActorName) : GameObject(inActorName), mActorType(0)
 {
 }
 
@@ -83,6 +83,11 @@ void Actor::SetVelocity(const float inX, const float inY, const float inZ)
 	mVelocity.SetX(inX);
 	mVelocity.SetY(inY);
 	mVelocity.SetZ(inZ);
+}
+
+void Actor::SetActorType(const uint8& inActorType)
+{
+	mActorType = inActorType;
 }
 
 bool Actor::FindPlayerViewer(RemoteClientPtr inRemoteClient)

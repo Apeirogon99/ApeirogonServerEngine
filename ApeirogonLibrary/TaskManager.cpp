@@ -26,11 +26,11 @@ bool TaskManager::Prepare(ServicePtr service)
 
 void TaskManager::Shutdown()
 {
-	for (auto& task : mGameObjects)
-	{
-		task.second->Destroy();
-		task.second->ClearTask();
-	}
+	//for (auto& task : mGameObjects)
+	//{
+	//	task.second->Destroy();
+	//	task.second->ClearTask();
+	//}
 
 	TaskManagerLog(L"[TaskManager::Shutdown()] Task manager success shutdown\n");
 
@@ -41,9 +41,16 @@ void TaskManager::Shutdown()
 int64 TaskManager::ProcessTask(const int64 inServiceTimeStamp)
 {
 	mTaskProcessTimeStamp.StartTimeStamp();
-	for (auto& task : mGameObjects)
+	for (auto task = mGameObjects.begin(); task != mGameObjects.end();)
 	{
-		task.second->Execute(inServiceTimeStamp);
+		if (false == task->second->Execute(inServiceTimeStamp))
+		{
+			this->mGameObjects.erase(task++);
+		}
+		else
+		{
+			++task;
+		}
 	}
 	return mTaskProcessTimeStamp.GetTimeStamp();
 }
@@ -79,6 +86,8 @@ void TaskManager::DestroyGameObject(GameObjectPtr inGameObject)
 
 void TaskManager::PushTask(GameObjectPtr inGameObject)
 {
+	TaskManagerLog(L"[TaskManager::PushTask] Push Task %ws\n", inGameObject->GetGameObjectName());
+
 	CreateGameObject(inGameObject);
 
 	const int64 objectID = inGameObject->GetGameObjectID();
@@ -90,11 +99,13 @@ void TaskManager::PushTask(GameObjectPtr inGameObject)
 
 void TaskManager::ReleaseTask(GameObjectPtr inGameObject)
 {
-	mGameObjects.erase(inGameObject->GetGameObjectID());
+	const WCHAR* gameObjectName = inGameObject->GetGameObjectName();
 
 	DestroyGameObject(inGameObject);
 
 	mCurrentTickGameObjectCount--;
+
+	TaskManagerLog(L"[TaskManager::ReleaseTask] Release Task %ws [USE::%d]\n", gameObjectName, inGameObject.use_count());
 }
 
 bool TaskManager::FindTask(const int64 inGameObjectID, GameObjectPtr& outGameObject)
@@ -102,7 +113,7 @@ bool TaskManager::FindTask(const int64 inGameObjectID, GameObjectPtr& outGameObj
 	auto object = mGameObjects.find(inGameObjectID);
 	if (object->second == nullptr)
 	{
-		TaskManagerLog(L"[TaskManager::FindTask] Not found game object");
+		TaskManagerLog(L"[TaskManager::FindTask] Not found game object\n");
 		return false;
 	}
 
@@ -124,7 +135,7 @@ bool TaskManager::FindTask(const WCHAR* inGameObjectName, GameObjectPtr& outGame
 		}
 	}
 
-	TaskManagerLog(L"[TaskManager::FindTask] Not found game object");
+	TaskManagerLog(L"[TaskManager::FindTask] Not found game object\n");
 	return false;
 }
 
