@@ -19,8 +19,19 @@ void BoxCollision::MakeAABB(const FVector& inCenterLocation, FVector& outMin, FV
     outMax = FVector(inCenterLocation.GetX() + this->mExtent.GetX(), inCenterLocation.GetY() + this->mExtent.GetY(), inCenterLocation.GetZ() + this->mExtent.GetZ());
 }
 
-void BoxCollision::MakeOBB(const FVector& inCenterLocation, FVector& outMin, FVector& outMax)
+void BoxCollision::MakeOBB(const FVector& inCenterLocation, Matrix& outMatrix, Matrix& outInvMatrix)
 {
+    Matrix matrix = Matrix::Scale(1.0f, 1.0f, 1.0f);
+    //matrix = matrix * Matrix::RotateMatrix(this->GetOrientation());
+
+    matrix = matrix * Matrix::RotatePitch(this->GetOrientation().GetPitch());
+    matrix = matrix * Matrix::RotateYaw(this->GetOrientation().GetYaw());
+    matrix = matrix * Matrix::RotateRoll(this->GetOrientation().GetRoll());
+
+    matrix = matrix * Matrix::Translate(inCenterLocation);
+
+    outMatrix = matrix;
+    outInvMatrix = Matrix::Inverse(matrix);
 }
 
 bool BoxCollision::BoxCollisionCheck(const BoxCollision& inBoxCollision)

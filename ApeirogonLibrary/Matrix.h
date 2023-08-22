@@ -1,11 +1,12 @@
 #pragma once
 
-#define MAX_MATRIX 3
+#define MAX_MATRIX 4
 
 class APEIROGON_API Matrix
 {
 public:
 	Matrix();
+	Matrix(const float inMatrix[MAX_MATRIX][MAX_MATRIX]);
 	Matrix(const Matrix& inMatrix);
 	Matrix& operator=(const Matrix& inMatrix);
 
@@ -23,29 +24,30 @@ public:
 
 	bool operator==(const FVector& inMatrix);
 
-	friend std::ostream& operator<<(std::ostream& inOstream, const Matrix& inMatrix);
+	//friend std::ostream& operator<<(std::ostream& inOstream, const Matrix& inMatrix);
 
 public:
 	void SetMatrix(const Matrix& inMatrix);
 
 	static Matrix Identity();
 	static Matrix Scale(const float& inSX, const float& inSY, const float& inSZ);
+	static Matrix Translate(const FVector& inVector);
 	static Matrix RotatePitch(const float& inRX);
 	static Matrix RotateYaw(const float& inRY);
 	static Matrix RotateRoll(const float& inRZ);
+	static Matrix RotateMatrix(const FVector& inLocation, const FRotator& inRotator);
 	static Matrix Inverse(const Matrix& inMatrix);
+	static Matrix Transpose(const Matrix& inMatrix);
 
 public:
-	
-
-private:
 	union
 	{
 		struct
 		{
-			float m00, m01, m02;
-			float m10, m11, m12;
-			float m20, m21, m22;
+			float m00, m01, m02, m03;
+			float m10, m11, m12, m13;
+			float m20, m21, m22, m23;
+			float m30, m31, m32, m33;
 		};
 
 		float mMatrix[MAX_MATRIX][MAX_MATRIX];

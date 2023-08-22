@@ -56,7 +56,7 @@ public:
 	void SetBoxExtent(const FVector& inBoxExtent) { mExtent = inBoxExtent; }
 	void SetOrientation(const FRotator& inOrientation) { mOrientation = inOrientation; }
 	void MakeAABB(const FVector& inCenterLocation, FVector& outMin, FVector& outMax);
-	void MakeOBB(const FVector& inCenterLocation, FVector& outMin, FVector& outMax);
+	void MakeOBB(const FVector& inCenterLocation, Matrix& outMatrix, Matrix& outInvMatrix);
 
 public:
 	const FVector&	GetBoxExtent() const { return mExtent; }

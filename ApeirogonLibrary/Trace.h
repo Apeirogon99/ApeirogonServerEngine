@@ -26,7 +26,8 @@ public:
 	APEIROGON_API const ETraceType&	GetTraceType() const; 
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)				abstract;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			abstract;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				abstract;
 	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	abstract;
 	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		abstract;
 
@@ -51,8 +52,8 @@ public:
 	BoxTrace& operator=(BoxTrace&&) noexcept = delete;
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)				override;
-	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent);
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				override;
 	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	override;
 	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		override;
 
@@ -76,7 +77,8 @@ public:
 	CapsuleTrace& operator=(CapsuleTrace&&) noexcept = delete;
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)				override;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				override;
 	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	override;
 	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		override;
 
@@ -97,7 +99,8 @@ public:
 	SphereTrace& operator=(SphereTrace&&) noexcept = delete;
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)				override;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				override;
 	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	override;
 	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		override;
 
@@ -118,7 +121,8 @@ public:
 	FrustumTrace& operator=(FrustumTrace&&) noexcept = delete;
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTrace(BoxCollisionComponent& inBoxCollisionComponent)				override;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				override;
 	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	override;
 	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		override;
 

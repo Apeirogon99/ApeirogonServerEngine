@@ -23,5 +23,5 @@ AnimationComponent& Character::GetAnimationComponent()
 
 BoxCollisionComponent& Character::GetCapsuleCollisionComponent()
 {
-	return mCapsuleCollisionComponent;
+ 	return mCapsuleCollisionComponent;
 }
