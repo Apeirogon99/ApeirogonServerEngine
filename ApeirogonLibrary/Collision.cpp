@@ -21,17 +21,13 @@ void BoxCollision::MakeAABB(const FVector& inCenterLocation, FVector& outMin, FV
 
 void BoxCollision::MakeOBB(const FVector& inCenterLocation, Matrix& outMatrix, Matrix& outInvMatrix)
 {
-    Matrix matrix = Matrix::Scale(1.0f, 1.0f, 1.0f);
-    //matrix = matrix * Matrix::RotateMatrix(this->GetOrientation());
 
-    matrix = matrix * Matrix::RotatePitch(this->GetOrientation().GetPitch());
-    matrix = matrix * Matrix::RotateYaw(this->GetOrientation().GetYaw());
-    matrix = matrix * Matrix::RotateRoll(this->GetOrientation().GetRoll());
-
-    matrix = matrix * Matrix::Translate(inCenterLocation);
+    Matrix matrix = Matrix::RotateMatrix(inCenterLocation, this->GetOrientation());
 
     outMatrix = matrix;
     outInvMatrix = Matrix::Inverse(matrix);
+
+    //printf("\nInverse Rotate + Translate MATRIX\n"); outInvMatrix.ToString();
 }
 
 bool BoxCollision::BoxCollisionCheck(const BoxCollision& inBoxCollision)

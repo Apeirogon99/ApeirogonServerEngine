@@ -153,15 +153,15 @@ float FVector::Distance2D(const FVector& inVector1, const FVector& inVector2)
 
 float FVector::DotProduct(const FVector& inVector1, const FVector& inVector2)
 {
-	return (inVector1.GetX() * inVector2.GetX()) + (inVector1.GetY() * inVector2.GetY()) + (inVector1.GetY() * inVector2.GetY());
+	return (inVector1.GetX() * inVector2.GetX()) + (inVector1.GetY() * inVector2.GetY()) + (inVector1.GetZ() * inVector2.GetZ());
 }
 
 FVector FVector::CrossProduct(const FVector& inVector1, const FVector& inVector2)
 {
 	FVector vector;
 	vector.SetX(inVector1.GetY() * inVector2.GetZ() - inVector1.GetZ() * inVector2.GetY());
-	vector.SetX(inVector1.GetZ() * inVector2.GetX() - inVector1.GetX() * inVector2.GetZ());
-	vector.SetX(inVector1.GetX() * inVector2.GetY() - inVector1.GetY() * inVector2.GetX());
+	vector.SetY(inVector1.GetZ() * inVector2.GetX() - inVector1.GetX() * inVector2.GetZ());
+	vector.SetZ(inVector1.GetX() * inVector2.GetY() - inVector1.GetY() * inVector2.GetX());
 	return vector;
 }
 

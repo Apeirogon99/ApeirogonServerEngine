@@ -22,7 +22,9 @@ public:
 	Matrix	operator*(float inScale) const;
 	Matrix	operator/(float inScale) const;
 
-	bool operator==(const FVector& inMatrix);
+	bool operator==(const Matrix& inMatrix);
+
+	void ToString();
 
 	//friend std::ostream& operator<<(std::ostream& inOstream, const Matrix& inMatrix);
 
@@ -32,12 +34,16 @@ public:
 	static Matrix Identity();
 	static Matrix Scale(const float& inSX, const float& inSY, const float& inSZ);
 	static Matrix Translate(const FVector& inVector);
-	static Matrix RotatePitch(const float& inRX);
-	static Matrix RotateYaw(const float& inRY);
-	static Matrix RotateRoll(const float& inRZ);
+	static Matrix RotateX(const float& inRX);
+	static Matrix RotateY(const float& inRY);
+	static Matrix RotateZ(const float& inRZ);
 	static Matrix RotateMatrix(const FVector& inLocation, const FRotator& inRotator);
+	static Matrix RotateMatrix(const FRotator& inRoator);
 	static Matrix Inverse(const Matrix& inMatrix);
 	static Matrix Transpose(const Matrix& inMatrix);
+
+	static void GetAxis(const FRotator& inRotation, FVector& outX, FVector& outY, FVector& outZ);
+public:
 
 public:
 	union

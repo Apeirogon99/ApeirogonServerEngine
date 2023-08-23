@@ -52,35 +52,36 @@ Matrix Matrix::operator-(const Matrix& inMatrix) const
 
 FVector Matrix::operator*(const FVector& inVector) const
 {
-    FVector vector;
-    vector.SetX(mMatrix[0][0] * inVector.GetX() + mMatrix[0][1] * inVector.GetX() + mMatrix[0][2] * inVector.GetX());
-    vector.SetY(mMatrix[1][0] * inVector.GetY() + mMatrix[1][1] * inVector.GetY() + mMatrix[1][2] * inVector.GetY());
-    vector.SetZ(mMatrix[2][0] * inVector.GetZ() + mMatrix[2][1] * inVector.GetZ() + mMatrix[2][2] * inVector.GetZ());
+    float resultX = mMatrix[0][0] * inVector.GetX() + mMatrix[0][1] * inVector.GetY() + mMatrix[0][2] * inVector.GetZ();
+    float resultY = mMatrix[1][0] * inVector.GetX() + mMatrix[1][1] * inVector.GetY() + mMatrix[1][2] * inVector.GetZ();
+    float resultZ = mMatrix[2][0] * inVector.GetX() + mMatrix[2][1] * inVector.GetY() + mMatrix[2][2] * inVector.GetZ();
+
+    FVector vector(resultX, resultY, resultZ);
     return vector;
 }
 
 Matrix Matrix::operator*(const Matrix& inMatrix) const
 {
     Matrix matrix;
-    matrix.m00 = this->m00 * inMatrix.m00 + this->m01 * inMatrix.m10 + this->m02 * inMatrix.m20 + this->m03 * inMatrix.m30;
-    matrix.m01 = this->m00 * inMatrix.m01 + this->m01 * inMatrix.m11 + this->m02 * inMatrix.m21 + this->m03 * inMatrix.m31;
-    matrix.m02 = this->m00 * inMatrix.m02 + this->m01 * inMatrix.m12 + this->m02 * inMatrix.m22 + this->m03 * inMatrix.m32;
-    matrix.m03 = this->m00 * inMatrix.m03 + this->m01 * inMatrix.m13 + this->m02 * inMatrix.m23 + this->m03 * inMatrix.m33;
-               
-    matrix.m10 = this->m10 * inMatrix.m00 + this->m11 * inMatrix.m10 + this->m12 * inMatrix.m20 + this->m13 * inMatrix.m30;
-    matrix.m11 = this->m10 * inMatrix.m01 + this->m11 * inMatrix.m11 + this->m12 * inMatrix.m21 + this->m13 * inMatrix.m31;
-    matrix.m12 = this->m10 * inMatrix.m02 + this->m11 * inMatrix.m12 + this->m12 * inMatrix.m22 + this->m13 * inMatrix.m32;
-    matrix.m13 = this->m10 * inMatrix.m03 + this->m11 * inMatrix.m13 + this->m12 * inMatrix.m23 + this->m13 * inMatrix.m33;
-         
-    matrix.m20 = this->m20 * inMatrix.m00 + this->m21 * inMatrix.m10 + this->m22 * inMatrix.m20 + this->m23 * inMatrix.m30;
-    matrix.m21 = this->m20 * inMatrix.m01 + this->m21 * inMatrix.m11 + this->m22 * inMatrix.m21 + this->m23 * inMatrix.m31;
-    matrix.m22 = this->m20 * inMatrix.m02 + this->m21 * inMatrix.m12 + this->m22 * inMatrix.m22 + this->m23 * inMatrix.m32;
-    matrix.m23 = this->m20 * inMatrix.m03 + this->m21 * inMatrix.m13 + this->m22 * inMatrix.m23 + this->m23 * inMatrix.m33;
-       
-    matrix.m30 = this->m30 * inMatrix.m00 + this->m31 * inMatrix.m10 + this->m32 * inMatrix.m20 + this->m33 * inMatrix.m30;
-    matrix.m31 = this->m30 * inMatrix.m01 + this->m31 * inMatrix.m11 + this->m32 * inMatrix.m21 + this->m33 * inMatrix.m31;
-    matrix.m32 = this->m30 * inMatrix.m02 + this->m31 * inMatrix.m12 + this->m32 * inMatrix.m22 + this->m33 * inMatrix.m32;
-    matrix.m33 = this->m30 * inMatrix.m03 + this->m31 * inMatrix.m13 + this->m32 * inMatrix.m23 + this->m33 * inMatrix.m33;
+    matrix.m00 = (this->m00 * inMatrix.m00) + (this->m01 * inMatrix.m10) + (this->m02 * inMatrix.m20) + (this->m03 * inMatrix.m30);
+    matrix.m01 = (this->m00 * inMatrix.m01) + (this->m01 * inMatrix.m11) + (this->m02 * inMatrix.m21) + (this->m03 * inMatrix.m31);
+    matrix.m02 = (this->m00 * inMatrix.m02) + (this->m01 * inMatrix.m12) + (this->m02 * inMatrix.m22) + (this->m03 * inMatrix.m32);
+    matrix.m03 = (this->m00 * inMatrix.m03) + (this->m01 * inMatrix.m13) + (this->m02 * inMatrix.m23) + (this->m03 * inMatrix.m33);
+                                          
+    matrix.m10 = (this->m10 * inMatrix.m00) + (this->m11 * inMatrix.m10) + (this->m12 * inMatrix.m20) + (this->m13 * inMatrix.m30);
+    matrix.m11 = (this->m10 * inMatrix.m01) + (this->m11 * inMatrix.m11) + (this->m12 * inMatrix.m21) + (this->m13 * inMatrix.m31);
+    matrix.m12 = (this->m10 * inMatrix.m02) + (this->m11 * inMatrix.m12) + (this->m12 * inMatrix.m22) + (this->m13 * inMatrix.m32);
+    matrix.m13 = (this->m10 * inMatrix.m03) + (this->m11 * inMatrix.m13) + (this->m12 * inMatrix.m23) + (this->m13 * inMatrix.m33);
+                                          
+    matrix.m20 = (this->m20 * inMatrix.m00) + (this->m21 * inMatrix.m10) + (this->m22 * inMatrix.m20) + (this->m23 * inMatrix.m30);
+    matrix.m21 = (this->m20 * inMatrix.m01) + (this->m21 * inMatrix.m11) + (this->m22 * inMatrix.m21) + (this->m23 * inMatrix.m31);
+    matrix.m22 = (this->m20 * inMatrix.m02) + (this->m21 * inMatrix.m12) + (this->m22 * inMatrix.m22) + (this->m23 * inMatrix.m32);
+    matrix.m23 = (this->m20 * inMatrix.m03) + (this->m21 * inMatrix.m13) + (this->m22 * inMatrix.m23) + (this->m23 * inMatrix.m33);
+                                          
+    matrix.m30 = (this->m30 * inMatrix.m00) + (this->m31 * inMatrix.m10) + (this->m32 * inMatrix.m20) + (this->m33 * inMatrix.m30);
+    matrix.m31 = (this->m30 * inMatrix.m01) + (this->m31 * inMatrix.m11) + (this->m32 * inMatrix.m21) + (this->m33 * inMatrix.m31);
+    matrix.m32 = (this->m30 * inMatrix.m02) + (this->m31 * inMatrix.m12) + (this->m32 * inMatrix.m22) + (this->m33 * inMatrix.m32);
+    matrix.m33 = (this->m30 * inMatrix.m03) + (this->m31 * inMatrix.m13) + (this->m32 * inMatrix.m23) + (this->m33 * inMatrix.m33);
     return matrix;
 }
 
@@ -114,9 +115,24 @@ Matrix Matrix::operator/(float inScale) const
     return Matrix();
 }
 
-bool Matrix::operator==(const FVector& inMatrix)
+bool Matrix::operator==(const Matrix& inMatrix)
 {
-    return false;
+    return true;
+}
+
+void Matrix::ToString()
+{
+    printf("{\n");
+    for (int32 i = 0; i < MAX_MATRIX; ++i)
+    {
+        printf("   ");
+        for (int32 j = 0; j < MAX_MATRIX; ++j)
+        {
+            printf("%+.3f   ", mMatrix[i][j]);
+        }
+        printf("\n");
+    }
+    printf("}\n");
 }
 
 void Matrix::SetMatrix(const Matrix& inMatrix)
@@ -157,7 +173,7 @@ Matrix Matrix::Translate(const FVector& inVector)
     return matrix;
 }
 
-Matrix Matrix::RotatePitch(const float& inRX)
+Matrix Matrix::RotateX(const float& inRX)
 {
     Matrix matrix;
     matrix.m00 = 1.0f;              matrix.m01 = 0.0f;              matrix.m02 = 0.0f;              matrix.m03 = 0.0f;
@@ -167,7 +183,7 @@ Matrix Matrix::RotatePitch(const float& inRX)
     return matrix;
 }
 
-Matrix Matrix::RotateYaw(const float& inRY)
+Matrix Matrix::RotateY(const float& inRY)
 {
     Matrix matrix;
     matrix.m00 = std::cosf(inRY);   matrix.m01 = 0.0f;              matrix.m02 = std::sinf(inRY);   matrix.m03 = 0.0f;
@@ -177,7 +193,7 @@ Matrix Matrix::RotateYaw(const float& inRY)
     return matrix;
 }
 
-Matrix Matrix::RotateRoll(const float& inRZ)
+Matrix Matrix::RotateZ(const float& inRZ)
 {
     Matrix matrix;
     matrix.m00 = std::cosf(inRZ);   matrix.m01 = -std::sinf(inRZ);  matrix.m02 = 0.0f;              matrix.m03 = 0.0f;
@@ -189,14 +205,57 @@ Matrix Matrix::RotateRoll(const float& inRZ)
 
 Matrix Matrix::RotateMatrix(const FVector& inLocation, const FRotator& inRotator)
 {
-    Matrix matrix = Matrix::Scale(1.0f, 1.0f, 1.0f);
+    Matrix matrix;
 
-    matrix = matrix * Matrix::RotatePitch(inRotator.GetPitch());
-    matrix = matrix * Matrix::RotateYaw(inRotator.GetYaw());
-    matrix = matrix * Matrix::RotateRoll(inRotator.GetRoll());
+    matrix = Matrix::Scale(1.0f, 1.0f, 1.0f);
 
-    matrix = matrix * Matrix::Translate(inLocation);
+    Matrix Yawmatrix    = Matrix::RotateZ(inRotator.GetYaw());
+    Matrix Pitchmatrix  = Matrix::RotateY(inRotator.GetPitch());
+    Matrix Rollmatrix   = Matrix::RotateX(inRotator.GetRoll());
+    matrix = Yawmatrix * Pitchmatrix * Rollmatrix;
 
+    Matrix translate = Matrix::Translate(inLocation);
+    matrix = matrix * translate;
+
+    //printf("\nRotate + Translate MATRIX\n"); matrix.ToString();
+
+    return matrix;
+}
+
+Matrix Matrix::RotateMatrix(const FRotator& inRoator)
+{
+    float pitch = inRoator.GetPitch() * PI / 180.0f;
+    float yaw = inRoator.GetYaw() * PI / 180.0f;
+    float roll = inRoator.GetRoll() * PI / 180.0f;
+
+    // Calculate sine and cosine values
+    float SP = std::sinf(pitch);
+    float CP = std::cosf(pitch);
+    float SY = std::sinf(yaw);
+    float CY = std::cosf(yaw);
+    float SR = std::sinf(roll);
+    float CR = std::cosf(roll);
+
+    Matrix matrix;
+    matrix.mMatrix[0][0] = CP * CY;
+    matrix.mMatrix[0][1] = CP * SY;
+    matrix.mMatrix[0][2] = SP;
+    matrix.mMatrix[0][3] = 0.f;
+
+    matrix.mMatrix[1][0] = SR * SP * CY - CR * SY;
+    matrix.mMatrix[1][1] = SR * SP * SY + CR * CY;
+    matrix.mMatrix[1][2] = -SR * CP;
+    matrix.mMatrix[1][3] = 0.f;
+
+    matrix.mMatrix[2][0] = -(CR * SP * CY + SR * SY);
+    matrix.mMatrix[2][1] = CY * SR - CR * SP * SY;
+    matrix.mMatrix[2][2] = CR * CP;
+    matrix.mMatrix[2][3] = 0.f;
+
+    matrix.mMatrix[3][0] = 0.0f;
+    matrix.mMatrix[3][1] = 0.0f;
+    matrix.mMatrix[3][2] = 0.0f;
+    matrix.mMatrix[3][3] = 1.f;
     return matrix;
 }
 
@@ -228,7 +287,7 @@ Matrix Matrix::Inverse(const Matrix& inMatrix)
                                     inMatrix.mMatrix[0][1] * inMatrix.mMatrix[1][2] * inMatrix.mMatrix[2][3] -
                                     inMatrix.mMatrix[0][2] * inMatrix.mMatrix[1][3] * inMatrix.mMatrix[2][1] -
                                     inMatrix.mMatrix[0][3] * inMatrix.mMatrix[1][1] * inMatrix.mMatrix[2][2]
-                                );
+                                ) * det;
 
     invMatrix.mMatrix[1][0] = (inMatrix.mMatrix[1][2] * inMatrix.mMatrix[2][0] - inMatrix.mMatrix[1][0] * inMatrix.mMatrix[2][2]) * det;
     invMatrix.mMatrix[1][1] = (inMatrix.mMatrix[0][0] * inMatrix.mMatrix[2][2] - inMatrix.mMatrix[0][2] * inMatrix.mMatrix[2][0]) * det;
@@ -240,7 +299,7 @@ Matrix Matrix::Inverse(const Matrix& inMatrix)
                                     inMatrix.mMatrix[0][0] * inMatrix.mMatrix[1][3] * inMatrix.mMatrix[2][2] -
                                     inMatrix.mMatrix[0][2] * inMatrix.mMatrix[1][0] * inMatrix.mMatrix[2][3] -
                                     inMatrix.mMatrix[0][3] * inMatrix.mMatrix[1][2] * inMatrix.mMatrix[2][0]
-                                );
+                                ) * det;
 
     invMatrix.mMatrix[2][0] = (inMatrix.mMatrix[1][0] * inMatrix.mMatrix[2][1] - inMatrix.mMatrix[1][1] * inMatrix.mMatrix[2][0]) * det;
     invMatrix.mMatrix[2][1] = (inMatrix.mMatrix[0][1] * inMatrix.mMatrix[2][0] - inMatrix.mMatrix[0][0] * inMatrix.mMatrix[2][1]) * det;
@@ -252,21 +311,31 @@ Matrix Matrix::Inverse(const Matrix& inMatrix)
                                     inMatrix.mMatrix[0][0] * inMatrix.mMatrix[1][1] * inMatrix.mMatrix[2][3] -
                                     inMatrix.mMatrix[0][1] * inMatrix.mMatrix[1][3] * inMatrix.mMatrix[2][0] -
                                     inMatrix.mMatrix[0][3] * inMatrix.mMatrix[1][0] * inMatrix.mMatrix[2][1]
-                                );
+                                ) * det;
 
     invMatrix.mMatrix[3][0] = 0.0f;
     invMatrix.mMatrix[3][1] = 0.0f;
     invMatrix.mMatrix[3][2] = 0.0f;
-    invMatrix.mMatrix[3][3] = 0.0f;
+    invMatrix.mMatrix[3][3] = 1.0f;
     return invMatrix;
 }
 
 Matrix Matrix::Transpose(const Matrix& inMatrix)
 {
     Matrix matrix;
-    matrix.m00 = inMatrix.m00;      matrix.m01 = inMatrix.m00;      matrix.m02 = inMatrix.m00;      matrix.m03 = inMatrix.m03;
+    matrix.m00 = inMatrix.m00;      matrix.m01 = inMatrix.m01;      matrix.m02 = inMatrix.m02;      matrix.m03 = inMatrix.m03;
     matrix.m10 = inMatrix.m10;      matrix.m11 = inMatrix.m11;      matrix.m12 = inMatrix.m12;      matrix.m13 = inMatrix.m13;
     matrix.m20 = inMatrix.m20;      matrix.m21 = inMatrix.m21;      matrix.m22 = inMatrix.m22;      matrix.m23 = inMatrix.m23;
     matrix.m30 = inMatrix.m30;      matrix.m31 = inMatrix.m31;      matrix.m32 = inMatrix.m32;      matrix.m33 = inMatrix.m33;
     return matrix;
+}
+
+void Matrix::GetAxis(const FRotator& inRotation, FVector& outX, FVector& outY, FVector& outZ)
+{
+    Matrix matrix = Matrix::RotateMatrix(inRotation);
+
+    outX.SetX(matrix.mMatrix[0][0]); outX.SetY(matrix.mMatrix[0][1]); outX.SetZ(matrix.mMatrix[0][2]);
+    outY.SetX(matrix.mMatrix[1][0]); outY.SetY(matrix.mMatrix[1][1]); outY.SetZ(matrix.mMatrix[1][2]);
+    outZ.SetX(matrix.mMatrix[2][0]); outZ.SetY(matrix.mMatrix[2][1]); outZ.SetZ(matrix.mMatrix[2][2]);
+
 }
