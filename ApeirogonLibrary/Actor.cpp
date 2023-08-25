@@ -1,12 +1,18 @@
 #include "pch.h"
 #include "Actor.h"
 
-Actor::Actor(const WCHAR* inActorName) : GameObject(inActorName), mActorType(0)
+Actor::Actor(const WCHAR* inActorName) : GameObject(inActorName), mActorType(0), mDefaultCollisionComponent(nullptr)
 {
 }
 
 Actor::~Actor()
 {
+	if (nullptr != mDefaultCollisionComponent)
+	{
+		delete mDefaultCollisionComponent;
+	}
+
+	mDefaultCollisionComponent = nullptr;
 }
 
 void Actor::CloseToActor(ActorPtr inCloseActor, float inPossibleVisbleLength)
@@ -88,6 +94,11 @@ void Actor::SetVelocity(const float inX, const float inY, const float inZ)
 void Actor::SetActorType(const uint8& inActorType)
 {
 	mActorType = inActorType;
+}
+
+void Actor::SetDefaultCollisionComponent(CollisionComponent* inCollisionComponent)
+{
+	mDefaultCollisionComponent = inCollisionComponent;
 }
 
 bool Actor::FindPlayerViewer(RemoteClientPtr inRemoteClient)

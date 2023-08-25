@@ -159,3 +159,5 @@
 //		 GameFrameWork		//
 //==========================//
 #include "GameFrameworkLibrary.h"
+
+#include "KDTree.h"

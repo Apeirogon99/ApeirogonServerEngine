@@ -50,6 +50,13 @@ bool FRotator::operator==(const FRotator& inRotator)
     return mPitch == inRotator.mPitch && mYaw == inRotator.mYaw && mRoll == inRotator.mRoll;
 }
 
+FRotator FRotator::TurnRotator(const FRotator& inRotator)
+{
+    FVector turnVector = inRotator.GetForwardVector() * -1.0f;
+    FRotator rotation = turnVector.Rotator();
+    return rotation;
+}
+
 FVector FRotator::Vector() const
 {
     const float PitchNoWinding = std::fmod(mPitch, 360.0f);

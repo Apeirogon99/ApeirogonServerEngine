@@ -3,7 +3,7 @@
 
 Character::Character(const WCHAR* inActorName) : Actor(inActorName)
 {
-	
+	mDefaultCollisionComponent = new BoxCollisionComponent;
 }
 
 Character::~Character()
@@ -21,7 +21,7 @@ AnimationComponent& Character::GetAnimationComponent()
 	return mAnimationComponent;
 }
 
-BoxCollisionComponent& Character::GetCapsuleCollisionComponent()
+BoxCollisionComponent* Character::GetCapsuleCollisionComponent()
 {
- 	return mCapsuleCollisionComponent;
+ 	return static_cast<BoxCollisionComponent*>(this->mDefaultCollisionComponent);
 }

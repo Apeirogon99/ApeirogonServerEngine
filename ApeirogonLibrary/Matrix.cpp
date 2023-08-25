@@ -203,6 +203,36 @@ Matrix Matrix::RotateZ(const float& inRZ)
     return matrix;
 }
 
+Matrix Matrix::RotateRX(const float& inRX)
+{
+    Matrix matrix;
+    matrix.m00 = 1.0f;              matrix.m01 = 0.0f;              matrix.m02 = 0.0f;              matrix.m03 = 0.0f;
+    matrix.m10 = 0.0f;              matrix.m11 = -1.0f;             matrix.m12 = 0.0f;              matrix.m13 = 0.0f;
+    matrix.m20 = 0.0f;              matrix.m21 = 0.0f;              matrix.m22 = -1.0f;             matrix.m23 = 0.0f;
+    matrix.m30 = 0.0f;              matrix.m31 = 0.0f;              matrix.m32 = 0.0f;              matrix.m33 = 1.0f;
+    return matrix;
+}
+
+Matrix Matrix::RotateRY(const float& inRY)
+{
+    Matrix matrix;
+    matrix.m00 = -1.0f;             matrix.m01 = 0.0f;              matrix.m02 = 0.0f;              matrix.m03 = 0.0f;
+    matrix.m10 = 0.0f;              matrix.m11 = 1.0f;              matrix.m12 = 0.0f;              matrix.m13 = 0.0f;
+    matrix.m20 = 0.0f;              matrix.m21 = 0.0f;              matrix.m22 = -1.0f;             matrix.m23 = 0.0f;
+    matrix.m30 = 0.0f;              matrix.m31 = 0.0f;              matrix.m32 = 0.0f;              matrix.m33 = 1.0f;
+    return matrix;
+}
+
+Matrix Matrix::RotateRZ(const float& inRZ)
+{
+    Matrix matrix;
+    matrix.m00 = -1.0f;             matrix.m01 = 0.0f;              matrix.m02 = 0.0f;              matrix.m03 = 0.0f;
+    matrix.m10 = 0.0f;              matrix.m11 = -1.0f;             matrix.m12 = 0.0f;              matrix.m13 = 0.0f;
+    matrix.m20 = 0.0f;              matrix.m21 = 0.0f;              matrix.m22 = 1.0f;              matrix.m23 = 0.0f;
+    matrix.m30 = 0.0f;              matrix.m31 = 0.0f;              matrix.m32 = 0.0f;              matrix.m33 = 1.0f;
+    return matrix;
+}
+
 Matrix Matrix::RotateMatrix(const FVector& inLocation, const FRotator& inRotator)
 {
     Matrix matrix;

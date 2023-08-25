@@ -1,71 +1,59 @@
 #pragma once
 
-class APEIROGON_API KDNode
+class KDNode
 {
 public:
-	KDNode() : mLocation(), mGameObjectID(0), mActorType(0), mLeftNode(nullptr), mRightNode(nullptr) {}
+	KDNode(const uint32& inNodeNumber) : mActorRef(), mNodeNumber(inNodeNumber), mLeftNode(nullptr), mRightNode(nullptr) {}
 	~KDNode() { Clear(); }
 
 	KDNode(const KDNode& inNode)
 	{
-		this->mLocation			= inNode.mLocation;
-		this->mGameObjectID		= inNode.mGameObjectID;
-		this->mActorType		= inNode.mActorType;
-		this->mLeftNode			= inNode.mLeftNode;
-		this->mRightNode		= inNode.mRightNode;
+		this->mActorRef		= inNode.mActorRef;
+		this->mLeftNode		= inNode.mLeftNode;
+		this->mRightNode	= inNode.mRightNode;
 	}
 
 	KDNode& operator=(const KDNode& inNode)
 	{
-		this->mLocation			= inNode.mLocation;
-		this->mGameObjectID		= inNode.mGameObjectID;
-		this->mActorType		= inNode.mActorType;
-		this->mLeftNode			= inNode.mLeftNode;
-		this->mRightNode		= inNode.mRightNode;
+		this->mActorRef		= inNode.mActorRef;
+		this->mLeftNode		= inNode.mLeftNode;
+		this->mRightNode	= inNode.mRightNode;
 		return *this;
 	}
 
 public:
 	bool IsValid()
 	{
-		return mGameObjectID != 0;
+		return mActorRef.lock() != nullptr;
 	}
 
 	void Clear() 
 	{ 
-		mLocation = FVector(0.0f, 0.0f, 0.0f); 
-		mGameObjectID = 0; 
-		mActorType = 0;
+		mActorRef.reset();
 		mLeftNode = nullptr; 
 		mRightNode = nullptr; 
 	}
 
-	void SetNode(const Location& inLocation, const int64& inObjectID, const uint8& iActorType) 
+	void SetNode(ActorRef inActor)
 	{ 
-		this->SetLocation(inLocation); 
-		this->SetObjectID(inObjectID);  
-		this->SetActorType(iActorType); 
+		this->SetActorRef(inActor);
 		this->SetLeftNode(nullptr);
 		this->SetRightNode(nullptr);
 	}
 	
-	void SetLocation(const Location& inLocation)	{ mLocation = inLocation; }
-	void SetObjectID(const int64& inObjectID)		{ mGameObjectID = inObjectID; }
-	void SetActorType(const uint8& inActorType)		{ mActorType = inActorType; }
-	void SetLeftNode(KDNode* inLeftNode)			{ mLeftNode = inLeftNode; }
-	void SetRightNode(KDNode* inRightNode)			{ mRightNode = inRightNode; }
+	void SetActorRef(ActorRef inActor)			{ mActorRef = inActor; };
+	void SetLeftNode(KDNode* inLeftNode)		{ mLeftNode = inLeftNode; }
+	void SetRightNode(KDNode* inRightNode)		{ mRightNode = inRightNode; }
 
 public:
-	const Location& GetLocation()	const	{ return mLocation; }
-	const int64&	GetObjectID()	const	{ return mGameObjectID; }
-	const uint8&	GetActorType()	const	{ return mActorType; }
-	KDNode*			GetLeftNode()	const	{ return mLeftNode; }
-	KDNode*			GetRightNode()	const	{ return mRightNode; }
+	ActorRef		GetActorRef()	const { return mActorRef; }
+	const uint32&	GetNodeNumber() const { return mNodeNumber; }
+	KDNode*			GetLeftNode()	const { return mLeftNode; }
+	KDNode*			GetRightNode()	const { return mRightNode; }
 
 private:
-	Location	mLocation;
-	int64		mGameObjectID;
-	uint8		mActorType;
+	ActorRef	mActorRef;
+	uint32		mNodeNumber;
 
 	KDNode*		mLeftNode;
 	KDNode*		mRightNode;
@@ -82,7 +70,7 @@ class KDTree
 	};
 
 public:
-	KDTree(const uint16& inPoolSize) : mRootNode(new KDNode)
+	KDTree(const uint16& inPoolSize)
 	{
 		if (inPoolSize > UINT16_MAX)
 		{
@@ -98,7 +86,7 @@ public:
 
 		for (uint16 index = 0; index < newPoolsize; ++index)
 		{
-			mNodesPool.push_back(new KDNode);
+			mNodesPool.push_back(new KDNode(index));
 			mAvailableNodeNumber.push(index);
 		}
 
@@ -112,8 +100,8 @@ public:
 			node = nullptr;
 		}
 
-		delete mRootNode;
-		mRootNode = nullptr;
+		mNodesPool.clear();
+		mUseNode.clear();
 	}
 
 	KDTree(const KDTree&) = delete;
@@ -123,51 +111,131 @@ public:
 	KDTree& operator=(KDTree&&) noexcept = delete;
 
 public:
-	void InsertNode(const Location& inLocation, const int64& inGameObjectID, const uint8& inActorType)
+	void InsertNode(ActorRef inActor)
 	{
-		KDNode* newNode = NextAvailableNode();
-		//KDNode* newNode = new KDNode;
-		newNode->SetNode(inLocation, inGameObjectID, inActorType);
-
-		if (mRootNode == nullptr)
+		ActorPtr actor = inActor.lock();
+		if (nullptr == actor)
 		{
-			mRootNode = newNode;
 			return;
 		}
 
-		InsertKDTree(mRootNode, newNode, INIT_DEPTH);
+		if (nullptr == actor->GetDefaultCollisionComponent())
+		{
+			return;
+		}
+
+		KDNode* nextNode = NextAvailableNode();
+		if (nextNode == nullptr)
+		{
+			return;
+		}
+		nextNode->Clear();
+		nextNode->SetNode(actor);
+
+		if (mUseNode.size() == 0)
+		{
+			mUseNode.push_back(nextNode);
+			return;
+		}
+
+		InsertKDTree(mUseNode[0], nextNode, INIT_DEPTH);
+
+		mUseNode.push_back(nextNode);
 	}
 
 	void DeleteTree()
 	{
-		mAvailableNodeNumber = std::queue<uint16>();
 
-		for (uint16 index = 0; index < static_cast<uint16>(mNodesPool.size()); ++index)
+		if (mUseNode.size() == 0)
 		{
-			mNodesPool.at(index)->Clear();
-			mAvailableNodeNumber.push(index);
+			return;
 		}
 
-		mRootNode->SetNode(FVector(0.0f, 0.0f, 0.0f), 0, 0);
+		for (KDNode* node : mUseNode)
+		{
+			mAvailableNodeNumber.push(node->GetNodeNumber());
+		}
 
-		//DeleteNodePreOrder(mRootNode);
-		//mRootNode = nullptr;
+		DeleteNodePreOrder(mUseNode[0]);
+
+		mUseNode.clear();
 	}
 
-	//bool SearchNodes(const FVector& inLocation, const CollisionComponent& inBoxCollisionComponent, const uint8& inActorType, std::vector<ActorPtr>& outResultActor, const uint32& inMaxResult = INFINITE)
-	//{
-	//	if (inActorType == 0)
-	//	{
-	//		return false;
-	//	}
+	bool SearchNodes(BoxTrace& inBoxTrace, const uint8& inActorType, std::vector<int64>& outGameObjectIDs, const uint32& inMaxResult = INFINITE)
+	{
+		if (inActorType == 0)
+		{
+			return false;
+		}
+		
+		const Location& boxLocation = inBoxTrace.GetCenterLocation();
+		const float radius = std::sqrtf(std::powf(inBoxTrace.GetBoxCollision().GetBoxExtent().GetX(), 2) + std::powf(inBoxTrace.GetBoxCollision().GetBoxExtent().GetY(), 2));	//외접원 반지름
+		
+		std::vector<int64> findNodeIDs;
+		SearchNodePreOrder(boxLocation, radius, inActorType, mUseNode[0], findNodeIDs);
 
-	//	return outResultActor.size();
-	//}
+		for (auto nodeID : findNodeIDs)
+		{
+			ActorPtr actor = mNodesPool[nodeID]->GetActorRef().lock();
+			if (nullptr == actor)
+			{
+				continue;
+			}
 
-	//bool SearchNodes(const FVector& inLocation, const CapsuleCollision& inCapsuleCollisionComponent, const uint8& inActorType, std::vector<ActorPtr>& outResultActor, const uint32& inMaxResult = INFINITE)
-	//{
-	//	return outResultActor.size();
-	//}
+			CollisionComponent* collisionComponent = actor->GetDefaultCollisionComponent();
+			if (nullptr == collisionComponent)
+			{
+				continue;
+			}
+
+			if (false == inBoxTrace.CollisionTrace(collisionComponent))
+			{
+				continue;
+			}
+
+			outGameObjectIDs.emplace_back(actor->GetGameObjectID());
+		}
+		
+		return outGameObjectIDs.size();
+	}
+
+	bool SearchNodes(SphereTrace& inSphereTrace, const uint8& inActorType, std::vector<int64>& outGameObjectIDs, const uint32& inMaxResult = INFINITE)
+	{
+		if (inActorType == 0)
+		{
+			return false;
+		}
+
+		const Location& sphereLocation = inSphereTrace.GetCenterLocation();
+		const float radius = inSphereTrace.GetSphereCollision().GetRadius();
+
+		std::vector<int64> findNodeIDs;
+		SearchNodePreOrder(sphereLocation, radius, inActorType, mUseNode[0], findNodeIDs);
+
+		for (auto nodeID : findNodeIDs)
+		{
+			ActorPtr actor = mNodesPool[nodeID]->GetActorRef().lock();
+			if (nullptr == actor)
+			{
+				continue;
+			}
+
+			CollisionComponent* collisionComponent = actor->GetDefaultCollisionComponent();
+			if (nullptr == collisionComponent)
+			{
+				continue;
+			}
+
+			if (false == inSphereTrace.CollisionTrace(collisionComponent))
+			{
+				continue;
+			}
+
+			outGameObjectIDs.emplace_back(actor->GetGameObjectID());
+		}
+
+		return outGameObjectIDs.size();
+	}
 
 	//bool SearchNodes(const FVector& inLocation, const SphereCollision& inSphereCollisionComponent, const uint8& inActorType, std::vector<ActorPtr>& outResultActor, const uint32& inMaxResult = INFINITE)
 	//{
@@ -181,13 +249,22 @@ public:
 			return false;
 		}
 
-		SearchNodePreOrder(inFindLocation, inRadius, inActorType, mRootNode, outGameObjectIDs);
+		SearchNodePreOrder(inFindLocation, inRadius, inActorType, mUseNode[0], outGameObjectIDs);
 		return outGameObjectIDs.size();
 	}
 
 	void DebugKDTree()
 	{
-		DebugPrintPreOrder(mRootNode);
+
+		if (mUseNode.size() == 0)
+		{
+			return;
+		}
+
+		printf("DEBUG KD-TREE\n");
+		printf("{\n");
+		DebugPrintPreOrder(mUseNode[0]);
+		printf("}\n");
 	}
 
 public:
@@ -216,8 +293,8 @@ protected:
 
 		const uint32 axis = inDepth % MAX_AXIS;
 
-		const Location& parentLocation	= inParentNode->GetLocation();
-		const Location& nodeLocation	= inNode->GetLocation();
+		const Location& parentLocation	= inParentNode->GetActorRef().lock()->GetLocation();
+		const Location& nodeLocation	= inNode->GetActorRef().lock()->GetLocation();
 
 		bool result = CompareLocation(parentLocation, nodeLocation, axis);
 
@@ -247,7 +324,12 @@ protected:
 
 	void DeleteNodePreOrder(KDNode* inNode)
 	{
-		if (inNode == nullptr)
+		if (nullptr == inNode)
+		{
+			return;
+		}
+
+		if (false == inNode->IsValid())
 		{
 			return;
 		}
@@ -255,8 +337,7 @@ protected:
 		DeleteNodePreOrder(inNode->GetLeftNode());
 		DeleteNodePreOrder(inNode->GetRightNode());
 
-		delete inNode;
-		inNode = nullptr;
+		inNode->Clear();
 	}
 
 	bool CompareLocation(const Location& inParentLocation, const Location& inNodeLocation, const uint32& inAxis)
@@ -284,28 +365,55 @@ protected:
 
 	void DebugPrintPreOrder(KDNode* inNode)
 	{
+
 		if (nullptr == inNode)
 		{
 			return;
 		}
 
-		printf("[NODE-ID::%lld] Location[%+-3.2f\t%+-3.2f\t%+-3.2f]\n", inNode->GetObjectID(), inNode->GetLocation().GetX(), inNode->GetLocation().GetY() , inNode->GetLocation().GetZ());
+		if (false == inNode->IsValid())
+		{
+			return;
+		}
+
+		ActorPtr		actor		= inNode->GetActorRef().lock();
+		const uint32&	nodeID		= inNode->GetNodeNumber();
+		const Location& location	= actor->GetLocation();
+		const WCHAR*	name		= actor->GetGameObjectName();
+
+		wprintf(L"\t[NODE-ID::%04u] [Location::(%+09.3f  %+09.3f  %+09.3f)] [Name::%ws]\n", nodeID, location.GetX(), location.GetY(), location.GetZ(), name);
 		DebugPrintPreOrder(inNode->GetLeftNode());
 		DebugPrintPreOrder(inNode->GetRightNode());
 	}
 
 	void SearchNodePreOrder(const FVector& inFindLocation, const float& inRadius, const uint8& inActorType, KDNode* inNode, std::vector<int64>& outGameObjectIDs)
 	{
-		if (inNode == nullptr)
+		if (nullptr == inNode)
 		{
 			return;
 		}
 
-		const Location& nodeLocation = inNode->GetLocation();
-		const float distance = FVector::Distance(inFindLocation, nodeLocation);
-		if (distance <= inRadius && inActorType == inNode->GetActorType())
+		if (false == inNode->IsValid())
 		{
-			outGameObjectIDs.push_back(inNode->GetObjectID());
+			return;
+		}
+
+		ActorPtr			actor				= inNode->GetActorRef().lock();
+		CollisionComponent* collision			= actor->GetDefaultCollisionComponent();
+		const uint8&		type				= actor->GetActorType();
+		const Location&		location			= actor->GetLocation();
+		const Location&		collisionLocation	= location + collision->GetLocalLocation();
+		const float&		collisionRadius		= collision->GetLocalRadius();
+
+		if (type == inActorType && type == 2)
+		{
+
+		}
+
+		const float distance = FVector::Distance(inFindLocation, collisionLocation);
+		if (distance <= inRadius + collisionRadius && inActorType == type)
+		{
+			outGameObjectIDs.push_back(inNode->GetNodeNumber());
 		}
 
 		SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetLeftNode(), outGameObjectIDs);
@@ -313,8 +421,8 @@ protected:
 	}
 
 private:
-	KDNode*					mRootNode;
 	std::vector<KDNode*>	mNodesPool;
+	std::vector<KDNode*>	mUseNode;
 	std::queue<uint16>		mAvailableNodeNumber;
 };
 

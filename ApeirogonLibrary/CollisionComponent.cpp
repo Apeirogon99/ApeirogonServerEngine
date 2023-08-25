@@ -27,6 +27,11 @@ void CollisionComponent::SetLocalRotation(const FRotator& inLocalRotation)
 	mLocalRotation = inLocalRotation;
 }
 
+void CollisionComponent::SetCollisionType(const CollisionType& inColisionType)
+{
+	mCollisionType = inColisionType;
+}
+
 const ActorRef& CollisionComponent::GetOwner() const
 {
 	return mOwner;
@@ -42,6 +47,11 @@ const FRotator& CollisionComponent::GetLocalRotation() const
 	return mLocalRotation;
 }
 
+const CollisionType& CollisionComponent::GetCollisionType() const
+{
+	return mCollisionType;
+}
+
 
 //==========================//
 //	 BoxCollisionComponent	//
@@ -49,6 +59,7 @@ const FRotator& CollisionComponent::GetLocalRotation() const
 
 BoxCollisionComponent::BoxCollisionComponent() : mBoxCollision(FVector(), FRotator())
 {
+	this->SetCollisionType(CollisionType::Collision_Box);
 }
 
 BoxCollisionComponent::~BoxCollisionComponent()
@@ -59,6 +70,11 @@ void BoxCollisionComponent::SetBoxCollision(const FVector& inBoxExtent)
 {
 	mBoxCollision.SetBoxExtent(inBoxExtent);
 	mBoxCollision.SetOrientation(FRotator());
+}
+
+const float BoxCollisionComponent::GetLocalRadius()
+{
+	return std::sqrtf(std::powf(mBoxCollision.GetBoxExtent().GetX(), 2) + std::powf(mBoxCollision.GetBoxExtent().GetY(), 2));
 }
 
 BoxCollision& BoxCollisionComponent::GetBoxCollision()
@@ -72,6 +88,7 @@ BoxCollision& BoxCollisionComponent::GetBoxCollision()
 
 CapsuleCollisionComponent::CapsuleCollisionComponent() : mCapsuleCollision(0.0f, 0.0f)
 {
+	this->SetCollisionType(CollisionType::Collision_Capsule);
 }
 
 CapsuleCollisionComponent::~CapsuleCollisionComponent()
@@ -82,6 +99,11 @@ void CapsuleCollisionComponent::SetCapsuleCollision(const float inRadius, const 
 {
 	mCapsuleCollision.SetRadius(inRadius);
 	mCapsuleCollision.SetHeight(inHeight);
+}
+
+const float CapsuleCollisionComponent::GetLocalRadius()
+{
+	return mCapsuleCollision.GetRadius();
 }
 
 const CapsuleCollision& CapsuleCollisionComponent::GetCapsuleCollision()
@@ -95,6 +117,7 @@ const CapsuleCollision& CapsuleCollisionComponent::GetCapsuleCollision()
 
 SphereCollisionComponent::SphereCollisionComponent() : mSphereCollision(0.0f)
 {
+	this->SetCollisionType(CollisionType::Collision_Sphere);
 }
 
 SphereCollisionComponent::~SphereCollisionComponent()
@@ -104,6 +127,11 @@ SphereCollisionComponent::~SphereCollisionComponent()
 void SphereCollisionComponent::SetSphereCollisione(const float inRadius)
 {
 	mSphereCollision.SetRadius(inRadius);
+}
+
+const float SphereCollisionComponent::GetLocalRadius()
+{
+	return mSphereCollision.GetRadius();
 }
 
 const SphereCollision& SphereCollisionComponent::GetSphereCollision()

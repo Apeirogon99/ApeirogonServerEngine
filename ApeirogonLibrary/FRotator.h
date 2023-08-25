@@ -15,6 +15,9 @@ public:
 	bool operator==(const FRotator& inRotator);
 
 public:
+	static FRotator TurnRotator(const FRotator& inRotator);
+
+public:
 	FVector Vector() const;
 
 public:

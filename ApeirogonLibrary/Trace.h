@@ -26,10 +26,11 @@ public:
 	APEIROGON_API const ETraceType&	GetTraceType() const; 
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			abstract;
-	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				abstract;
-	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	abstract;
-	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		abstract;
+	APEIROGON_API virtual bool CollisionTrace(CollisionComponent* inCollision)									abstract;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)			abstract;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)				abstract;
+	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)	abstract;
+	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)		abstract;
 
 protected:
 	ActorRef	mOwner;
@@ -52,13 +53,15 @@ public:
 	BoxTrace& operator=(BoxTrace&&) noexcept = delete;
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			override;
-	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				override;
-	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	override;
-	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		override;
+	APEIROGON_API virtual bool CollisionTrace(CollisionComponent* inCollision)									override;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)				override;
+	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)	override;
+	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)		override;
 
 public:
-	FVector GetCenterLocation() const;
+	APEIROGON_API FVector GetCenterLocation() const;
+	APEIROGON_API const BoxCollision& GetBoxCollision() const;
 
 private:
 	BoxCollision mBoxCollision;
@@ -77,10 +80,15 @@ public:
 	CapsuleTrace& operator=(CapsuleTrace&&) noexcept = delete;
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			override;
-	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				override;
-	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	override;
-	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		override;
+	APEIROGON_API virtual bool CollisionTrace(CollisionComponent* inCollision)									override;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)				override;
+	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)	override;
+	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)		override;
+
+public:
+	APEIROGON_API FVector GetCenterLocation() const;
+	APEIROGON_API const CapsuleCollision& GetCapsuleCollision() const;
 
 private:
 	CapsuleCollision mCapsuleCollision;
@@ -99,10 +107,15 @@ public:
 	SphereTrace& operator=(SphereTrace&&) noexcept = delete;
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			override;
-	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				override;
-	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	override;
-	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		override;
+	APEIROGON_API virtual bool CollisionTrace(CollisionComponent* inCollision)									override;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)				override;
+	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)	override;
+	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)		override;
+
+public:
+	APEIROGON_API FVector GetCenterLocation() const;
+	APEIROGON_API const SphereCollision& GetSphereCollision() const;
 
 private:
 	SphereCollision mSphereCollision;
@@ -121,10 +134,11 @@ public:
 	FrustumTrace& operator=(FrustumTrace&&) noexcept = delete;
 
 public:
-	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)			override;
-	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)				override;
-	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)	override;
-	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)		override;
+	APEIROGON_API virtual bool CollisionTrace(CollisionComponent* inCollision)									override;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)				override;
+	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)	override;
+	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)		override;
 
 private:
 	FrustumCollision mFrustumCollision;

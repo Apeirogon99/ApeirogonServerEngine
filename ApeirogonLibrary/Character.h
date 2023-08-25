@@ -22,11 +22,10 @@ public:
 public:
 	APEIROGON_API MovementComponent&		GetMovementComponent();
 	APEIROGON_API AnimationComponent&		GetAnimationComponent();
-	APEIROGON_API BoxCollisionComponent&	GetCapsuleCollisionComponent();
+	APEIROGON_API BoxCollisionComponent*	GetCapsuleCollisionComponent();
 
 protected:
 	MovementComponent					mMovementComponent;
 	AnimationComponent					mAnimationComponent;
-	BoxCollisionComponent				mCapsuleCollisionComponent;
 };
 

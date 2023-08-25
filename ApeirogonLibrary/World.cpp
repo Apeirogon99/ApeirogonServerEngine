@@ -56,6 +56,48 @@ bool World::FindActors(const FVector& inFindLocation, const float& inRadius, con
 	return outActors.size();
 }
 
+bool World::FindActors(BoxTrace& inBoxTrace, const uint8& inActorType, std::vector<ActorPtr>& outActors, const uint32& inMaxSize)
+{
+	std::vector<int64> actorGameObjectIDs;
+	bool result = this->mWorldObserver.SearchNodes(inBoxTrace, inActorType, actorGameObjectIDs, inMaxSize);
+	if (!result)
+	{
+		return false;
+	}
+
+	for (const int64& gameObjectID : actorGameObjectIDs)
+	{
+		auto findPos = mWorldActors.find(gameObjectID);
+		if (findPos != mWorldActors.end())
+		{
+			outActors.push_back(findPos->second);
+		}
+	}
+
+	return outActors.size();
+}
+
+bool World::FindActors(SphereTrace& inSphereTrace, const uint8& inActorType, std::vector<ActorPtr>& outActors, const uint32& inMaxSize)
+{
+	std::vector<int64> actorGameObjectIDs;
+	bool result = this->mWorldObserver.SearchNodes(inSphereTrace, inActorType, actorGameObjectIDs, inMaxSize);
+	if (!result)
+	{
+		return false;
+	}
+
+	for (const int64& gameObjectID : actorGameObjectIDs)
+	{
+		auto findPos = mWorldActors.find(gameObjectID);
+		if (findPos != mWorldActors.end())
+		{
+			outActors.push_back(findPos->second);
+		}
+	}
+
+	return outActors.size();
+}
+
 bool World::DestroyAllActor()
 {
 

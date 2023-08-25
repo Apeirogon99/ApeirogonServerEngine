@@ -23,9 +23,42 @@ BoxTrace::BoxTrace(ActorRef inOwner, FVector inStart, FVector inEnd, bool inIsIg
 {
 }
 
-bool BoxTrace::BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)
+bool BoxTrace::CollisionTrace(CollisionComponent* inCollision)
 {
-	ActorPtr collisionActor = inBoxCollisionComponent.GetOwner().lock();
+	bool result = false;
+
+	if (nullptr == inCollision)
+	{
+		return result;
+	}
+
+	const CollisionType& type = inCollision->GetCollisionType();
+
+	switch (type)
+	{
+	case CollisionType::Collision_Unspecified:
+		break;
+	case CollisionType::Collision_Box:
+		result = BoxCollisionTraceOBB(static_cast<BoxCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Capsule:
+		result = CapsuleCollisionTrace(static_cast<CapsuleCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Sphere:
+		result = SphereCollisionTrace(static_cast<SphereCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Frustum:
+		break;
+	default:
+		break;
+	}
+
+	return result;
+}
+
+bool BoxTrace::BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)
+{
+	ActorPtr collisionActor = inBoxCollisionComponent->GetOwner().lock();
 	if (nullptr == collisionActor)
 	{
 		return false;
@@ -34,7 +67,7 @@ bool BoxTrace::BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionCompon
 	FVector actorMin;
 	FVector actorMax;
 	FVector actorCenterLocation = collisionActor->GetLocation();
-	inBoxCollisionComponent.GetBoxCollision().MakeAABB(actorCenterLocation, actorMin, actorMax);
+	inBoxCollisionComponent->GetBoxCollision().MakeAABB(actorCenterLocation, actorMin, actorMax);
 
 	FVector traceMin;
 	FVector traceMax;
@@ -51,154 +84,23 @@ bool BoxTrace::BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionCompon
 	return false;
 }
 
-bool BoxTrace::BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)
+bool BoxTrace::BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)
 {
-	ActorPtr BActor = inBoxCollisionComponent.GetOwner().lock();
+	ActorPtr BActor = inBoxCollisionComponent->GetOwner().lock();
 	if (nullptr == BActor)
 	{
 		return false;
 	}
-	inBoxCollisionComponent.GetBoxCollision().SetOrientation(BActor->GetRotation());
+	inBoxCollisionComponent->GetBoxCollision().SetOrientation(BActor->GetRotation());
 
-	//printf("\nBMAtrix");
-	Matrix BMatrix;
-	Matrix BInveMatrix;
-	const Location& BCenter = BActor->GetLocation() + inBoxCollisionComponent.GetLocalLocation();
-	const BoxCollision& BBoundBox = inBoxCollisionComponent.GetBoxCollision();
+	const Location& BCenter = BActor->GetLocation() + inBoxCollisionComponent->GetLocalLocation();
+	const BoxCollision& BBoundBox = inBoxCollisionComponent->GetBoxCollision();
 	const FVector BBoxExtent = BBoundBox.GetBoxExtent();
-	inBoxCollisionComponent.GetBoxCollision().MakeOBB(BCenter, BMatrix, BInveMatrix);
 
-	//printf("\nAMAtrix");
-	Matrix AMatrix;
-	Matrix AInvMatrix;
 	const Location& ACenter = GetCenterLocation();
 	const BoxCollision& ABoundBox = this->mBoxCollision;
 	const FVector ABoxExtent = ABoundBox.GetBoxExtent();
-	this->mBoxCollision.MakeOBB(ACenter, AMatrix, AInvMatrix);
 
-	////Trace를 기준 좌표계로 변환
-	//Matrix	mat = BMatrix * AInvMatrix;
-	//FVector pos = AInvMatrix * (BCenter - ACenter);
-
-	//pos.ToString();
-
-	//printf("ACenter = "); ACenter.ToString();
-	//printf("BCenter = "); BCenter.ToString();
-	//printf("Center = "); (BCenter - ACenter).ToString();
-	//printf("BPOS = "); pos.ToString();
-
-	//printf("BMatrix * AInvMatrix\n");
-	//mat.ToString();
-
-	//FVector ZAxis(mat.m00, mat.m01, mat.m02);
-	//FVector XAxis(mat.m10, mat.m11, mat.m12);
-	//FVector YAxis(mat.m20, mat.m21, mat.m22);
-
-	//
-
-	//float A0 = fabsf(pos.GetX());
-	//float A1 = fabsf(pos.GetY());
-	//float A2 = fabsf(pos.GetZ());
-
-	//float B0 = fabsf(pos.GetX() * XAxis.GetX() + pos.GetY() * YAxis.GetX() + pos.GetZ() * ZAxis.GetX());
-	//float B1 = fabsf(pos.GetX() * XAxis.GetY() + pos.GetY() * YAxis.GetY() + pos.GetZ() * ZAxis.GetY());
-	//float B2 = fabsf(pos.GetX() * XAxis.GetZ() + pos.GetY() * YAxis.GetZ() + pos.GetZ() * ZAxis.GetZ());
-
-	//float R0, R1, R;
-
-	////1 (Ra)x
-	//R0 = ABoxExtent.GetX();
-	//R1 = BBoxExtent.GetX() * fabsf(XAxis.GetX()) + BBoxExtent.GetY() * fabsf(XAxis.GetY()) + BBoxExtent.GetZ() * fabsf(XAxis.GetZ());
-	//R = A0;
-	//if (R > R0 + R1) { printf("(Ra)x        "); return false; }
-
-	////2 (Ra)y
-	//R0 = ABoxExtent.GetY();
-	//R1 = BBoxExtent.GetX() * fabsf(YAxis.GetX()) + BBoxExtent.GetY() * fabsf(YAxis.GetY()) + BBoxExtent.GetZ() * fabsf(YAxis.GetZ());
-	//R = A1;
-	//if (R > R0 + R1) { printf("(Ra)y        "); return false; }
-
-	////3 (Ra)z
-	//R0 = ABoxExtent.GetY();
-	//R1 = BBoxExtent.GetX() * fabsf(ZAxis.GetX()) + BBoxExtent.GetY() * fabsf(ZAxis.GetY()) + BBoxExtent.GetZ() * fabsf(ZAxis.GetZ());
-	//R = A2;
-	//if (R > R0 + R1) { printf("(Ra)z        "); return false; }
-
-	////4 (Rb)x
-	//R0 = ABoxExtent.GetX() * fabsf(XAxis.GetX()) + ABoxExtent.GetY() * fabsf(YAxis.GetX()) + ABoxExtent.GetZ() * fabsf(ZAxis.GetX());
-	//R1 = BBoxExtent.GetX();
-	//R = B0;
-	//if (R > R0 + R1) { printf("(Rb)x        "); return false; }
-
-	////5 (Rb)y
-	//R0 = ABoxExtent.GetX() * fabsf(XAxis.GetY()) + ABoxExtent.GetY() * fabsf(YAxis.GetY()) + ABoxExtent.GetZ() * fabsf(ZAxis.GetY());
-	//R1 = BBoxExtent.GetY();
-	//R = B1;
-	//if (R > R0 + R1) { printf("(Rb)y        "); return false; }
-
-	////6 (Rb)z
-	//R0 = ABoxExtent.GetX() * fabsf(XAxis.GetZ()) + ABoxExtent.GetY() * fabsf(YAxis.GetZ()) + ABoxExtent.GetZ() * fabsf(ZAxis.GetZ());
-	//R1 = BBoxExtent.GetZ();
-	//R = B2;
-	//if (R > R0 + R1) { printf("(Rb)z        "); return false; }
-
-	////7 (Ra)x X (Rb)x
-	//R0 = ABoxExtent.GetY() * fabsf(ZAxis.GetX()) + ABoxExtent.GetZ() * fabsf(YAxis.GetX());
-	//R1 = BBoxExtent.GetY() * fabsf(XAxis.GetZ()) + BBoxExtent.GetZ() * fabsf(XAxis.GetY());
-	//R = (A2 * YAxis.GetX() - A1 * ZAxis.GetX());
-	//if (R > R0 + R1) { printf("(Ra)x X (Rb)x"); return false; }
-
-	////8 (Ra)x X (Rb)y
-	//R0 = ABoxExtent.GetY() * fabsf(ZAxis.GetY()) + ABoxExtent.GetZ() * fabsf(YAxis.GetZ());
-	//R1 = BBoxExtent.GetX() * fabsf(XAxis.GetZ()) + BBoxExtent.GetZ() * fabsf(XAxis.GetX());
-	//R = (A2 * YAxis.GetY() - A1 * ZAxis.GetY());
-	//if (R > R0 + R1) { printf("(Ra)x X (Rb)y"); return false; }
-
-	////9 (Ra)x X (Rb)z
-	//R0 = ABoxExtent.GetY() * fabsf(ZAxis.GetZ()) + ABoxExtent.GetZ() * fabsf(XAxis.GetX());
-	//R1 = BBoxExtent.GetX() * fabsf(XAxis.GetY()) + BBoxExtent.GetY() * fabsf(XAxis.GetX());
-	//R = (A2 * YAxis.GetZ() - A1 * ZAxis.GetZ());
-	//if (R > R0 + R1) { printf("(Ra)x X (Rb)z"); return false; }
-
-	////10 (Ra)y X (Rb)x
-	//R0 = ABoxExtent.GetX() * fabsf(ZAxis.GetX()) + ABoxExtent.GetZ() * fabsf(XAxis.GetX());
-	//R1 = BBoxExtent.GetY() * fabsf(YAxis.GetZ()) + BBoxExtent.GetZ() * fabsf(YAxis.GetY());
-	//R = (A0 * ZAxis.GetX() - A2 * XAxis.GetX());
-	//if (R > R0 + R1) { printf("(Ra)y X (Rb)x"); return false; }
-
-	////11 (Ra)y X (Rb)y
-	//R0 = ABoxExtent.GetX() * fabsf(ZAxis.GetY()) + ABoxExtent.GetZ() * fabsf(XAxis.GetY());
-	//R1 = BBoxExtent.GetX() * fabsf(XAxis.GetZ()) + BBoxExtent.GetZ() * fabsf(YAxis.GetX());
-	//R = (A0 * ZAxis.GetY() - A2 * XAxis.GetY());
-	//if (R > R0 + R1) { printf("(Ra)y X (Rb)y"); return false; }
-
-	////12 (Ra)y X (Rb)z
-	//R0 = ABoxExtent.GetX() * fabsf(ZAxis.GetZ()) + ABoxExtent.GetZ() * fabsf(XAxis.GetZ());
-	//R1 = BBoxExtent.GetX() * fabsf(YAxis.GetY()) + BBoxExtent.GetY() * fabsf(YAxis.GetX());
-	//R = (A0 * ZAxis.GetZ() - A2 * XAxis.GetZ());
-	//if (R > R0 + R1) { printf("(Ra)y X (Rb)z"); return false; }
-
-	////13 (Ra)z X (Rb)x
-	//R0 = ABoxExtent.GetX() * fabsf(YAxis.GetX()) + ABoxExtent.GetY() * fabsf(XAxis.GetX());
-	//R1 = BBoxExtent.GetY() * fabsf(ZAxis.GetZ()) + BBoxExtent.GetZ() * fabsf(ZAxis.GetY());
-	//R = (A1 * XAxis.GetX() - A0 * YAxis.GetX());
-	//if (R > R0 + R1) { printf("(Ra)z X (Rb)x"); return false; }
-
-	////14 (Ra)z X (Rb)y
-	//R0 = ABoxExtent.GetZ() * fabsf(YAxis.GetY()) + ABoxExtent.GetY() * fabsf(XAxis.GetY());
-	//R1 = BBoxExtent.GetX() * fabsf(ZAxis.GetZ()) + BBoxExtent.GetZ() * fabsf(ZAxis.GetX());
-	//R = (A1 * XAxis.GetY() - A0 * YAxis.GetY());
-	//if (R > R0 + R1) { printf("(Ra)z X (Rb)y"); return false; }
-
-	////15 (Ra)z X (Rb)z
-	//R0 = ABoxExtent.GetX() * fabsf(YAxis.GetZ()) + ABoxExtent.GetY() * fabsf(XAxis.GetZ());
-	//R1 = BBoxExtent.GetX() * fabsf(ZAxis.GetY()) + BBoxExtent.GetY() * fabsf(ZAxis.GetX());
-	//R = (A1 * XAxis.GetZ() - A0 * YAxis.GetZ());
-	//if (R > R0 + R1) { printf("(Ra)z X (Rb)\n"); return false; }
-
-
-	//VER2
-printf("ver2");
 	const double cutoff = 0.999999;
 	bool existsParallelPair = false;
 
@@ -347,33 +249,46 @@ printf("ver2");
 	return true;
 }
 
-bool BoxTrace::CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)
+bool BoxTrace::CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)
 {
 	return false;
 }
 
-bool BoxTrace::SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)
+bool BoxTrace::SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)
 {
-	ActorPtr sphereActor = inSphereCollisionComponent.GetOwner().lock();
+	ActorPtr sphereActor = inSphereCollisionComponent->GetOwner().lock();
 	if (nullptr == sphereActor)
 	{
 		return false;
 	}
-	FVector sphereActorLocation = sphereActor->GetLocation();
+	const FVector	sphereActorLocation = sphereActor->GetLocation();
+	const FVector	sphereCenterLocation = sphereActorLocation + inSphereCollisionComponent->GetLocalLocation();
+	const float		sphereRadius = inSphereCollisionComponent->GetSphereCollision().GetRadius();
 
-	const float		sphereRadius = inSphereCollisionComponent.GetSphereCollision().GetRadius();
-	const FVector	sphereCenterLocation = sphereActorLocation + inSphereCollisionComponent.GetLocalLocation();
+	const FVector boxCenterLocation = this->GetCenterLocation();
+	const FVector boxExtent = this->GetBoxCollision().GetBoxExtent();
 
-	const FVector	boxCenterLocation = this->GetCenterLocation();
+	FVector boxMax(boxCenterLocation.GetX() + boxExtent.GetX(), boxCenterLocation.GetY() + boxExtent.GetY(), boxCenterLocation.GetZ() + boxExtent.GetZ());
+	FVector boxMin(boxCenterLocation.GetX() - boxExtent.GetX(), boxCenterLocation.GetY() - boxExtent.GetY(), boxCenterLocation.GetZ() - boxExtent.GetZ());
 
-	const FVector	newSphereCenterLocation = sphereCenterLocation - boxCenterLocation;
+	FVector closeLocation;
+	closeLocation.SetX(std::fmax(boxMin.GetX(), std::fmin(this->mStart.GetX(), boxMax.GetX())));
+	closeLocation.SetY(std::fmax(boxMin.GetY(), std::fmin(this->mStart.GetY(), boxMax.GetY())));
+	closeLocation.SetZ(std::fmax(boxMin.GetZ(), std::fmin(this->mStart.GetZ(), boxMax.GetZ())));
 
-	return false;
+	float distance = FVector::Distance(this->mStart, closeLocation);
+
+	return distance <= sphereRadius;
 }
 
 FVector BoxTrace::GetCenterLocation() const
 {
 	return (mStart + mEnd) / 2.0f;
+}
+
+const BoxCollision& BoxTrace::GetBoxCollision() const
+{
+	return mBoxCollision;
 }
 
 //==========================//
@@ -389,24 +304,39 @@ CapsuleTrace::~CapsuleTrace()
 
 }
 
-bool CapsuleTrace::BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)
+bool CapsuleTrace::CollisionTrace(CollisionComponent* inCollision)
 {
 	return false;
 }
 
-bool CapsuleTrace::BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)
+bool CapsuleTrace::BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)
 {
 	return false;
 }
 
-bool CapsuleTrace::CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)
+bool CapsuleTrace::BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)
 {
 	return false;
 }
 
-bool CapsuleTrace::SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)
+bool CapsuleTrace::CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)
 {
 	return false;
+}
+
+bool CapsuleTrace::SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)
+{
+	return false;
+}
+
+FVector CapsuleTrace::GetCenterLocation() const
+{
+	return mStart;
+}
+
+const CapsuleCollision& CapsuleTrace::GetCapsuleCollision() const
+{
+	return mCapsuleCollision;
 }
 
 //==========================//
@@ -422,19 +352,52 @@ SphereTrace::~SphereTrace()
 
 }
 
-bool SphereTrace::BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)
+bool SphereTrace::CollisionTrace(CollisionComponent* inCollision)
 {
-	ActorPtr boxActor = inBoxCollisionComponent.GetOwner().lock();
+	bool result = false;
+
+	if (nullptr == inCollision)
+	{
+		return result;
+	}
+
+	const CollisionType& type = inCollision->GetCollisionType();
+
+	switch (type)
+	{
+	case CollisionType::Collision_Unspecified:
+		break;
+	case CollisionType::Collision_Box:
+		result = BoxCollisionTraceOBB(static_cast<BoxCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Capsule:
+		result = CapsuleCollisionTrace(static_cast<CapsuleCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Sphere:
+		result = SphereCollisionTrace(static_cast<SphereCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Frustum:
+		break;
+	default:
+		break;
+	}
+
+	return result;
+}
+
+bool SphereTrace::BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)
+{
+	ActorPtr boxActor = inBoxCollisionComponent->GetOwner().lock();
 	if (nullptr == boxActor)
 	{
 		return false;
 	}
 	Location actorLocation = boxActor->GetLocation();
-	Location boxCenterLocation = actorLocation + inBoxCollisionComponent.GetLocalLocation();
+	Location boxCenterLocation = actorLocation + inBoxCollisionComponent->GetLocalLocation();
 
 	FVector boxMin;
 	FVector boxMax;
-	inBoxCollisionComponent.GetBoxCollision().MakeAABB(boxCenterLocation, boxMin, boxMax);
+	inBoxCollisionComponent->GetBoxCollision().MakeAABB(boxCenterLocation, boxMin, boxMax);
 
 	FVector closeLocation;
 	closeLocation.SetX(std::fmax(boxMin.GetX(), std::fmin(this->mStart.GetX(), boxMax.GetX())));
@@ -446,33 +409,66 @@ bool SphereTrace::BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionCom
 	return distance <= this->mSphereCollision.GetRadius();
 }
 
-bool SphereTrace::BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)
+bool SphereTrace::BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)
+{
+	ActorPtr boxActor = inBoxCollisionComponent->GetOwner().lock();
+	if (nullptr == boxActor)
+	{
+		return false;
+	}
+	const FVector	boxActorLocation	= boxActor->GetLocation();
+	const FVector	boxCenterLocation	= boxActorLocation + inBoxCollisionComponent->GetLocalLocation();
+	const FVector	boxExtent			= inBoxCollisionComponent->GetBoxCollision().GetBoxExtent();
+
+	const float		sphereRadius			= this->GetSphereCollision().GetRadius();
+	const FVector	sphereCenterLocation	= this->GetCenterLocation();
+
+
+	FVector boxMax(boxCenterLocation.GetX() + boxExtent.GetX(), boxCenterLocation.GetY() + boxExtent.GetY(), boxCenterLocation.GetZ() + boxExtent.GetZ());
+	FVector boxMin(boxCenterLocation.GetX() - boxExtent.GetX(), boxCenterLocation.GetY() - boxExtent.GetY(), boxCenterLocation.GetZ() - boxExtent.GetZ());
+
+	FVector closeLocation;
+	closeLocation.SetX(std::fmax(boxMin.GetX(), std::fmin(this->mStart.GetX(), boxMax.GetX())));
+	closeLocation.SetY(std::fmax(boxMin.GetY(), std::fmin(this->mStart.GetY(), boxMax.GetY())));
+	closeLocation.SetZ(std::fmax(boxMin.GetZ(), std::fmin(this->mStart.GetZ(), boxMax.GetZ())));
+
+	float distance = FVector::Distance(this->mStart, closeLocation);
+
+	return distance <= this->mSphereCollision.GetRadius();
+}
+
+bool SphereTrace::CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)
 {
 	return false;
 }
 
-bool SphereTrace::CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)
+bool SphereTrace::SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)
 {
-	return false;
-}
-
-bool SphereTrace::SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)
-{
-	ActorPtr otherSphereActor = inSphereCollisionComponent.GetOwner().lock();
+	ActorPtr otherSphereActor = inSphereCollisionComponent->GetOwner().lock();
 	if (nullptr == otherSphereActor)
 	{
 		return false;
 	}
 	Location otherSphereActorLocation = otherSphereActor->GetLocation();
-	Location otherSphereCenterLocation = otherSphereActorLocation + inSphereCollisionComponent.GetLocalLocation();
+	Location otherSphereCenterLocation = otherSphereActorLocation + inSphereCollisionComponent->GetLocalLocation();
 	Location thisSphereCenterLocation = this->mStart;
 
-	float otherRadius = inSphereCollisionComponent.GetSphereCollision().GetRadius();
+	float otherRadius = inSphereCollisionComponent->GetSphereCollision().GetRadius();
 	float thisRadius = this->mSphereCollision.GetRadius();
 	float maxRadius	= otherRadius + thisRadius;
 
 	float distance = FVector::Distance(otherSphereCenterLocation, thisSphereCenterLocation);
 	return (distance <= maxRadius) ? true : false;
+}
+
+FVector SphereTrace::GetCenterLocation() const
+{
+	return mStart;
+}
+
+const SphereCollision& SphereTrace::GetSphereCollision() const
+{
+	return mSphereCollision;
 }
 
 //==========================//
@@ -488,22 +484,28 @@ FrustumTrace::~FrustumTrace()
 
 }
 
-bool FrustumTrace::BoxCollisionTraceAABB(BoxCollisionComponent& inBoxCollisionComponent)
+bool FrustumTrace::CollisionTrace(CollisionComponent* inCollision)
 {
 	return false;
 }
 
-bool FrustumTrace::BoxCollisionTraceOBB(BoxCollisionComponent& inBoxCollisionComponent)
+
+bool FrustumTrace::BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)
 {
 	return false;
 }
 
-bool FrustumTrace::CapsuleCollisionTrace(CapsuleCollisionComponent& inCapsuleCollisionComponent)
+bool FrustumTrace::BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)
 {
 	return false;
 }
 
-bool FrustumTrace::SphereCollisionTrace(SphereCollisionComponent& inSphereCollisionComponent)
+bool FrustumTrace::CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)
+{
+	return false;
+}
+
+bool FrustumTrace::SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)
 {
 	return false;
 }

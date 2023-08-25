@@ -2,7 +2,7 @@
 class CollisionComponent
 {
 public:
-	APEIROGON_API CollisionComponent() {}
+	APEIROGON_API CollisionComponent() : mCollisionType(CollisionType::Collision_Unspecified) {}
 	APEIROGON_API ~CollisionComponent() {}
 
 	CollisionComponent(const CollisionComponent&) = delete;
@@ -16,16 +16,21 @@ public:
 	APEIROGON_API void SetOwner(ActorRef inOwner);
 	APEIROGON_API void SetLocalLocation(const FVector& inLocalLocation);
 	APEIROGON_API void SetLocalRotation(const FRotator& inLocalRotation);
+	APEIROGON_API void SetCollisionType(const CollisionType& inColisionType);
 
 public:
-	APEIROGON_API const ActorRef&	GetOwner() const;
-	APEIROGON_API const FVector&	GetLocalLocation() const;
-	APEIROGON_API const FRotator&	GetLocalRotation() const;
+	APEIROGON_API const ActorRef&		GetOwner() const;
+	APEIROGON_API virtual const float	GetLocalRadius() abstract;
+	APEIROGON_API const FVector&		GetLocalLocation() const;
+	APEIROGON_API const FRotator&		GetLocalRotation() const;
+	APEIROGON_API const CollisionType&	GetCollisionType() const;
 
 protected:
-	ActorRef	mOwner;
-	FVector		mLocalLocation;
-	FRotator	mLocalRotation;
+	ActorRef		mOwner;
+	float			mLocalRadius;
+	FVector			mLocalLocation;
+	FRotator		mLocalRotation;
+	CollisionType	mCollisionType;
 };
 
 class BoxCollisionComponent : public CollisionComponent
@@ -44,6 +49,7 @@ public:
 	APEIROGON_API void SetBoxCollision(const FVector& inBoxExtent);
 
 public:
+	APEIROGON_API virtual const float GetLocalRadius() override;
 	APEIROGON_API BoxCollision& GetBoxCollision();
 
 private:
@@ -66,6 +72,7 @@ public:
 	APEIROGON_API void SetCapsuleCollision(const float inRadius, const float inHeight);
 
 public:
+	APEIROGON_API virtual const float GetLocalRadius() override;
 	APEIROGON_API const CapsuleCollision& GetCapsuleCollision();
 
 private:
@@ -88,6 +95,7 @@ public:
 	APEIROGON_API void SetSphereCollisione(const float inRadius);
 
 public:
+	APEIROGON_API virtual const float GetLocalRadius() override;
 	APEIROGON_API const SphereCollision& GetSphereCollision();
 
 private:

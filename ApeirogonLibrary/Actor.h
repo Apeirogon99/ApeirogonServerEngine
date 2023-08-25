@@ -43,6 +43,8 @@ public:
 
 	APEIROGON_API void			SetActorType(const uint8& inActorType);
 
+	APEIROGON_API void			SetDefaultCollisionComponent(CollisionComponent* inCollisionComponent);
+
 	APEIROGON_API bool			FindPlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API bool			InsertPlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API bool			ReleasePlayerViewer(RemoteClientPtr inRemoteClient);
@@ -60,6 +62,7 @@ public:
 	APEIROGON_API const Velocity&		GetVelocity()	const	{ return mVelocity; }
 	APEIROGON_API const uint8&			GetActorType()	const	{ return mActorType; }
 	APEIROGON_API const PlayerViewer&	GetPlayerViewers()		{ return mPlayerViewers; }
+	APEIROGON_API CollisionComponent*	GetDefaultCollisionComponent() { return mDefaultCollisionComponent; }
 
 protected:
 	WorldRef		mWorld;
@@ -67,5 +70,6 @@ protected:
 	FVector			mVelocity;
 	uint8			mActorType;
 	PlayerViewer	mPlayerViewers;
+	CollisionComponent* mDefaultCollisionComponent;
 };
 
