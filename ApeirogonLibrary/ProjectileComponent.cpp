@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ProjectileComponent.h"
 
-ProjectileComponent::ProjectileComponent() : mLocation(), mRotation(), mMaxSyncTime(0), mLastMovementTime(0), mCurrentMovementSyncTime(0)
+ProjectileComponent::ProjectileComponent() : mMaxSyncTime(0), mLastMovementTime(0), mCurrentMovementSyncTime(0)
 {
 }
 
@@ -9,10 +9,8 @@ ProjectileComponent::~ProjectileComponent()
 {
 }
 
-void ProjectileComponent::InitProjectile(const Location& inInitLocation, const Rotation& inInitRotation, const int64& inMaxSyncTime, const int64& inWorldTime)
+void ProjectileComponent::InitProjectile(const int64& inMaxSyncTime, const int64& inWorldTime)
 {
-	mLocation = inInitLocation;
-	mRotation = inInitRotation;
 	mMaxSyncTime = inMaxSyncTime;
 	mLastMovementTime = inWorldTime;
 	mCurrentMovementSyncTime = 0;
@@ -26,7 +24,7 @@ bool ProjectileComponent::Update(ActorPtr inOwner)
 	const int64 currentWorldTime = inOwner->GetWorld().lock()->GetWorldTime();
 	const float	duration = static_cast<float>(currentWorldTime - this->mLastMovementTime) / 1000.0f;
 
-	FVector	direction = this->mRotation.Vector();
+	FVector	direction = inOwner->GetRotation().Vector();
 	FVector velocity = direction * currentVelocity;
 	FVector	deadReckoningLocation = currentLocation + (velocity * duration);
 
@@ -55,7 +53,7 @@ const Location ProjectileComponent::GetCurrentLocation(ActorPtr inOwner)
 	const int64 currentWorldTime = inOwner->GetWorld().lock()->GetWorldTime();
 	const float	duration = static_cast<float>(currentWorldTime - this->mLastMovementTime) / 1000.0f;
 
-	FVector	direction = this->mRotation.Vector();
+	FVector	direction = inOwner->GetRotation().Vector();
 	FVector velocity = direction * currentVelocity;
 	FVector	deadReckoningLocation = currentLocation + (velocity * duration);
 

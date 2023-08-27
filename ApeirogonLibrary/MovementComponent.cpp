@@ -41,8 +41,10 @@ bool MovementComponent::Update(ActorPtr inOwner, const float& inCloseToDestinati
 	const int64 currentWorldTime	= inOwner->GetWorld().lock()->GetWorldTime();
 	const float	duration			= static_cast<float>(currentWorldTime - this->mLastMovementTime) / 1000.0f;
 
-	FVector	direction = (destinationLocation - currentLocation).Normalize();
-	FVector velocity = direction * currentVelocity;
+	FVector		direction	= destinationLocation - currentLocation;
+	FRotator	rotation	= direction.Rotator();
+	FVector		foward		= rotation.GetForwardVector();
+	FVector		velocity	= foward * currentVelocity;
 
 	//inOwner->GameObjectLog(L"[Vel] (%5.6f:%5.6f:%5.6f)\n", velocity.GetX(), velocity.GetY(), velocity.GetZ());
 
@@ -114,6 +116,34 @@ const Location MovementComponent::GetCurrentLocation(ActorPtr inOwner)
 	}
 
 	Velocity	currentVelocity		= inOwner->GetVelocity();
+	const float	duration = static_cast<float>(worldTime - this->mLastMovementTime) / 1000.0f;
+
+	FVector	direction = (destinationLocation - currentLocation).Normalize();
+	FVector velocity = direction * currentVelocity;
+
+	FVector	deadReckoningLocation = currentLocation + (velocity * duration);
+
+	return deadReckoningLocation;
+}
+
+const Location MovementComponent::GetNextLocation(ActorPtr inOwner)
+{
+	WorldPtr world = inOwner->GetWorld().lock();
+	if (nullptr == world)
+	{
+		assert(!world);
+	}
+	const int64 worldTime = world->GetNextWorldTime();
+
+	Location currentLocation = inOwner->GetLocation();
+	Location destinationLocation = this->mServerDestinationLocation;
+
+	if (currentLocation == destinationLocation)
+	{
+		return currentLocation;
+	}
+
+	Velocity	currentVelocity = inOwner->GetVelocity();
 	const float	duration = static_cast<float>(worldTime - this->mLastMovementTime) / 1000.0f;
 
 	FVector	direction = (destinationLocation - currentLocation).Normalize();

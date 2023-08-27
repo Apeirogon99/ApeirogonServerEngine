@@ -20,6 +20,7 @@ public:
 	void SetRestrictMovement(bool inRestrict);
 	void SetNewDestination(ActorPtr inOwner, const Location& inCurrentLocation, Location& inDestinationLocation, const int64 inMovementLastTime, const float& inCollisionSize);
 	const Location GetCurrentLocation(ActorPtr inOwner);
+	const Location GetNextLocation(ActorPtr inOwner);
 
 public:
 	const Location& GetServerDestinationLocation() const;

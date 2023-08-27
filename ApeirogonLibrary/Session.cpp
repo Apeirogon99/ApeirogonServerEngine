@@ -151,6 +151,8 @@ void Session::RegisterSend()
         mSendEvent.owner = nullptr;
         mSendEvent.Clean();
         _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
+
+        this->Disconnect(L"Send Error");
     }
     
 }

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Service.h"
 
-Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(10)
+Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(33)
 {
 	setlocale(LC_ALL, "");
 }
@@ -62,7 +62,7 @@ void Service::ServiceScheudler()
 
 		totalRunTime = scheudlerTimeStamp.GetTimeStamp();
 
-		//if (totalRunTime > maxProcessTime)
+		//if (totalRunTime)
 		//{
 		//	wprintf(L"Scheudler over run time [TOTAL::%lld] [TICK::%lld] [TASK::%lld] [DB::%lld] [SEND::%lld]\n", totalRunTime, tickRunTime, taskRunTime, dbRunTime, sendRunTime);
 		//}
