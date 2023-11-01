@@ -66,7 +66,7 @@ public:
 public:
 	APEIROGON_API const ESessionMode&	GetSessionMode() const;
 	bool								IsConnected() const;
-	bool								HasPending();
+	bool								HasPending(int32& outPending);
 	APEIROGON_API SessionPtr			GetSession();
 	APEIROGON_API WinSocketPtr			GetWinSocket() const;
 	APEIROGON_API IPAddressPtr			GetIpAddress() const;

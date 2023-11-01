@@ -27,12 +27,12 @@ public:
 
 
 public:
-	bool		Comapre(const FVector& inVector1, const FVector& inVector2, const float inDiff);
 	FRotator	Rotator();
 	float		Length() const;
 	FVector		Normalize() const;
 
 public:
+	static bool		Comapre(const FVector& inVector1, const FVector& inVector2);
 	static float	Distance(const FVector& inVector1, const FVector& inVector2);
 	static float	Distance2D(const FVector& inVector1, const FVector& inVector2);
 	static float	DotProduct(const FVector& inVector1, const FVector& inVector2);

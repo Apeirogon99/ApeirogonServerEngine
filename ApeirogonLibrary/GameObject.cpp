@@ -32,7 +32,7 @@ void GameObject::Tick(const int64 inDeltaTime)
 	}
 
 	mTickTimer -= inDeltaTime;
-	if (mTickTimer < 0)
+	if (mTickTimer <= 0)
 	{
 		OnTick(mMaxTickTimer - mTickTimer);
 		mTickTimer = mMaxTickTimer;

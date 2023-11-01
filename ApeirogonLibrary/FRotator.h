@@ -31,6 +31,8 @@ public:
 	float GetRoll()		const { return mRoll; }
 
 	FVector GetForwardVector() const;
+	FVector GetRightVector() const;
+	FVector GetUpVector() const;
 
 	void ToString()		const { printf("Pitch=%3.3f Yaw=%3.3f Roll=%3.3f\n", mPitch, mYaw, mRoll); }
 

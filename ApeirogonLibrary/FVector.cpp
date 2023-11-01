@@ -104,9 +104,9 @@ std::ostream& operator<<(std::ostream& inOstream, const FVector& inVector)
 	return inOstream;
 }
 
-bool FVector::Comapre(const FVector& inVector1, const FVector& inVector2, const float inDiff)
+bool FVector::Comapre(const FVector& inVector1, const FVector& inVector2)
 {
-	return false;
+	return inVector1.mX == inVector2.mX && inVector1.mY == inVector2.mY && inVector1.mZ == inVector2.mZ;
 }
 
 FRotator FVector::Rotator()
@@ -138,6 +138,12 @@ FVector FVector::Normalize() const
 
 float FVector::Distance(const FVector& inVector1, const FVector& inVector2)
 {
+	bool compare = FVector::Comapre(inVector1, inVector2);
+	if (compare)
+	{
+		return 0.0f;
+	}
+
 	const float x = std::powf(inVector1.GetX()- inVector2.GetX(), 2);
 	const float y = std::powf(inVector1.GetY()- inVector2.GetY(), 2);
 	const float z = std::powf(inVector1.GetZ()- inVector2.GetZ(), 2);
@@ -146,6 +152,13 @@ float FVector::Distance(const FVector& inVector1, const FVector& inVector2)
 
 float FVector::Distance2D(const FVector& inVector1, const FVector& inVector2)
 {
+
+	bool compare = FVector::Comapre(inVector1, inVector2);
+	if (compare)
+	{
+		return 0.0f;
+	}
+
 	const float x = std::powf(inVector1.GetX() - inVector2.GetX(), 2);
 	const float y = std::powf(inVector1.GetY() - inVector2.GetY(), 2);
 	return std::sqrtf(x + y);

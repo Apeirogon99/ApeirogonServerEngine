@@ -30,7 +30,7 @@ public:
 	void Shutdown();
 	bool RegisterSocketToIOCP(const WinSocketPtr sock);
 	APEIROGON_API bool WorkDispatch(DWORD timeoutMs = INFINITE);
-	APEIROGON_API bool PostDispatch(const uint32 inNumOfBytes, IocpEvent inEven);
+	APEIROGON_API bool PostDispatch(const uint32 inNumOfBytes, IocpEvent* inEvent);
 
 protected:
 	void IOCPErrorHandling(IocpEvent* inEvent);

@@ -16,11 +16,172 @@ const ETraceType& Trace::GetTraceType() const
 }
 
 //==========================//
+//		   LineTrace		//
+//==========================//
+LineTrace::LineTrace(ActorRef inOwner, FVector inStart, FVector inEnd, bool inIsIgnore) : Trace(inOwner, inStart, inEnd, inIsIgnore, ETraceType::Trace_Line)
+{
+
+}
+
+bool LineTrace::CollisionTrace(CollisionComponent* inCollision)
+{
+	bool result = false;
+
+	if (nullptr == inCollision)
+	{
+		return result;
+	}
+
+	const CollisionType& type = inCollision->GetCollisionType();
+
+	switch (type)
+	{
+	case CollisionType::Collision_Unspecified:
+		break;
+	case CollisionType::Collision_Box:
+		result = BoxCollisionTraceOBB(static_cast<BoxCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Capsule:
+		result = CapsuleCollisionTrace(static_cast<CapsuleCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Sphere:
+		result = SphereCollisionTrace(static_cast<SphereCollisionComponent*>(inCollision));
+		break;
+	case CollisionType::Collision_Frustum:
+		break;
+	default:
+		break;
+	}
+
+	return result;
+}
+
+bool LineTrace::BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)
+{
+	return false;
+}
+
+bool LineTrace::BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)
+{
+	ActorPtr BoxActor = inBoxCollisionComponent->GetOwner().lock();
+	if (nullptr == BoxActor)
+	{
+		return false;
+	}
+	inBoxCollisionComponent->GetBoxCollision().SetOrientation(BoxActor->GetRotation());
+
+	const Location&		BoxCenter		= BoxActor->GetLocation() + inBoxCollisionComponent->GetLocalLocation();
+	const BoxCollision& BoundBox		= inBoxCollisionComponent->GetBoxCollision();
+	const FVector		BoxExtent		= BoundBox.GetBoxExtent();
+	const FRotator		BoxOrientation	= BoundBox.GetOrientation();
+
+	FVector d = mEnd - mStart;
+	FVector e = BoxCenter - mStart;
+
+	float halfSize[3] = { 0.0f, };
+	halfSize[0] = BoxExtent.GetX() / 2.0f;
+	halfSize[1] = BoxExtent.GetY() / 2.0f;
+	halfSize[2] = BoxExtent.GetZ() / 2.0f;
+
+	float tMin = -FLT_MAX;
+	float tMax = FLT_MAX;
+
+	FVector Axis[3];
+	Matrix::GetAxis(BoxOrientation, Axis[0], Axis[1], Axis[2]);
+
+	for (int i = 0; i < 3; ++i) {
+
+		float halfExtent = halfSize[0] * std::fabs(Axis[i].GetX()) +
+			halfSize[1] * std::fabs(Axis[i].GetY()) +
+			halfSize[2] * std::fabs(Axis[i].GetZ());
+
+		float eProj = FVector::DotProduct(e, Axis[i]);
+		float fProj = FVector::DotProduct(d, Axis[i]);
+
+		if (std::fabs(fProj) < 1e-6)
+		{
+			if (-eProj - halfExtent > 0 || -eProj + halfExtent < 0)
+			{
+				return false;
+			}
+		}
+		else 
+		{
+			float t1 = (eProj - halfExtent) / fProj;
+			float t2 = (eProj + halfExtent) / fProj;
+
+			if (t1 > t2)
+				std::swap(t1, t2);
+
+			if (t1 > tMin)
+				tMin = t1;
+
+			if (t2 < tMax)
+				tMax = t2;
+
+			if (tMin > tMax)
+			{
+				return false;
+			}
+
+			if (tMax < 0)
+			{
+				return false;
+			}
+
+		}
+	}
+
+	if (tMin > 1 || tMax < 0)
+	{
+		return false;
+	}
+
+	mImpactPoint = mStart + d * tMin;
+	return true;
+}
+
+bool LineTrace::CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)
+{
+	return false;
+}
+
+bool LineTrace::SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)
+{
+	return false;
+}
+
+FVector LineTrace::GetCenterLocation() const
+{
+	return (mStart + mEnd) / 2.0f;
+}
+
+float LineTrace::GetDistance() const
+{
+	return FVector::Distance(mStart, mEnd);
+}
+
+FVector LineTrace::GetImpactPoint() const
+{
+	return mImpactPoint;
+}
+
+//==========================//
 //		   BoxTrace			//
 //==========================//
 
 BoxTrace::BoxTrace(ActorRef inOwner, FVector inStart, FVector inEnd, bool inIsIgnore, FVector inBoxExtent, FRotator inOrientation) : Trace(inOwner, inStart, inEnd, inIsIgnore, ETraceType::Trace_Box), mBoxCollision(inBoxExtent, inOrientation)
 {
+}
+
+bool BoxTrace::InitBoxTrace(ActorRef inOwner, FVector inStart, FVector inEnd, bool inIsIgnore, FVector inBoxExtent, FRotator inOrientation)
+{
+	mOwner = inOwner;
+	mStart = inStart;
+	mEnd = inEnd;
+	mBoxCollision.SetBoxExtent(inBoxExtent);
+	mBoxCollision.SetOrientation(inOrientation);
+	return true;
 }
 
 bool BoxTrace::CollisionTrace(CollisionComponent* inCollision)
@@ -508,4 +669,14 @@ bool FrustumTrace::CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCol
 bool FrustumTrace::SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)
 {
 	return false;
+}
+
+FVector Trace::GetStartLocation() const
+{
+	return mStart;
+}
+
+FVector Trace::GetEndLocation() const
+{
+	return mEnd;
 }

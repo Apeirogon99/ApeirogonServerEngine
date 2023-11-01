@@ -32,10 +32,10 @@ EMonitoringResult SessionMonitoring::CheckSession()
 		return EMonitoringResult::MR_Already_Monitoring;
 	}
 
-	if (false == CheckPing(result))
-	{
-		MonitoringLog(result);
-	}
+	//if (false == CheckPing(result))
+	//{
+	//	MonitoringLog(result);
+	//}
 
 	_InterlockedExchange(&mIsCheck, static_cast<LONG>(Default::MONITOR_IS_FREE));
 	return result;

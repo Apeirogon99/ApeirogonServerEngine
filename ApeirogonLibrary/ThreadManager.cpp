@@ -31,7 +31,7 @@ bool ThreadManager::Prepare(ServicePtr service)
 
 void ThreadManager::Shutdown()
 {
-	ExitEvent exitEvent;
+	ExitEvent* exitEvent = new ExitEvent;
 	for (std::thread& thread : mThreads)
 	{
 		mService->GetIOCPServer()->PostDispatch(1, exitEvent);

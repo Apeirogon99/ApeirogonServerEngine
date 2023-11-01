@@ -17,6 +17,10 @@ Actor::~Actor()
 
 void Actor::CloseToActor(ActorPtr inCloseActor, float inPossibleVisbleLength)
 {
+	if (nullptr == inCloseActor)
+	{
+		return;
+	}
 
 	if (false == inCloseActor->IsValid())
 	{
@@ -125,4 +129,17 @@ void Actor::BrodcastPlayerViewers(SendBufferPtr inSendBuffer)
 	{
 		viewer->Send(inSendBuffer);
 	}
+}
+
+void Actor::ClearPlayerViewers()
+{
+	for (auto viewer : mPlayerViewers)
+	{
+		if (viewer)
+		{
+			viewer.reset();
+		}
+	}
+
+	mPlayerViewers.clear();
 }

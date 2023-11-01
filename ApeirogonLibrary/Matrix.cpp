@@ -369,3 +369,21 @@ void Matrix::GetAxis(const FRotator& inRotation, FVector& outX, FVector& outY, F
     outZ.SetX(matrix.mMatrix[2][0]); outZ.SetY(matrix.mMatrix[2][1]); outZ.SetZ(matrix.mMatrix[2][2]);
 
 }
+
+FVector Matrix::GetXAxis(const FRotator& inRotation)
+{
+    Matrix matrix = Matrix::RotateMatrix(inRotation);
+    return FVector(matrix.mMatrix[0][0], matrix.mMatrix[0][1], matrix.mMatrix[0][2]);
+}
+
+FVector Matrix::GetYAxis(const FRotator& inRotation)
+{
+    Matrix matrix = Matrix::RotateMatrix(inRotation);
+    return FVector(matrix.mMatrix[1][0], matrix.mMatrix[1][1], matrix.mMatrix[1][2]);
+}
+
+FVector Matrix::GetZAxis(const FRotator& inRotation)
+{
+    Matrix matrix = Matrix::RotateMatrix(inRotation);
+    return FVector(matrix.mMatrix[2][0], matrix.mMatrix[2][1], matrix.mMatrix[2][2]);
+}

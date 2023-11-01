@@ -22,10 +22,12 @@ void MovementComponent::InitMovement(const Location& inInitLocation, const int64
 bool MovementComponent::Update(ActorPtr inOwner, const float& inCloseToDestination)
 {
 
+	const int64 currentWorldTime = inOwner->GetWorld().lock()->GetWorldTime();
+
 	Location currentLocation = inOwner->GetLocation();
 	Location destinationLocation = this->mServerDestinationLocation;
 
-	if (currentLocation == destinationLocation)
+	if (FVector::Comapre(currentLocation, destinationLocation))
 	{
 		return false;
 	}
@@ -34,27 +36,23 @@ bool MovementComponent::Update(ActorPtr inOwner, const float& inCloseToDestinati
 	if (locationDistance <= inCloseToDestination)
 	{
 		inOwner->SetLocation(destinationLocation);
-		return false;
+		return true;
 	}
 
 	Velocity	currentVelocity		= inOwner->GetVelocity();
-	const int64 currentWorldTime	= inOwner->GetWorld().lock()->GetWorldTime();
+
 	const float	duration			= static_cast<float>(currentWorldTime - this->mLastMovementTime) / 1000.0f;
 
 	FVector		direction	= destinationLocation - currentLocation;
-	FRotator	rotation	= direction.Rotator();
+	FRotator	rotation	= inOwner->GetRotation();
+
 	FVector		foward		= rotation.GetForwardVector();
 	FVector		velocity	= foward * currentVelocity;
 
-	//inOwner->GameObjectLog(L"[Vel] (%5.6f:%5.6f:%5.6f)\n", velocity.GetX(), velocity.GetY(), velocity.GetZ());
-
 	FVector	deadReckoningLocation = currentLocation + (velocity * duration);
 
-	//inOwner->GameObjectLog(L"[Move] (%5.6f:%5.6f:%5.6f)\n", deadReckoningLocation.GetX(), deadReckoningLocation.GetY(), deadReckoningLocation.GetZ());
-
-	this->mOldLocation = currentLocation;
-
 	inOwner->SetLocation(deadReckoningLocation);
+	this->mOldLocation = currentLocation;
 	this->mLastMovementTime = currentWorldTime;
 	return true;
 }
@@ -69,7 +67,7 @@ bool MovementComponent::SyncUpdate(ActorPtr inOwner, const int64 inSyncTime)
 	mCurrentMovementSyncTime = 0;
 
 	const float distance = FVector::Distance2D(inOwner->GetLocation(), this->mOldLocation);
-	if (distance <= 0.1f)
+	if (distance <= 1.0f)
 	{
 		return false;
 	}
@@ -83,7 +81,7 @@ void MovementComponent::SetRestrictMovement(bool inRestrict)
 	mIsRestrict = inRestrict;
 }
 
-void MovementComponent::SetNewDestination(ActorPtr inOwner, const Location& inCurrentLocation, Location& inDestinationLocation, const int64 inMovementLastTime, const float& inCollisionSize)
+void MovementComponent::SetNewDestination(ActorPtr inOwner, const Location& inCurrentLocation, const Location& inDestinationLocation, const int64 inMovementLastTime, const float& inCollisionSize)
 {
 	FVector		direction = inDestinationLocation - inCurrentLocation;
 	FRotator	rotation = direction.Rotator();
@@ -98,6 +96,10 @@ void MovementComponent::SetNewDestination(ActorPtr inOwner, const Location& inCu
 	mLastMovementTime			= inMovementLastTime;
 }
 
+void MovementComponent::SetTeleportDestination(ActorPtr inOwner, const Location& inDestinationLocation, const int64 inMovementLastTime)
+{
+}
+
 const Location MovementComponent::GetCurrentLocation(ActorPtr inOwner)
 {
 	WorldPtr world = inOwner->GetWorld().lock();
@@ -110,7 +112,7 @@ const Location MovementComponent::GetCurrentLocation(ActorPtr inOwner)
 	Location currentLocation		= inOwner->GetLocation();
 	Location destinationLocation	= this->mServerDestinationLocation;
 
-	if (currentLocation == destinationLocation)
+	if (FVector::Comapre(currentLocation, destinationLocation))
 	{
 		return currentLocation;
 	}
@@ -138,7 +140,7 @@ const Location MovementComponent::GetNextLocation(ActorPtr inOwner)
 	Location currentLocation = inOwner->GetLocation();
 	Location destinationLocation = this->mServerDestinationLocation;
 
-	if (currentLocation == destinationLocation)
+	if (FVector::Comapre(currentLocation, destinationLocation))
 	{
 		return currentLocation;
 	}
@@ -152,6 +154,32 @@ const Location MovementComponent::GetNextLocation(ActorPtr inOwner)
 	FVector	deadReckoningLocation = currentLocation + (velocity * duration);
 
 	return deadReckoningLocation;
+}
+
+const Location MovementComponent::GetNextLocation(ActorPtr inOwner, const Location& inCurrentLocation, const Location& inDestinationLocation, const int64& inMovementLastTime, float inRadius)
+{
+	Location currentLocation = inCurrentLocation;
+	Location destinationLocation = inDestinationLocation;
+
+	if (1.0f >= FVector::Distance2D(currentLocation, destinationLocation))
+	{
+		return currentLocation;
+	}
+
+	Velocity currentVelocity = inOwner->GetVelocity();
+	const float	duration = static_cast<float>(inMovementLastTime) / 1000.0f;
+
+	FVector	direction = (destinationLocation - currentLocation).Normalize();
+	FVector velocity = direction * currentVelocity;
+
+	FVector	deadReckoningLocation = currentLocation + (velocity * duration) - (direction * inRadius);
+
+	return deadReckoningLocation;
+}
+
+const Location& MovementComponent::GetOldLocation() const
+{
+	return mOldLocation;
 }
 
 const Location& MovementComponent::GetServerDestinationLocation() const

@@ -36,11 +36,19 @@ void Session::Dispatch(IocpEvent* iocpEvent, int32 numOfBytes)
         break;
     case EventType::RegisterSend:
         RegisterSend();
+
+        //if (iocpEvent)
+        //{
+        //    delete iocpEvent;
+        //}
+
+        //iocpEvent = nullptr;
+
         break;
     case EventType::Icmp:
         ProcessIcmp();
+        break;
     default:
-        
         break;
     }
 }
@@ -108,7 +116,7 @@ void Session::RegisterRecv()
 
     mRecvEvent.Init();
     mRecvEvent.owner = shared_from_this();
-    //mRecvEvent.Clean();
+    mRecvEvent.Clean();
 
     if (false == mSocket->RecvEx(mRecvEvent))
     {
@@ -160,42 +168,42 @@ void Session::RegisterSend()
 void Session::RegisterIcmp()
 {
 
-    LONG IsSending = static_cast<LONG>(Default::SESSION_IS_SENDING);
-    IsSending = _InterlockedCompareExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_SENDING), static_cast<LONG>(Default::SESSION_IS_FREE));
+    //LONG IsSending = static_cast<LONG>(Default::SESSION_IS_SENDING);
+    //IsSending = _InterlockedCompareExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_SENDING), static_cast<LONG>(Default::SESSION_IS_FREE));
 
-    if (IsSending == static_cast<LONG>(Default::SESSION_IS_SENDING))
-    {
-        return;
-    }
+    //if (IsSending == static_cast<LONG>(Default::SESSION_IS_SENDING))
+    //{
+    //    return;
+    //}
 
-    if (false == IsConnected())
-    {
-        Disconnect(L"Is not connected");
-        return;
-    }
+    //if (false == IsConnected())
+    //{
+    //    Disconnect(L"Is not connected");
+    //    return;
+    //}
 
-    mIcmpEvent.Init();
-    mIcmpEvent.Clean();
-    mIcmpEvent.owner = shared_from_this();
-    mIcmpEvent.mIpAddr = mIpAddr;
-    mIcmpEvent.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    //mIcmpEvent.Init();
+    //mIcmpEvent.Clean();
+    //mIcmpEvent.owner = shared_from_this();
+    //mIcmpEvent.mIpAddr = mIpAddr;
+    //mIcmpEvent.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-    if (false == mSocket->SendIcmp(mIcmpEvent))
-    {
-        mIcmpEvent.owner = nullptr;
-        mIcmpEvent.Clean();
-        _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
-    }
-    else
-    {
-        GetSessionManager()->GetService()->GetIOCPServer()->PostDispatch(mIcmpEvent.mReplyBuffer.GetUsedSize(), mIcmpEvent);
-    }
+    //if (false == mSocket->SendIcmp(mIcmpEvent))
+    //{
+    //    mIcmpEvent.owner = nullptr;
+    //    mIcmpEvent.Clean();
+    //    _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
+    //}
+    //else
+    //{
+    //    GetSessionManager()->GetService()->GetIOCPServer()->PostDispatch(mIcmpEvent.mReplyBuffer.GetUsedSize(), mIcmpEvent);
+    //}
 
 }
 
 void Session::ProcessConnect()
 {
-    mConnectEvnet.owner = nullptr;
+    mConnectEvnet.SetOwner(nullptr);
     mIsConnect.store(true);
 
     //if (false == mSocket->UpdateConnectSocket(true))
@@ -238,6 +246,8 @@ void Session::ProcessDisconnect()
     }
 
     OnDisconnected();
+
+    mIsConnect.store(false);
 }
 
 void Session::ProcessRecv(const uint32 numOfBytes)
@@ -272,6 +282,15 @@ void Session::ProcessRecv(const uint32 numOfBytes)
 
 void Session::ProcessSend(const uint32 numOfBytes)
 {
+
+    LONG IsSending = static_cast<LONG>(Default::SESSION_IS_FREE);
+    IsSending = _InterlockedCompareExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE), static_cast<LONG>(Default::SESSION_IS_SENDING));
+
+    if (IsSending == static_cast<LONG>(Default::SESSION_IS_FREE))
+    {
+        return;
+    }
+
     mSendEvent.owner = nullptr;
     mSendEvent.Clean();
 
@@ -283,7 +302,6 @@ void Session::ProcessSend(const uint32 numOfBytes)
 
     OnSend(numOfBytes);
 
-    _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
     if (false == mSendQueue.IsEmpty())
     {
         RegisterSend();
@@ -308,7 +326,7 @@ void Session::ProcessIcmp()
 
     OnIcmp();
 
-    _InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
+    //_InterlockedExchange(&mIsSending, static_cast<LONG>(Default::SESSION_IS_FREE));
 
 }
 
@@ -319,8 +337,11 @@ void Session::Connect()
 
 void Session::Disconnect(const WCHAR* cause)
 {
-    if (mIsConnect.exchange(false) == false)
+    bool oldIsConnect = mIsConnect.exchange(false);
+    if (oldIsConnect == false)
+    {
         return;
+    }
 
     SessionLog(L"[Session::Disconnect()] %ws\n", cause);
 
@@ -328,11 +349,15 @@ void Session::Disconnect(const WCHAR* cause)
     {
         SessionLog(L"[Session::Disconnect()] Failed to disconnect\n");
     }
-
 }
 
 void Session::Send(SendBufferPtr sendBuffer)
 {
+    if (nullptr == sendBuffer)
+    {
+        return;
+    }
+
     if (IsConnected() == false)
     {
         Disconnect(L"Can't Send");
@@ -439,11 +464,15 @@ bool Session::IsConnected() const
     return mIsConnect;
 }
 
-bool Session::HasPending()
+bool Session::HasPending(int32& outPendingSize)
 {
     bool connect    = mIsConnect.load();
     bool empty      = mSendQueue.IsEmpty();
     bool send       = mIsSending;
+
+    outPendingSize = mSendQueue.GetPending();
+
+    //printf("SEND CONDITION [%d, %d, %d]\t", connect, !empty, !send);
 
     return (connect && !empty && !send);
 }

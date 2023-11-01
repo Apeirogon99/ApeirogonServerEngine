@@ -26,6 +26,7 @@ public:
 public:
 	APEIROGON_API bool	IsEmpty();
 	APEIROGON_API bool	IsFull();
+	APEIROGON_API int32	GetPending();
 
 private:
 	FastSpinLock					mLock;

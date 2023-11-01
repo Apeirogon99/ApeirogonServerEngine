@@ -46,6 +46,10 @@ public:
 	static Matrix Transpose(const Matrix& inMatrix);
 
 	static void GetAxis(const FRotator& inRotation, FVector& outX, FVector& outY, FVector& outZ);
+	static FVector GetXAxis(const FRotator& inRotation);
+	static FVector GetYAxis(const FRotator& inRotation);
+	static FVector GetZAxis(const FRotator& inRotation);
+
 public:
 
 public:

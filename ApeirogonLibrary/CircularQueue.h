@@ -29,7 +29,11 @@ public:
 
 	~CircularQueue()
 	{
-		delete[] mQueue;
+		if (mQueue)
+		{
+			delete[] mQueue;
+		}
+		mQueue = nullptr;
 	}
 
 	CircularQueue(CircularQueue&&) = delete;
@@ -76,7 +80,6 @@ public:
 		{
 			mQueue[currentIndex] = std::move(inVariable);
 			mTail = nextIndex;
-
 			return true;
 		}
 
@@ -236,7 +239,7 @@ public:
 		return mCapcity;
 	}
 
-protected:
+public:
 	int32 GetUsedSize()
 	{
 		int32 Count = 0;

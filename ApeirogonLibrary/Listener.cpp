@@ -59,7 +59,7 @@ bool Listener::Prepare(ServicePtr service)
 	for (uint32 i = 0; i < acceptCount; i++)
 	{
 		AcceptEvent* acceptEvent = new AcceptEvent();
-		acceptEvent->owner = shared_from_this();
+		acceptEvent->SetOwner(shared_from_this());
 		mAcceptEvents.push_back(acceptEvent);
 		RegisterAccept(acceptEvent);
 	}
@@ -122,7 +122,7 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 	SessionPtr newSession = mService->GetSessionManager()->CreateSession(ESessionMode::Client);
 
 	acceptEvent->Init();
-	acceptEvent->session = newSession;
+	acceptEvent->SetSession(newSession);
 
 	DWORD bytesReceived = 0;
 

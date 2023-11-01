@@ -26,11 +26,11 @@ bool TaskManager::Prepare(ServicePtr service)
 
 void TaskManager::Shutdown()
 {
-	//for (auto& task : mGameObjects)
-	//{
-	//	task.second->Destroy();
-	//	task.second->ClearTask();
-	//}
+	for (auto task = mGameObjects.begin(); task != mGameObjects.end();)
+	{
+		this->DestroyGameObject(task->second);
+		this->mGameObjects.erase(task++);
+	}
 
 	TaskManagerLog(L"[TaskManager::Shutdown()] Task manager success shutdown\n");
 
@@ -86,9 +86,9 @@ void TaskManager::DestroyGameObject(GameObjectPtr inGameObject)
 
 void TaskManager::PushTask(GameObjectPtr inGameObject)
 {
-	TaskManagerLog(L"[TaskManager::PushTask] Push Task %ws\n", inGameObject->GetGameObjectName());
 
 	CreateGameObject(inGameObject);
+	TaskManagerLog(L"[TaskManager::PushTask][%lld] Push Task %ws\n", inGameObject->GetGameObjectID(), inGameObject->GetGameObjectName());
 
 	const int64 objectID = inGameObject->GetGameObjectID();
 	std::pair<int64, GameObjectPtr> tempTask = std::make_pair(objectID, inGameObject);
@@ -101,11 +101,11 @@ void TaskManager::ReleaseTask(GameObjectPtr inGameObject)
 {
 	const WCHAR* gameObjectName = inGameObject->GetGameObjectName();
 
+	TaskManagerLog(L"[TaskManager::ReleaseTask][%lld] Release Task %ws\n", inGameObject->GetGameObjectID(), gameObjectName);
 	DestroyGameObject(inGameObject);
 
 	mCurrentTickGameObjectCount--;
 
-	TaskManagerLog(L"[TaskManager::ReleaseTask] Release Task %ws [USE::%d]\n", gameObjectName, inGameObject.use_count());
 }
 
 bool TaskManager::FindTask(const int64 inGameObjectID, GameObjectPtr& outGameObject)

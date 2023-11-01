@@ -3,6 +3,7 @@
 enum class ETraceType
 {
 	Trace_None,
+	Trace_Line,
 	Trace_Box,
 	Trace_Capsule,
 	Trace_Sphere,
@@ -32,12 +33,44 @@ public:
 	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)	abstract;
 	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)		abstract;
 
+public:
+	APEIROGON_API FVector GetStartLocation() const;
+	APEIROGON_API FVector GetEndLocation() const;
+
 protected:
 	ActorRef	mOwner;
 	FVector		mStart;
 	FVector		mEnd;
 	bool		mIsIgnore;
 	ETraceType	mTraceType;
+};
+
+class LineTrace : public Trace
+{
+public:
+	APEIROGON_API LineTrace(ActorRef inOwner, FVector inStart, FVector inEnd, bool inIsIgnore);
+	APEIROGON_API virtual ~LineTrace() {}
+
+	LineTrace(const LineTrace&) = delete;
+	LineTrace(LineTrace&&) noexcept = delete;
+
+	LineTrace& operator=(const LineTrace&) = delete;
+	LineTrace& operator=(LineTrace&&) noexcept = delete;
+
+public:
+	APEIROGON_API virtual bool CollisionTrace(CollisionComponent* inCollision)									override;
+	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)			override;
+	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)				override;
+	APEIROGON_API virtual bool CapsuleCollisionTrace(CapsuleCollisionComponent* inCapsuleCollisionComponent)	override;
+	APEIROGON_API virtual bool SphereCollisionTrace(SphereCollisionComponent* inSphereCollisionComponent)		override;
+
+public:
+	APEIROGON_API FVector GetCenterLocation() const;
+	APEIROGON_API float GetDistance() const;
+	APEIROGON_API FVector GetImpactPoint() const;
+
+public:
+	FVector mImpactPoint;
 };
 
 class BoxTrace : public Trace
@@ -53,6 +86,7 @@ public:
 	BoxTrace& operator=(BoxTrace&&) noexcept = delete;
 
 public:
+	APEIROGON_API virtual bool InitBoxTrace(ActorRef inOwner, FVector inStart, FVector inEnd, bool inIsIgnore, FVector inBoxExtent, FRotator inOrientation);
 	APEIROGON_API virtual bool CollisionTrace(CollisionComponent* inCollision)									override;
 	APEIROGON_API virtual bool BoxCollisionTraceAABB(BoxCollisionComponent* inBoxCollisionComponent)			override;
 	APEIROGON_API virtual bool BoxCollisionTraceOBB(BoxCollisionComponent* inBoxCollisionComponent)				override;

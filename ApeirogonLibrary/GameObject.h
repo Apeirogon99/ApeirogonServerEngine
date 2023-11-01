@@ -69,5 +69,5 @@ inline void GameObject::GameObjectLog(const WCHAR* inLog, Args ...inArgs)
 		return;
 	}
 
-	task->TaskManagerLog(inLog, inArgs...);
+	task->TaskManagerLog(tempStream.str().c_str(), inArgs...);
 }

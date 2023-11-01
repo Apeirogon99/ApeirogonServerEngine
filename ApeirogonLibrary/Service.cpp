@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Service.h"
 
-Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(33)
+Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(100)
 {
 	setlocale(LC_ALL, "");
 }
@@ -18,9 +18,8 @@ const int64 Service::GetServiceTimeStamp()
 
 const int64 Service::GetNextServiceTimeStamp()
 {
-	const int64 currentTime		= mServiceTime.GetTimeStamp();
-	const int64 lessProcessTime = mScheudlerProcessTime - (currentTime % mScheudlerProcessTime);
-	return currentTime + lessProcessTime;
+	const int64 currentTime	= mServiceTime.GetTimeStamp();
+	return currentTime + mScheudlerProcessTime + 1;
 }
 
 void Service::ServiceScheudler()
@@ -36,6 +35,7 @@ void Service::ServiceScheudler()
 	int64 taskRunTime;
 	int64 dbRunTime;
 	int64 sendRunTime;
+	int64 sleepTime = 0;
 
 	int64 processTime = 0;
 	while (IsServiceOpen())
@@ -46,23 +46,33 @@ void Service::ServiceScheudler()
 		taskRunTime		= 0;
 		dbRunTime		= 0;
 
-		while (processTime < serviceTimeStamp + mScheudlerProcessTime)
-		{
+		//while (processTime < serviceTimeStamp + mScheudlerProcessTime)
+		//{
 
 			taskRunTime += this->mTaskManager->ProcessTask(serviceTimeStamp);
 
 			dbRunTime += this->mDatabaseManager->ProcessTask();
 
 			processTime = scheudlerTimeStamp.GetTimeStamp() + serviceTimeStamp;
-		}
+		//}
 
-		tickRunTime = mTaskManager->Tick(scheudlerTimeStamp.GetTimeStamp());
+		tickRunTime = mTaskManager->Tick(taskRunTime + dbRunTime + sleepTime);
 
 		sendRunTime = mSessionManager->WorkDispatch();
 
 		totalRunTime = scheudlerTimeStamp.GetTimeStamp();
 
-		//if (totalRunTime)
+		sleepTime = mScheudlerProcessTime - totalRunTime;
+		if (0 < sleepTime)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
+		}
+		else
+		{
+			//printf("LATE TIME\n");
+		}
+
+		//if (true)
 		//{
 		//	wprintf(L"Scheudler over run time [TOTAL::%lld] [TICK::%lld] [TASK::%lld] [DB::%lld] [SEND::%lld]\n", totalRunTime, tickRunTime, taskRunTime, dbRunTime, sendRunTime);
 		//}

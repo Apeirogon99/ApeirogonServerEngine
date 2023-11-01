@@ -16,6 +16,8 @@ public:
 	APEIROGON_API virtual void	OnAppearActor(ActorPtr inAppearActor) {};
 	APEIROGON_API virtual void	OnDisAppearActor(ActorPtr inDisAppearActor) {};
 
+	APEIROGON_API virtual void	OnInteractive(ActorPtr inActor) {};
+
 	APEIROGON_API virtual void	OnHit(ActorPtr inInstigated, const float inDamage) {};
 	APEIROGON_API virtual void	OnDeath() {};
 
@@ -49,6 +51,7 @@ public:
 	APEIROGON_API bool			InsertPlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API bool			ReleasePlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API void			BrodcastPlayerViewers(SendBufferPtr inSendBuffer);
+	APEIROGON_API void			ClearPlayerViewers();
 
 public:
 	APEIROGON_API ActorPtr				GetActorPtr()			{ return std::static_pointer_cast<Actor>(shared_from_this()); }

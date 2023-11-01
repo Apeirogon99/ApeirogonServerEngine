@@ -3,7 +3,7 @@ class RoundTripTime
 {
 	enum class Defualt
 	{
-		Capacity = 0x8,
+		Capacity = 0x100,
 	};
 
 public:

@@ -78,3 +78,13 @@ FVector FRotator::GetForwardVector() const
 {
     return this->Vector();
 }
+
+FVector FRotator::GetRightVector() const
+{
+    return Matrix::GetYAxis(*this);
+}
+
+FVector FRotator::GetUpVector() const
+{
+    return Matrix::GetZAxis(*this);
+}

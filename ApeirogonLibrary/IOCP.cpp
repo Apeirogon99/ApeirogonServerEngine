@@ -72,7 +72,19 @@ bool IOCPServer::WorkDispatch(DWORD timeoutMs)
 
 	if (iocpEvent->eventType == EventType::Exit)
 	{
+		if (iocpEvent)
+		{
+			delete iocpEvent;
+		}
+
+		iocpEvent = nullptr;
+
 		return true;
+	}
+
+	if (nullptr == iocpEvent)
+	{
+		return false;
 	}
 
 	IOCPObjectPtr iocpObject = iocpEvent->owner;
@@ -81,16 +93,28 @@ bool IOCPServer::WorkDispatch(DWORD timeoutMs)
 		IOCPErrorHandling(iocpEvent);
 		return false;
 	}
+	//printf("HANDLE : %lld, Event : %d\n", iocpObject->GetHandle(), static_cast<int32>(iocpEvent->eventType));
+
+	//if (iocpEvent->eventType == EventType::RegisterSend)
+	//{
+	//	printf("[%lld] RegisterSend = %d\n", iocpObject->GetHandle(), numOfBytes);
+	//}
+
+	//if (iocpEvent->eventType == EventType::Send)
+	//{
+	//	printf("[%lld] ProcessSend = %d\n", iocpObject->GetHandle(), numOfBytes);
+	//}
+
 	iocpObject->Dispatch(iocpEvent, numOfBytes);
 
 	return true;
 }
 
-bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent inEvent)
+bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent* inEvent)
 {
 	ULONG_PTR key = 0;
 
-	bool ret = ::PostQueuedCompletionStatus(mIOCPHandle, inNumOfBytes, key, &inEvent);
+	bool ret = ::PostQueuedCompletionStatus(mIOCPHandle, inNumOfBytes, key, inEvent);
 	if (ret == false)
 	{
 		IOCPServerLog(L"[IOCPServer::PostDispatch()]");
@@ -128,18 +152,21 @@ void IOCPServer::IOCPErrorHandling(IocpEvent* inEvent)
 
 	switch (code)
 	{
+	case 0:
+		printf("SUCESS\n");
+		break;
 	case ERROR_NETNAME_DELETED:
 		session->Disconnect(L"ERROR_NETNAME_DELETED");
 		break;
-
 	case ERROR_NETWORK_ACCESS_DENIED:
 		session->Disconnect(L"ERROR_NETWORK_ACCESS_DENIED");
 		break;
 	case ERROR_CONNECTION_ABORTED:
+		return;
 		session->Disconnect(L"ERROR_CONNECTION_ABORTED");
 		break;
 	default:
-		mService->GetLoggerManager()->WriteLog(L"[IOCPServer::IOCPErrorHandling] Can't Handling Error");
+		mService->GetLoggerManager()->WriteLog(L"[IOCPServer::IOCPErrorHandling] Can't Handling (%d) Error", code);
 		break;
 	}
 }

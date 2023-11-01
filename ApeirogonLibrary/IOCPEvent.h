@@ -23,6 +23,7 @@ public:
 	IocpEvent(EventType type);
 
 	void			Init();
+	void			SetOwner(IOCPObjectPtr inOwner);
 
 public:
 	EventType		eventType;
@@ -57,6 +58,9 @@ class AcceptEvent : public IocpEvent
 {
 public:
 	AcceptEvent() : IocpEvent(EventType::Accept) { }
+
+public:
+	void SetSession(SessionPtr inSession);
 
 public:
 	SessionPtr	session = nullptr;

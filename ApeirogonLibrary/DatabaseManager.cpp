@@ -170,7 +170,6 @@ int64 DatabaseManager::ProcessTask()
 		{
 			return mProcessTimeStamp.GetTimeStamp();
 		}
-
 		mDatabaseTaskQueue.Dequeue(completeTask);
 	}
 

@@ -150,10 +150,13 @@ public:
 
 	APEIROGON_API void Clean()
 	{
-
 		mWritePos = 0;
 		mReadPos = 0;
-		::memset(mBuffer, NULL, mCapcity);
+
+		if (mBuffer)
+		{
+			::memset(mBuffer, NULL, mCapcity);
+		}
 	}
 
 public:

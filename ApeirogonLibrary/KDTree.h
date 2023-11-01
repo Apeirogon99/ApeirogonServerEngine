@@ -161,9 +161,64 @@ public:
 		mUseNode.clear();
 	}
 
-	bool SearchNodes(BoxTrace& inBoxTrace, const uint8& inActorType, std::vector<int64>& outGameObjectIDs, const uint32& inMaxResult = INFINITE)
+	bool SearchNodes(LineTrace& inLineTrace, const uint8& inActorType, std::vector<FVector>& outIntersection, const size_t& inMaxResult = INFINITE)
 	{
 		if (inActorType == 0)
+		{
+			return false;
+		}
+
+		if (mUseNode.size() == 0)
+		{
+			return false;
+		}
+
+		const Location& location = inLineTrace.GetCenterLocation();
+		const float radius = inLineTrace.GetDistance();
+
+		std::vector<int64> findNodeIDs;
+		SearchNodePreOrder(location, radius, inActorType, mUseNode[0], findNodeIDs);
+
+		for (size_t index = 0; index < findNodeIDs.size(); ++index)
+		{
+			const int64& gameObjectID = findNodeIDs[index];
+			ActorPtr actor = mNodesPool[gameObjectID]->GetActorRef().lock();
+			if (nullptr == actor)
+			{
+				continue;
+			}
+
+			CollisionComponent* collisionComponent = actor->GetDefaultCollisionComponent();
+			if (nullptr == collisionComponent)
+			{
+				continue;
+			}
+
+			if (false == inLineTrace.CollisionTrace(collisionComponent))
+			{
+				continue;
+			}
+
+			outIntersection.emplace_back(inLineTrace.GetImpactPoint());
+
+			if (outIntersection.size() == inMaxResult)
+			{
+				break;
+			}
+
+		}
+
+		return outIntersection.size();
+	}
+
+	bool SearchNodes(BoxTrace& inBoxTrace, const uint8& inActorType, std::vector<int64>& outGameObjectIDs, const size_t& inMaxResult = INFINITE)
+	{
+		if (inActorType == 0)
+		{
+			return false;
+		}
+
+		if (mUseNode.size() == 0)
 		{
 			return false;
 		}
@@ -174,9 +229,10 @@ public:
 		std::vector<int64> findNodeIDs;
 		SearchNodePreOrder(boxLocation, radius, inActorType, mUseNode[0], findNodeIDs);
 
-		for (auto nodeID : findNodeIDs)
+		for (size_t index = 0; index < findNodeIDs.size(); ++index)
 		{
-			ActorPtr actor = mNodesPool[nodeID]->GetActorRef().lock();
+			const int64& gameObjectID = findNodeIDs[index];
+			ActorPtr actor = mNodesPool[gameObjectID]->GetActorRef().lock();
 			if (nullptr == actor)
 			{
 				continue;
@@ -194,14 +250,25 @@ public:
 			}
 
 			outGameObjectIDs.emplace_back(actor->GetGameObjectID());
+
+			if (outGameObjectIDs.size() == inMaxResult)
+			{
+				break;
+			}
+
 		}
 		
 		return outGameObjectIDs.size();
 	}
 
-	bool SearchNodes(SphereTrace& inSphereTrace, const uint8& inActorType, std::vector<int64>& outGameObjectIDs, const uint32& inMaxResult = INFINITE)
+	bool SearchNodes(SphereTrace& inSphereTrace, const uint8& inActorType, std::vector<int64>& outGameObjectIDs, const size_t& inMaxResult = INFINITE)
 	{
 		if (inActorType == 0)
+		{
+			return false;
+		}
+
+		if (mUseNode.size() == 0)
 		{
 			return false;
 		}
@@ -212,9 +279,10 @@ public:
 		std::vector<int64> findNodeIDs;
 		SearchNodePreOrder(sphereLocation, radius, inActorType, mUseNode[0], findNodeIDs);
 
-		for (auto nodeID : findNodeIDs)
+		for (size_t index = 0; index < findNodeIDs.size(); ++index)
 		{
-			ActorPtr actor = mNodesPool[nodeID]->GetActorRef().lock();
+			const int64& gameObjectID = findNodeIDs[index];
+			ActorPtr actor = mNodesPool[gameObjectID]->GetActorRef().lock();
 			if (nullptr == actor)
 			{
 				continue;
@@ -232,6 +300,12 @@ public:
 			}
 
 			outGameObjectIDs.emplace_back(actor->GetGameObjectID());
+
+			if (outGameObjectIDs.size() == inMaxResult)
+			{
+				break;
+			}
+
 		}
 
 		return outGameObjectIDs.size();
@@ -242,14 +316,39 @@ public:
 	//	return outResultActor.size();
 	//}
 
-	bool FindNodes(const FVector& inFindLocation, const float& inRadius, const uint8& inActorType, std::vector<int64>& outGameObjectIDs)
+	bool SearchNodes(const FVector& inFindLocation, const float& inRadius, const uint8& inActorType, std::vector<int64>& outGameObjectIDs, const size_t& inMaxResult = INFINITE)
 	{
 		if (inActorType == 0)
 		{
 			return false;
 		}
 
-		SearchNodePreOrder(inFindLocation, inRadius, inActorType, mUseNode[0], outGameObjectIDs);
+		if (mUseNode.size() == 0)
+		{
+			return false;
+		}
+
+		std::vector<int64> findNodeIDs;
+		SearchNodePreOrder(inFindLocation, inRadius, inActorType, mUseNode[0], findNodeIDs);
+
+		for (size_t index = 0; index < findNodeIDs.size(); ++index)
+		{
+			const int64& gameObjectID = findNodeIDs[index];
+			ActorPtr actor = mNodesPool[gameObjectID]->GetActorRef().lock();
+			if (nullptr == actor)
+			{
+				continue;
+			}
+
+			outGameObjectIDs.emplace_back(actor->GetGameObjectID());
+
+			if (outGameObjectIDs.size() == inMaxResult)
+			{
+				break;
+			}
+
+		}
+
 		return outGameObjectIDs.size();
 	}
 
@@ -404,11 +503,6 @@ protected:
 		const Location&		location			= actor->GetLocation();
 		const Location&		collisionLocation	= location + collision->GetLocalLocation();
 		const float&		collisionRadius		= collision->GetLocalRadius();
-
-		if (type == inActorType && type == 2)
-		{
-
-		}
 
 		const float distance = FVector::Distance(inFindLocation, collisionLocation);
 		if (distance <= inRadius + collisionRadius && inActorType == type)

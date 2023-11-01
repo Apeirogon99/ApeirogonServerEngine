@@ -14,3 +14,13 @@ void IocpEvent::Init()
 	OVERLAPPED::Offset = 0;
 	OVERLAPPED::OffsetHigh = 0;
 }
+
+void IocpEvent::SetOwner(IOCPObjectPtr inOwner)
+{
+	owner = inOwner;
+}
+
+void AcceptEvent::SetSession(SessionPtr inSession)
+{
+	session = inSession;
+}

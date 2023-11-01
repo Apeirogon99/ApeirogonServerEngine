@@ -175,7 +175,6 @@ int64 SessionManager::WorkDispatch()
 
 	FastLockGuard lockGuard(mFastSpinLock);
 
-	RegisterSendEvent registerSendEvent;
 	for (auto curSession = mSessions.begin(); curSession != mSessions.end(); curSession++)
 	{
 		SessionPtr session = *curSession;
@@ -184,14 +183,18 @@ int64 SessionManager::WorkDispatch()
 			continue;
 		}
 
-		if (false == session->HasPending())
+		int32 outPendingSize = 0;
+		if (false == session->HasPending(outPendingSize))
 		{
 			continue;
 		}
 
-		registerSendEvent.Init();
-		registerSendEvent.owner = session;
-		mService->GetIOCPServer()->PostDispatch(1, registerSendEvent);
+
+		RegisterSendEvent* registerSendEvent = new RegisterSendEvent;
+		registerSendEvent->Init();
+		registerSendEvent->owner = session;
+
+		mService->GetIOCPServer()->PostDispatch(outPendingSize, registerSendEvent);
 
 		//session->GetMonitoring().CheckSession();
 	}

@@ -9,6 +9,7 @@ SendQueue::SendQueue() : mSendQueue(static_cast<uint32>(Default::MAX_QUEUE_SIZE)
 
 SendQueue::~SendQueue()
 {
+	Clear();
 }
 
 void SendQueue::Clear()
@@ -62,4 +63,10 @@ bool SendQueue::IsFull()
 {
 	FastLockGuard lockGuard(mLock);
 	return mSendQueue.IsFull();
+}
+
+int32 SendQueue::GetPending()
+{
+	FastLockGuard lockGuard(mLock);
+	return mSendQueue.GetUsedSize();
 }
