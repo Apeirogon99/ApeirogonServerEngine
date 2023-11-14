@@ -81,6 +81,8 @@ inline ActorPtr World::SpawnActor(GameObjectRef inOwner, const Location& inLocat
 	const int64 objectID = actor->GetGameObjectID();
 	std::pair<int64, ActorPtr> newObject = std::make_pair(objectID, actor);
 	auto result = mWorldActors.insert(newObject);
+
+	//mWorldObserver.InsertNode(actor->GetActorRef());
 	return actor;
 }
 

@@ -76,5 +76,7 @@ private:
 	TaskManagerPtr				mTaskManager;
 
 	TimeStamp					mServiceTime;
+
+public:
 	int64						mScheudlerProcessTime;
 };

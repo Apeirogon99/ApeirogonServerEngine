@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Service.h"
 
-Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(100)
+Service::Service() : mServiceState(EServiceState::Close), mSessionManager(nullptr), mListener(nullptr), mIOCPServer(nullptr), mThreadManager(nullptr), mLoggerManager(nullptr), mDatabaseManager(nullptr), mDataManager(nullptr), mTaskManager(nullptr), mServiceTime(L"Server"), mScheudlerProcessTime(33)
 {
 	setlocale(LC_ALL, "");
 }
@@ -56,11 +56,16 @@ void Service::ServiceScheudler()
 			processTime = scheudlerTimeStamp.GetTimeStamp() + serviceTimeStamp;
 		//}
 
-		tickRunTime = mTaskManager->Tick(taskRunTime + dbRunTime + sleepTime);
+		tickRunTime = mTaskManager->Tick(taskRunTime + dbRunTime + abs(sleepTime));
 
 		sendRunTime = mSessionManager->WorkDispatch();
 
 		totalRunTime = scheudlerTimeStamp.GetTimeStamp();
+
+		if (tickRunTime > 1)
+		{
+			printf("TICK RUNTIME : %02lld, %02lld\n", tickRunTime, taskRunTime + dbRunTime + abs(sleepTime));
+		}
 
 		sleepTime = mScheudlerProcessTime - totalRunTime;
 		if (0 < sleepTime)
@@ -69,12 +74,12 @@ void Service::ServiceScheudler()
 		}
 		else
 		{
-			//printf("LATE TIME\n");
+			printf("LATE TIME\n");
 		}
 
 		//if (true)
 		//{
-		//	wprintf(L"Scheudler over run time [TOTAL::%lld] [TICK::%lld] [TASK::%lld] [DB::%lld] [SEND::%lld]\n", totalRunTime, tickRunTime, taskRunTime, dbRunTime, sendRunTime);
+		//	wprintf(L"Scheudler over run time [TOTAL::%03lld] [TICK::%03lld] [TASK::%03lld] [DB::%03lld] [SEND::%03lld]\n", totalRunTime, tickRunTime, taskRunTime, dbRunTime, sendRunTime);
 		//}
 
 	}

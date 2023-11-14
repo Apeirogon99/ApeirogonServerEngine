@@ -11,7 +11,7 @@ public:
 public:
 	APEIROGON_API virtual void		Initialization();
 	APEIROGON_API virtual void		Destroy();
-	APEIROGON_API virtual void		Tick(const int64 inDeltaTime);
+	APEIROGON_API virtual bool		Tick(const int64 inDeltaTime);
 
 	APEIROGON_API virtual void		OnInitialization()				abstract;
 	APEIROGON_API virtual void		OnDestroy()						abstract;

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "World.h"
 
-World::World(const WCHAR* inName) : GameObject(inName), mWorldObserver(1024), mWorldObstruction(1024)
+World::World(const WCHAR* inName) : GameObject(inName), mWorldObserver(1024), mWorldObstruction(4096)
 {
 }
 

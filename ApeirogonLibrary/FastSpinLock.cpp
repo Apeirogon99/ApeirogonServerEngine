@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "FastSpinLock.h"
 
-FastSpinLock::FastSpinLock()
+FastSpinLock::FastSpinLock() : destination(static_cast<LONG>(Default::LOCK_IS_FREE))
 {
 	_InterlockedExchange(&destination, static_cast<LONG>(Default::LOCK_IS_FREE));
 }

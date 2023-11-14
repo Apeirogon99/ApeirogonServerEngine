@@ -177,7 +177,7 @@ public:
 		const float radius = inLineTrace.GetDistance();
 
 		std::vector<int64> findNodeIDs;
-		SearchNodePreOrder(location, radius, inActorType, mUseNode[0], findNodeIDs);
+		SearchNodePreOrder(location, radius, inActorType, mUseNode[0], findNodeIDs, INIT_DEPTH);
 
 		for (size_t index = 0; index < findNodeIDs.size(); ++index)
 		{
@@ -227,7 +227,7 @@ public:
 		const float radius = std::sqrtf(std::powf(inBoxTrace.GetBoxCollision().GetBoxExtent().GetX(), 2) + std::powf(inBoxTrace.GetBoxCollision().GetBoxExtent().GetY(), 2));	//외접원 반지름
 		
 		std::vector<int64> findNodeIDs;
-		SearchNodePreOrder(boxLocation, radius, inActorType, mUseNode[0], findNodeIDs);
+		SearchNodePreOrder(boxLocation, radius, inActorType, mUseNode[0], findNodeIDs, INIT_DEPTH);
 
 		for (size_t index = 0; index < findNodeIDs.size(); ++index)
 		{
@@ -275,15 +275,21 @@ public:
 
 		const Location& sphereLocation = inSphereTrace.GetCenterLocation();
 		const float radius = inSphereTrace.GetSphereCollision().GetRadius();
+		const ActorPtr self = inSphereTrace.GetOwner().lock();
 
 		std::vector<int64> findNodeIDs;
-		SearchNodePreOrder(sphereLocation, radius, inActorType, mUseNode[0], findNodeIDs);
+		SearchNodePreOrder(sphereLocation, radius, inActorType, mUseNode[0], findNodeIDs, INIT_DEPTH);
 
 		for (size_t index = 0; index < findNodeIDs.size(); ++index)
 		{
 			const int64& gameObjectID = findNodeIDs[index];
 			ActorPtr actor = mNodesPool[gameObjectID]->GetActorRef().lock();
 			if (nullptr == actor)
+			{
+				continue;
+			}
+
+			if (self == actor)
 			{
 				continue;
 			}
@@ -329,7 +335,7 @@ public:
 		}
 
 		std::vector<int64> findNodeIDs;
-		SearchNodePreOrder(inFindLocation, inRadius, inActorType, mUseNode[0], findNodeIDs);
+		SearchNodePreOrder(inFindLocation, inRadius, inActorType, mUseNode[0], findNodeIDs, INIT_DEPTH);
 
 		for (size_t index = 0; index < findNodeIDs.size(); ++index)
 		{
@@ -485,7 +491,7 @@ protected:
 		DebugPrintPreOrder(inNode->GetRightNode());
 	}
 
-	void SearchNodePreOrder(const FVector& inFindLocation, const float& inRadius, const uint8& inActorType, KDNode* inNode, std::vector<int64>& outGameObjectIDs)
+	void SearchNodePreOrder(const FVector& inFindLocation, const float& inRadius, const uint8& inActorType, KDNode* inNode, std::vector<int64>& outGameObjectIDs, const uint32& inDepth)
 	{
 		if (nullptr == inNode)
 		{
@@ -510,8 +516,44 @@ protected:
 			outGameObjectIDs.push_back(inNode->GetNodeNumber());
 		}
 
-		SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetLeftNode(), outGameObjectIDs);
-		SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetRightNode(), outGameObjectIDs);
+		uint32 nextDepth = (inDepth + INCREASE_DEPTH) % MAX_AXIS;
+		if (inDepth == 0)
+		{
+			if (inFindLocation.GetX() - inRadius < collisionLocation.GetX())
+			{
+				SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetLeftNode(), outGameObjectIDs, nextDepth);
+			}
+
+			if (inFindLocation.GetX() + inRadius >= collisionLocation.GetX())
+			{
+				SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetRightNode(), outGameObjectIDs, nextDepth);
+			}
+		}
+		else if (inDepth == 1)
+		{
+			if (inFindLocation.GetY() - inRadius < collisionLocation.GetY())
+			{
+				SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetLeftNode(), outGameObjectIDs, nextDepth);
+			}
+
+			if (inFindLocation.GetY() + inRadius >= collisionLocation.GetY())
+			{
+				SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetRightNode(), outGameObjectIDs, nextDepth);
+			}
+		}
+		else if (inDepth == 2)
+		{
+			if (inFindLocation.GetZ() - inRadius < collisionLocation.GetZ())
+			{
+				SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetLeftNode(), outGameObjectIDs, nextDepth);
+			}
+
+			if (inFindLocation.GetZ() + inRadius >= collisionLocation.GetZ())
+			{
+				SearchNodePreOrder(inFindLocation, inRadius, inActorType, inNode->GetRightNode(), outGameObjectIDs, nextDepth);
+			}
+		}
+
 	}
 
 private:

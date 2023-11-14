@@ -1,12 +1,16 @@
 #include "pch.h"
 #include "TaskManager.h"
 
-TaskManager::TaskManager() : mGameObjectIDCount(INVALID_GAMEOBJECT_ID), mTaskProcessTimeStamp(L"Task"), mTickProcessTimeStamp(L"Tick"), mCurrentTickGameObjectCount(0), mCurrentGameObjectCount(0)
+TaskManager::TaskManager() : mGameObjectIDCount(INVALID_GAMEOBJECT_ID), mTaskProcessTimeStamp(L"Task"), mTickProcessTimeStamp(L"Tick"), mCurrentTickGameObjectCount(0), mCurrentGameObjectCount(0), mObjectCount(0), mThreadPoolSize(5), mTickGameObject(4096), mSpinLock()
 {
 }
 
 TaskManager::~TaskManager()
 {
+	for (std::thread& thread : mThreads)
+	{
+		thread.join();
+	}
 }
 
 bool TaskManager::Prepare(ServicePtr service)
@@ -18,6 +22,11 @@ bool TaskManager::Prepare(ServicePtr service)
 	}
 
 	Init();
+
+	for (uint32 index = 0; index < mThreadPoolSize; ++index)
+	{
+		mThreads.emplace_back(std::thread());
+	}
 
 	TaskManagerLog(L"[TaskManager::Prepare()] Task manager success prepare\n");
 
@@ -43,6 +52,13 @@ int64 TaskManager::ProcessTask(const int64 inServiceTimeStamp)
 	mTaskProcessTimeStamp.StartTimeStamp();
 	for (auto task = mGameObjects.begin(); task != mGameObjects.end();)
 	{
+
+		if (task->second == nullptr)
+		{
+			++task;
+			continue;
+		}
+
 		if (false == task->second->Execute(inServiceTimeStamp))
 		{
 			this->mGameObjects.erase(task++);
@@ -55,12 +71,73 @@ int64 TaskManager::ProcessTask(const int64 inServiceTimeStamp)
 	return mTaskProcessTimeStamp.GetTimeStamp();
 }
 
+void TaskManager::AllWakeTickThread(const int64 inTickTime)
+{
+
+	mObjectCount = 0;
+	mTickGameObject.Clear();
+	size_t maxSize = mGameObjects.size();
+
+	for (std::thread& thread : mThreads)
+	{
+		thread = std::thread(&TaskManager::DoWorkTickThread, this, inTickTime, maxSize);
+	}
+
+	for (std::thread& thread : mThreads)
+	{
+		thread.join();
+	}
+
+}
+
+void TaskManager::DoWorkTickThread(const int64 inTickTime, const size_t inMaxSize)
+{
+	while (mService->IsServiceOpen())
+	{
+		GameObjectPtr task = nullptr;
+		{
+			FastLockGuard lockGuard(mSpinLock);
+			if (mObjectCount == inMaxSize)
+			{
+				return;
+			}
+
+			task = mGameObjects[mObjectCount++];
+		}
+
+		if (task == nullptr)
+		{
+			continue;
+		}
+
+		bool ret = task->Tick(inTickTime);;
+		//task->OnTick(inTickTime);
+		if (ret)
+		{
+			FastLockGuard lockGuard(mSpinLock);
+			mTickGameObject.Enqueue(task->GetGameObjectRef());
+		}
+		
+	}
+}
+
 int64 TaskManager::Tick(const int64 inTickTime)
 {
 	mTickProcessTimeStamp.StartTimeStamp();
+
+	//this->AllWakeTickThread(inTickTime);
+
+	//std::vector<GameObjectRef> tickTasks;
+	//mTickGameObject.Dequeue(tickTasks);
+	
+
 	for (auto& task : mGameObjects)
 	{
-		task.second->Tick(inTickTime + mTickProcessTimeStamp.GetTimeStamp());
+		GameObjectPtr gameObject = task.second;
+		if (gameObject)
+		{
+			gameObject->OnTick(inTickTime + mTickProcessTimeStamp.GetTimeStamp());
+		}
 	}
 	return mTickProcessTimeStamp.GetTimeStamp();
 }

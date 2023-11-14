@@ -113,7 +113,6 @@ bool IOCPServer::WorkDispatch(DWORD timeoutMs)
 bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent* inEvent)
 {
 	ULONG_PTR key = 0;
-
 	bool ret = ::PostQueuedCompletionStatus(mIOCPHandle, inNumOfBytes, key, inEvent);
 	if (ret == false)
 	{
