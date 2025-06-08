@@ -58,14 +58,14 @@ void Service::ServiceScheudler()
 
 		tickRunTime = mTaskManager->Tick(taskRunTime + dbRunTime + abs(sleepTime));
 
-		sendRunTime = mSessionManager->WorkDispatch();
+		sendRunTime = mSessionManager->SendRegister();
 
 		totalRunTime = scheudlerTimeStamp.GetTimeStamp();
 
-		if (tickRunTime > 1)
-		{
-			printf("TICK RUNTIME : %02lld, %02lld\n", tickRunTime, taskRunTime + dbRunTime + abs(sleepTime));
-		}
+		//if (tickRunTime > 1)
+		//{
+		//	printf("TICK RUNTIME : %02lld, %02lld\n", tickRunTime, taskRunTime + dbRunTime + abs(sleepTime));
+		//}
 
 		sleepTime = mScheudlerProcessTime - totalRunTime;
 		if (0 < sleepTime)
@@ -74,7 +74,7 @@ void Service::ServiceScheudler()
 		}
 		else
 		{
-			printf("LATE TIME\n");
+			//printf("LATE TIME\n");
 		}
 
 		//if (true)

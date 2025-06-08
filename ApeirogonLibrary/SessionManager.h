@@ -28,7 +28,7 @@ public:
 	APEIROGON_API ServicePtr	GetService() const;
 
 public:
-	int64 WorkDispatch();
+	int64 SendRegister();
 
 public:
 	APEIROGON_API void SessionManagerLog(const WCHAR* log, ...);

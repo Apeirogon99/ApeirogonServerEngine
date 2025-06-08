@@ -110,13 +110,13 @@ void TaskManager::DoWorkTickThread(const int64 inTickTime, const size_t inMaxSiz
 			continue;
 		}
 
-		bool ret = task->Tick(inTickTime);;
-		//task->OnTick(inTickTime);
-		if (ret)
-		{
-			FastLockGuard lockGuard(mSpinLock);
-			mTickGameObject.Enqueue(task->GetGameObjectRef());
-		}
+		//bool ret = task->Tick(inTickTime);;
+		////task->OnTick(inTickTime);
+		//if (ret)
+		//{
+		//	FastLockGuard lockGuard(mSpinLock);
+		//	mTickGameObject.Enqueue(task->GetGameObjectRef());
+		//}
 		
 	}
 }
@@ -129,7 +129,6 @@ int64 TaskManager::Tick(const int64 inTickTime)
 
 	//std::vector<GameObjectRef> tickTasks;
 	//mTickGameObject.Dequeue(tickTasks);
-	
 
 	for (auto& task : mGameObjects)
 	{

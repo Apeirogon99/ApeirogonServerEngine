@@ -48,6 +48,7 @@ public:
 	APEIROGON_API void			SetDefaultCollisionComponent(CollisionComponent* inCollisionComponent);
 
 	APEIROGON_API bool			FindPlayerViewer(RemoteClientPtr inRemoteClient);
+	APEIROGON_API bool			FindPlayerWithGameObjectId(int64 inGameObjectId);
 	APEIROGON_API bool			InsertPlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API bool			ReleasePlayerViewer(RemoteClientPtr inRemoteClient);
 	APEIROGON_API void			BrodcastPlayerViewers(SendBufferPtr inSendBuffer);

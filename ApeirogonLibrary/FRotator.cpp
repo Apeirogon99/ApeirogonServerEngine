@@ -76,7 +76,7 @@ FVector FRotator::Vector() const
 
 FVector FRotator::GetForwardVector() const
 {
-    return this->Vector();
+    return this->Vector().Normalize();
 }
 
 FVector FRotator::GetRightVector() const

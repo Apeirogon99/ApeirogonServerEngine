@@ -24,22 +24,19 @@ void GameObject::Destroy()
 	SetTick(false, INFINITE);
 }
 
-bool GameObject::Tick(const int64 inDeltaTime)
+void GameObject::Tick(const int64 inDeltaTime)
 {
 	if (false == mIsTick)
 	{
-		return false;
+		return;
 	}
 
 	mTickTimer -= inDeltaTime;
 	if (mTickTimer <= 0)
 	{
-		//OnTick(mMaxTickTimer - mTickTimer);
+		OnTick(mMaxTickTimer - mTickTimer);
 		mTickTimer = mMaxTickTimer;
-		return true;
 	}
-
-	return false;
 }
 
 void GameObject::SetOwner(GameObjectRef inOwner)

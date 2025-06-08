@@ -58,7 +58,7 @@ public:
 
 		{
 			FastLockGuard lockGuard(mFastSpinLock);
-			mTimeStamps.Peek(timestmaps);
+			//mTimeStamps.Peek(timestmaps);
 		}
 
 		if (timestmaps.empty())
@@ -85,7 +85,8 @@ public:
 
 	APEIROGON_API int32 GetCapcity()
 	{
-		return mTimeStamps.GetCapcity();
+		//return mTimeStamps.GetCapcity();
+		return 0;
 	}
 
 private:

@@ -2,11 +2,6 @@
 
 #include <mutex>
 
-enum class EThreadMode
-{
-	NotThreadSafe,
-	ThreadSafe,
-};
 
 template
 <

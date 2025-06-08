@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "SendQueue.h"
-#include "CircularQueue.h"
+//#include "CircularQueue.h"
 
 SendQueue::SendQueue() : mSendQueue(static_cast<uint32>(Default::MAX_QUEUE_SIZE))
 {
@@ -15,7 +15,7 @@ SendQueue::~SendQueue()
 void SendQueue::Clear()
 {
 	FastLockGuard lockGuard(mLock);
-	const uint32 count = mSendQueue.GetCount();
+	const uint32 count = 0;// mSendQueue.GetCount();
 	for (uint32 index = 0; index < count; ++index)
 	{
 		SendBufferPtr SendBuffer;

@@ -9,6 +9,13 @@ enum class EServiceState
 	Fetching
 };
 
+enum class EThreadMode
+{
+	IO_Single_Main_Single,
+	IO_Multi_Main_Single,
+	IO_Multi_Main_Multi,
+};
+
 class Service : public std::enable_shared_from_this<Service>
 {
 public:

@@ -111,6 +111,18 @@ bool Actor::FindPlayerViewer(RemoteClientPtr inRemoteClient)
 	return result != mPlayerViewers.end();
 }
 
+bool Actor::FindPlayerWithGameObjectId(int64 inGameObjectId)
+{
+	for (RemoteClientPtr client : mPlayerViewers)
+	{
+		if (inGameObjectId == client->GetRemotePlayer()->GetGameObjectID())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool Actor::InsertPlayerViewer(RemoteClientPtr inRemoteClient)
 {
 	auto result = mPlayerViewers.insert(inRemoteClient);

@@ -56,6 +56,21 @@ bool IOCPServer::RegisterSocketToIOCP(const WinSocketPtr sock)
 	return true;
 }
 
+std::optional<IocpEvent*> IOCPServer::PollEvent()
+{
+	DWORD numOfBytes = 0;
+	ULONG_PTR key = 0;
+	IocpEvent* iocpEvent = nullptr;
+
+	bool ret = ::GetQueuedCompletionStatus(mIOCPHandle, &numOfBytes, &key, reinterpret_cast<LPOVERLAPPED*>(&iocpEvent), INFINITE);
+	if (ret == false)
+	{
+		return std::nullopt;
+	}
+
+	return iocpEvent;
+}
+
 bool IOCPServer::WorkDispatch(DWORD timeoutMs)
 {
 	DWORD numOfBytes = 0;
@@ -119,7 +134,6 @@ bool IOCPServer::PostDispatch(const uint32 inNumOfBytes, IocpEvent* inEvent)
 		IOCPServerLog(L"[IOCPServer::PostDispatch()]");
 		return false;
 	}
-
 	return true;
 }
 

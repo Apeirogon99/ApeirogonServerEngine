@@ -29,6 +29,7 @@ public:
 	bool Prepare(ServicePtr service);
 	void Shutdown();
 	bool RegisterSocketToIOCP(const WinSocketPtr sock);
+	std::optional<IocpEvent*> PollEvent();
 	APEIROGON_API bool WorkDispatch(DWORD timeoutMs = INFINITE);
 	APEIROGON_API bool PostDispatch(const uint32 inNumOfBytes, IocpEvent* inEvent);
 

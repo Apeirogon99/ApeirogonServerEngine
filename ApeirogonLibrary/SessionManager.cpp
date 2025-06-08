@@ -165,7 +165,7 @@ ServicePtr SessionManager::GetService() const
 	return mService;
 }
 
-int64 SessionManager::WorkDispatch()
+int64 SessionManager::SendRegister()
 {
 	mProcessTimeStamp.StartTimeStamp();
 	if (mSessions.empty())
