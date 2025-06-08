@@ -172,30 +172,36 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
-    <ClInclude Include="ADOTask.h" />
-    <ClInclude Include="ADOCommand.h" />
-    <ClInclude Include="ADOConnection.h" />
-    <ClInclude Include="ADOEvent.h" />
-    <ClInclude Include="ADORecordset.h" />
+    <ClInclude Include="Database.h" />
+    <ClInclude Include="Database\ADOTask.h" />
+    <ClInclude Include="Database\ADOCommand.h" />
+    <ClInclude Include="Database\ADOConnection.h" />
+    <ClInclude Include="Database\ADOEvent.h" />
+    <ClInclude Include="Database\ADORecordset.h" />
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="FileStorage.h" />
     <ClInclude Include="GameFrameworkFoward.h" />
     <ClInclude Include="GameFrameworkLibrary.h" />
+    <ClInclude Include="Generic.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Hit.h" />
     <ClInclude Include="KDTree.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="MathLibrary.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MovementComponent.h" />
+    <ClInclude Include="Network.h" />
     <ClInclude Include="ProjectileComponent.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="RemoteClient.h" />
     <ClInclude Include="RemotePlayer.h" />
     <ClInclude Include="Trace.h" />
-    <ClInclude Include="DatabaseManager.h" />
-    <ClInclude Include="ADOUtils.h" />
-    <ClInclude Include="ADOVariant.h" />
+    <ClInclude Include="Database\DatabaseManager.h" />
+    <ClInclude Include="Database\ADOUtils.h" />
+    <ClInclude Include="Database\ADOVariant.h" />
     <ClInclude Include="ApeirogonLibrary.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DefaultMacros.h" />
@@ -222,7 +228,7 @@
     <ClInclude Include="RingBuffer.h" />
     <ClInclude Include="RoundTripTime.h" />
     <ClInclude Include="SendBuffer.h" />
-    <ClInclude Include="CircularQueue.h" />
+    <ClInclude Include="Generic\CircularQueue.h" />
     <ClInclude Include="SendQueue.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="Session.h" />
@@ -246,11 +252,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="ADOTask.cpp" />
-    <ClCompile Include="ADOCommand.cpp" />
-    <ClCompile Include="ADOConnection.cpp" />
-    <ClCompile Include="ADOEvent.cpp" />
-    <ClCompile Include="ADORecordset.cpp" />
+    <ClCompile Include="Database\ADOTask.cpp" />
+    <ClCompile Include="Database\ADOCommand.cpp" />
+    <ClCompile Include="Database\ADOConnection.cpp" />
+    <ClCompile Include="Database\ADOEvent.cpp" />
+    <ClCompile Include="Database\ADORecordset.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collision.cpp" />
@@ -263,9 +269,9 @@
     <ClCompile Include="RemoteClient.cpp" />
     <ClCompile Include="RemotePlayer.cpp" />
     <ClCompile Include="Trace.cpp" />
-    <ClCompile Include="DatabaseManager.cpp" />
-    <ClCompile Include="ADOUtils.cpp" />
-    <ClCompile Include="ADOVariant.cpp" />
+    <ClCompile Include="Database\DatabaseManager.cpp" />
+    <ClCompile Include="Database\ADOUtils.cpp" />
+    <ClCompile Include="Database\ADOVariant.cpp" />
     <ClCompile Include="ApeirogonLibrary.cpp" />
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="EngineAssert.cpp" />
@@ -293,7 +299,7 @@
     <ClCompile Include="RingBuffer.cpp" />
     <ClCompile Include="RoundTripTime.cpp" />
     <ClCompile Include="SendBuffer.cpp" />
-    <ClCompile Include="CircularQueue.cpp" />
+    <ClCompile Include="Generic\CircularQueue.cpp" />
     <ClCompile Include="SendQueue.cpp" />
     <ClCompile Include="Service.cpp" />
     <ClCompile Include="Session.cpp" />
