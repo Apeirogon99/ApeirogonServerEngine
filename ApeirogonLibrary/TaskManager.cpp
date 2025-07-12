@@ -57,7 +57,7 @@ void TaskManager::Shutdown()
 int64 TaskManager::ProcessTask(const int64 inServiceTimeStamp)
 {
 	mTaskProcessTimeStamp.StartTimeStamp();
-	for (auto iter = mWorlds.begin(); iter != mWorlds.end();)
+	for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
 	{
 		WorldPtr world = *iter;
 		world->Execute(inServiceTimeStamp);
@@ -124,7 +124,7 @@ int64 TaskManager::Tick(const int64 inTickTime)
 	//std::vector<GameObjectRef> tickTasks;
 	//mTickGameObject.Dequeue(tickTasks);
 
-	for (auto iter = mWorlds.begin(); iter != mWorlds.end();)
+	for (auto iter = mWorlds.begin(); iter != mWorlds.end(); ++iter)
 	{
 		WorldPtr world = *iter;
 		world->Tick(inTickTime);

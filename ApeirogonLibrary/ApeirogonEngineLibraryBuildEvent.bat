@@ -1,6 +1,6 @@
 @echo off
 pushd %~dp0
-SET Project_MMORPG2D_PATH=P:\MMORPG2D
+SET Project_MMORPG2D_PATH=P:\Project_LD_Server
 
 rem delete file
 DEL /Q /F "%Project_MMORPG2D_PATH%\ThirdParty\Apeirogon\include\Apeirogon\*.h"
