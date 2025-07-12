@@ -158,7 +158,7 @@ bool World::DestroyAllActor()
 	for (auto player = mWorldPlayers.begin(); player != mWorldPlayers.end();)
 	{
 
-		taskManager->DestroyGameObject(player->second->GetRemotePlayer()->GetGameObjectPtr());
+		//taskManager->DestroyGameObject(player->second->GetRemotePlayer()->GetGameObjectPtr());
 
 		const PlayerMonitors& playerMonitors = player->second->GetPlayerMonitors();
 		for (auto playerMonitor = playerMonitors.begin(); playerMonitor != playerMonitors.end();)
@@ -180,8 +180,8 @@ bool World::DestroyAllActor()
 	for (auto actor = mWorldActors.begin(); actor != mWorldActors.end();)
 	{
 
-		GameObjectPtr actorGameObject = actor->second->GetGameObjectPtr();
-		taskManager->ReleaseTask(actorGameObject);
+		//GameObjectPtr actorGameObject = actor->second->GetGameObjectPtr();
+		//taskManager->ReleaseTask(actorGameObject);
 
 		const PlayerViewer& playerViewers = actor->second->GetPlayerViewers();
 		for (auto playerViewer = playerViewers.begin(); playerViewer != playerViewers.end();)
@@ -210,8 +210,8 @@ bool World::DestroyActors(const uint8 inActorType)
 		{
 			if (actor->second->GetActorType() == inActorType)
 			{
-				GameObjectPtr actorGameObject = actor->second->GetGameObjectPtr();
-				taskManager->ReleaseTask(actorGameObject);
+				//GameObjectPtr actorGameObject = actor->second->GetGameObjectPtr();
+				//taskManager->ReleaseTask(actorGameObject);
 
 				const PlayerViewer& playerViewers = actor->second->GetPlayerViewers();
 				for (auto playerViewer = playerViewers.begin(); playerViewer != playerViewers.end();)
@@ -250,8 +250,8 @@ bool World::DestroyActor(const int64 inGameObjectID)
 		return false;
 	}
 
-	GameObjectPtr actorGameObject = actor->GetGameObjectPtr();
-	taskManager->ReleaseTask(actorGameObject);
+	//GameObjectPtr actorGameObject = actor->GetGameObjectPtr();
+	//taskManager->ReleaseTask(actorGameObject);
 
 	const PlayerViewer& playerViewers = actor->GetPlayerViewers();
 	for (auto playerViewer = playerViewers.begin(); playerViewer != playerViewers.end();)

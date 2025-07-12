@@ -10,8 +10,8 @@ public:
 
 protected:
 	APEIROGON_API virtual void OnInitialization()					abstract;
-	APEIROGON_API virtual void OnDestroy()						abstract;
-	APEIROGON_API virtual void OnTick(const int64 inDeltaTime)	abstract;
+	APEIROGON_API virtual void OnDestroy()							abstract;
+	APEIROGON_API virtual void OnTick(const int64 inDeltaTime)		abstract;
 	APEIROGON_API virtual bool IsValid()							abstract;
 
 public:
@@ -75,8 +75,8 @@ inline ActorPtr World::SpawnActor(GameObjectRef inOwner, const Location& inLocat
 	actor->SetRotation(inRotation);
 	actor->SetScale(inScale);
 
-	GameObjectPtr gameObject = actor->GetGameObjectPtr();
-	taskManager->PushTask(gameObject);
+	//GameObjectPtr gameObject = actor->GetGameObjectPtr();
+	//taskManager->PushTask(gameObject);
 
 	const int64 objectID = actor->GetGameObjectID();
 	std::pair<int64, ActorPtr> newObject = std::make_pair(objectID, actor);

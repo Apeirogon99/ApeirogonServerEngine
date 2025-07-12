@@ -88,6 +88,7 @@ private:
 	RecvEvent			mRecvEvent;
 	SendEvent			mSendEvent;
 	IcmpEvent			mIcmpEvent;
+	RegisterSendEvent	mRegisterSendEvent;
 	SessionMonitoring	mMonitoring;
 	
 	RoundTripTime		mRoundTripTime;
