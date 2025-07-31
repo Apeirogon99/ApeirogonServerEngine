@@ -126,6 +126,11 @@ World(메인, 던전)에 잡 큐를 넣는 것은 맞다고 생각하였습니�
 connection, command, recordset은 존재해야하기 때문에 </br>
 결과가 나와 처리될 때 까지 유지할 수 있도록 하였습니다. </br>
 
+Task를 끝내고 Release를 할 떄에는 Connection을 먼저 끊으면 Recordset이 바로 닫히게 됩니다 </br>
+그렇기에 다음과 같이 순서를 지켜서 Close와 Release를 하였습니다 </br>
+<img width="183" height="258" alt="image" src="https://github.com/user-attachments/assets/5abd47ae-6509-422d-8cdd-a22ab90455ec" />
+
+
 ### 메인 로직에서 쿼리 결과 처리
 메인 로직에서 데이터베이스 쿼리 결과를 처리하기 위해 </br>
 함수를 실행하여 command에 저장된 결과 및 아웃풋을 확인하고 </br>
@@ -147,13 +152,13 @@ adAsyncExecute같은 경우에는 adAsyncFetchNonBlocking있지만 취지는 전
 타입의 경우 어떻게 해야할까 고민하다가 다음과 같이 정의하였습니다 </br>
 이유는 SQL SERVER <-> C++ SERVER의 타입이  동일해야 하기 떄문입니다 </br>
 
-<img width="682" height="459" alt="image" src="https://github.com/user-attachments/assets/058e42cf-1401-4031-a8b2-c79af24cdecb" />
+<img width="682" height="459" alt="image" src="https://github.com/user-attachments/assets/058e42cf-1401-4031-a8b2-c79af24cdecb" /> </br>
 
 없는 경우 따로 작성하였습니다 </br>
-<img width="380" height="169" alt="image" src="https://github.com/user-attachments/assets/e47d700f-d95c-4c65-a80b-2abd2032e724" />
+<img width="380" height="169" alt="image" src="https://github.com/user-attachments/assets/e47d700f-d95c-4c65-a80b-2abd2032e724" /> </br>
 
 이를 이용해서 다음과 같은 작업이 가능하였습니다  </br>
 Input값을 받아와서 해당하는 타입으로 자동 변경 되도록 하였습니다,  </br>
 (Output의 경우 직접 정의하도록 하였습니다 = 이게 더 편하다고 생각하였습니다)  </br>
-<img width="481" height="86" alt="image" src="https://github.com/user-attachments/assets/8491fa99-0c4d-425e-b77d-004c9d27df05" />
+<img width="481" height="86" alt="image" src="https://github.com/user-attachments/assets/8491fa99-0c4d-425e-b77d-004c9d27df05" /> </br>
 
